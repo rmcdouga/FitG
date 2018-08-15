@@ -1,0 +1,89 @@
+98
+Rebel agents make contact with space pirates, who proceed to plunder any one Environ not occupied by Imperial military units on any one Imperial-controlled planet with no Imperial military units in Orbit. Add the resource value of the Environ to the Rebel Resource Track.  If no such Environ exists, ignore this event.
+
+99
+Unattractive Imperial policies revealed in the final issue of the Segunden Times-Dispatch.  The Imperial Player must move the loyalty marker on any three planets occupied by Segundens one space in the Rebel Player's favor.
+
+100
+The Emperor is in a rare mood.  If the Action Event "Imperial Player may commit atrocity" comes up at any time during this Galactic Game-Turn, the Imperial Player may immediately commit an Atrocity on any planet (see Case 36.2).
+
+101
+The whole galaxy is caught in a time Singularity.  Both Players, during theur respective Mission Phases may assign each of their Mission Groups two missions dur-ing their first Player-Turn of the Campaign Game-Turn.  Note:Ignore this event on the Hyper World as Mission Groups there can already perform two missions each.
+
+102
+It's _Galactic Peace Month_, according to the Imperial calendar.  Imperial military units and characters are not restricted by the Strategic Assignment routine.  The Im-perial Player may move his units entirely as he sees fit for the duration of this Campaign Game-Turn.
+
+103
+The Empire's eligible young recruits are struck by a wave of scholarly enthusiasm and march off to institu-tions of higher learning.  The Imperial Player may not purchase military units this Campaign Game-Turn.  He still receives his normal taxes; he just cannot use his available Force Points to buy military units.  He may expend Force Points on PDB's.
+
+104
+Competition and entertainment are at their best ever, as the Imperial-sponsored  GALACTIC GAMES tour Province One.  The Rebel Player must move the loyalty marker on any three planets in Province One one space in the Imperial Player's favor.
+
+105
+The heart of the galaxy is acting up again.  Add two to the Hyperjump distance being travelled by any units that are moving into or out of Province One (but no between other provinces and not within Province One).
+
+106
+A ghost fleet from the "Golden Age" mysteriously ap-pears from the nether-dimension.  During the Space Combat Segment of the first Rebel  Player-Turn of this Campaign Game-Turn, the fleet attackes all Imperial military units in any one Orbit Box in the Fifth Province.  It attacks with a strength of 20 (receiving no column shifts, although the Imperial forces may).  After attacking in the Orbit Box of the Rebel Player's choice the fleet vanishes.  The attack is resolved before all other space combat.
+
+107
+Rebel demonstrations on Lonica (421) get ugly, generating pro-Imperial feelings.  Place Loyalty marker on Loyal, unless it is currently on Patriotic.  The Rebel Player may perform no Diplomatic or Coup missions on the planet this Campaign Game-Turn.
+
+108
+Political scandals and their subsequent coverups are exposed, shocking residents of the Zakir (51) star system into anti-Imperial outrage.  Shift Loyalty of all three planets one space in favor of the Rebels.
+
+109
+A fanatical rebel cult that roams the Deblon (44) Star System has sparked fervent Rebel support through their music and other persuasive entertainments.  Shift the Loyalty markers on both planets one space in favor of the Rebels.  If the planet is currently Patriotic, shift it to Nuetral, instead.  If the planet is currently in Unrest, it may be placed into Rebellion.  The Domino Effect may be initiated if called for.
+
+110
+The many-colored moons of Tamset (312) perform a once-in-a-millenium cosmic dance of eclipses and conjunctions.  All characters on the planet stare in wonderment.  No bonus draws may be taken for any missions performed on this planet during this Campaign Game-Turn.
+
+111
+Sun spots and storms on Varu (43) drive all creatures wild. When resolving missions on planets in this system all "Creature Attacks" Action Events are carried out for the duration of the Campaign Game-Turn.  Exception to Case 13.42.
+
+112
+Imperial intelligence network cracks Rebel communication code.  A Rebel Secret must be revealed immediately (see Case 37.4).  A new code is hastily devised.
+
+113
+Bungled administrative work at Imperial transport control sends valuable military material into surprised Rebel hands.  Decrease Imperial resources by five Force Points and increase Rebel resources by five Force Points.  If there are not enough points currently on the Imperial Resource Track, it is subtracted from the upcoming Imperial Taxation.
+
+114
+Independent nomadic star-faring race suddenly invades the Egrix Star System (22).  The Player with the most military space Strength Points in the Orbit Box of each planet at the end of this Campaign Game-Turn may shift the Loyalty of the planet one space in his favor, as he has contributed the most to driving off the outside attackers there.  Space and land combat between Rebel and Imperial military units is carried out normally and the Imperial Player is still restricted by his Strategic Assignments.  If neither Player has units in an Orbit Box that planet's Loyalty is not moved.
+
+115
+It's Military Inventory and Maintenence Month, ac-cording to the Imperial calendar.  No Imperial military units may be moved outside of the province they cur-rently occupy for the duration of this Campaign Game-Turn.  However, Imperial characters may be moved ac-cording to the normal Strategic Assignement routine.  If the secret Rebel base has already been revealed, ignore this event.
+
+116
+Hyperjump technicians go on strike.  All military units have their Navigation rating reduced by one this Galac-tic Game-Turn.  Character spaceships are unaffected.
+
+117
+Plague breaks out in Province Three.  All characters currently in the province must receive one wound.  Ex-ception:  Dr. Sontag and any Rebel character in the same environ, or any Rebel characters in the same en-viron as a Rebel character who owns the Medi-kit of Pholtus do not receive a wound.  Furthermre, a planet in Province Three that has either the Doctor or the Medi-Kit on it shifts on Loyalty space in the Rebel Player's favor.
+
+118
+Hyperjump dimensions in a state of flux.  For the dura-tion of this Galactic Game-Turn, when ever a unit is going to hyperjump, the owning Player names the destination and then rolls the die twice, reading the result as a two-digit number (i.e., roll of 4 and 3 would be 43).  If the result matches the number of an existing star on the map, that unit must attempt to hyperjump to there, or else be automaticall placed in the Drift Two box of its original destination.  If the rolled number matches no star, it may jump normally.
+
+119
+Radical clone experiements are a big success.  Draw three characters at random from among the dead Characters.  Place each character in any Environ on a planet controlled by the owning Player.  If the Rebel Player controls no planets, he may place a character drawn in this manner in any Environ on a Planet in Rebellion.  If a player has no planets he can place a character on as described here, the character is return-ed to the  dead characters pile.
+
+120
+Internal racial disputes among the Kayns supercede any Imperial problems this Galactic Game-Turn.  The Loyalty markers on any Planets occupied by the Kayn race may not be moved at all.  Kayn characters (both Rebel and Imperial) may not be incuded in any Mission Groups or be named as a leader this Turn.  They may be moved and may heal.
+
+121
+Strange jamming signals from an unknown source shut down galactic communications for the duration of this Galactic Game-Turn.  No Imperial units may be moved across a province boundary (even if a planet is in rebellion), and no Domino Effects may be initiated this Game-Turn.
+
+122
+Industrial disaster at Defense Concepts Ltd., the manufacturer of all PDB equipment, cancels Imperial PDB output for this Galactic Game-Turn.  The Imperial Player may not put any Down PDBs up or increase the levels of any of his PDBs.
+
+123
+Public horror and outrage at the increasing suicide rate and apparent reckless habits among the youth, spark anti-Suicide Squade sentiments.  The Imperial Player must remove one Suicide Squad unit from play.  It may be re-purchased in a future turn (how quickly they forget).
+
+124
+Suvan religious leader denounces alleged Imperial atrocities.  The Rebel Player may shift the Loyalty marker on the home planet of the Suvans one space in his favor, or shift the Loyalty markers on two other Suvan-occupied planets one space in his favor.
+
+125
+Imperial Deltronics recall all standard Imperial character spaceships due to a mechanical defect.  All Imperial character spaceships )(except Redjac's ship) may not be moved for the duration of this Galactic Game-Turn.
+
+126
+An unprecedented amount of propaganda and publicity for both the Imperial and Rebel causes inspire characters to overcome any obstacles between them and total victory.  When resolving all missions this Campaign Game-Turn, ignore any Action Events that specifically prevent bonus draws.
+
+Text - Times Nre Roman 7pt
+

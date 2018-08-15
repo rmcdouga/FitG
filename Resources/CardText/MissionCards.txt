@@ -1,0 +1,107 @@
+Sabotage (S)
+May attempt to damage Enemy PDB or military units by undercover activity.
+May only be attempted in Environ occupied by Enemy military units and/or if Enemy PDB is on planet.
+
+(S) Mission Result:  If the mission let-ter comes up once in the Action Deck, the player may remove one Enemy 1-0 military unit from the Environ (it is eliminated) or he may place the Enemy PDB Down.
+Or, if two mission letters come up, he may remove any one Enemy military unit from the Environ or reduce the Enemy PDB by one level and place it Down.
+
+Diplomacy (D)
+May attempt to shift a planet Loyalty in Player's favor through negotiation with delegates of local populace.
+
+(D) Mission Result:  Every mission let-ter comes up in the Action Deck, shifts the planet Loyalty marker one space in favor of the Phasing Player, to a maximum of two shifts.  May not place a planet in or out of rebellion.
+*Bonus Draws:* One character's Diplomacy rating plus one for each other character on the mission plus current Loyalty Rating (see Case 15.11).
+
+Start Rebellion/Stop Rebellion (R)
+*Rebel Player:* May attempt to start full scale rebellion if planet Loyalty at Unrest.
+*Imperial Player:* May attempt to halt rebellion by non-military means on planet in Rebellion.
+
+(R) Mission Result:
+Rebel Player:  If the Mission Letter comes up in the Action Deck, flip the Loyalty marker to the Rebellion side.  See Case 15.4.
+Imperial Player:  If the mission letter comes up twice in the Action Deck, flip the Rebellion marker to the Loyalty side. No bonus draws.
+
+Scavage for Possessions (P)
+*Rebel Player only:* May attempt to find object of personal use.
+
+(P) Mission Result:  If the mission let-ter comes up in the Action Deck, draw a card from the Possesions Deck.  The new item may be assigned to any character in the mission group.  No more than one new possesion may be gained in one mission.
+
+Gain Characters (G)
+May attempt to find new friend of worth to the Player's cause.
+In the Star System and Province Games, the Im-perial Player may perform this mission only if his current number of characters is equal to or less than the number of characters he started the scenario with.
+
+(G) Mission Result:  If the mission let-ter comes up in the Action Deck, draw a Character Card at random from the appropriate deck.  The new character's counter is placed in the Environ with the Mission Group.  No more than one character may be gained in one mission.
+
+Gather Information (I)
+May attempt to learn details of Enemy deployment or strategic plans.
+May not be performed on a planet that is con-trolled by the Phasing Player if there are no Enemy units in the Environ.
+
+(I) Mission Result:  If one mission let-ter comes up in the Action Deck, all Enemy military units and caracters on the planet are revealed and detected.
+Star System and Province Games: If two mission letters come up the above occurs and the Phasin Player earns one Victory Point for learning an Enemy secret.
+Galactic Game: If two mission letters come up, the above happens and the Player learns an Enemy Secret (see Case 37.4).
+Bonus Draws: One character's Intelligence.
+
+Free Prisoners (F)
+May attempt to free Friendly captured characters in the same Environ.
+
+(F) Mission Result:  Every time that the mission letter comes up in the Action Deck, one captured character may be freed; place the captured character with the Mission Group.  If more that one character is currently captured, the Phasing Player takes the one of his choice from among the Enemy's prisoners (but only those in the same Environ).
+
+Assassination (A)
+May attempt to assassinate any one detected Enemy character in Environ.
+May only be performed in an Environ occupied by at least one detected Enemy character (who must be named before drawing Action Cards).
+
+(A) Mission Result:  If the mission let-ter comes up in the Action Deck, the  named Enemy character is removed from play.  If it does not come up, roll the die.  On a roll of 4 or 5 all characters on the mission are captured; on a roll of 6, all characters on the mission are killed.
+Bonus Draws: One character's Intelligence rating.
+
+Start Rebel Camp (B)
+*Rebel Player only:* May attempt to establish a band of locals dedicated to the Rebel cause.
+May be performed only on a planet that is cur-rently Patriotic or Loyal.
+
+(B) Mission Result:  If the mission let-ter comes up in the Action Deck, place a Rebel Camp marker in the Environ.  Beginning with the next Rebel Player-Turn, the camp may perform certain missions, within the restrictions of Case 13.2.  The camp is removed from the game im-mediately if the planet's loyalty becomes Dissent or Unrest, or if there are a number of Imperial military Strength Points in the Environ equal to or greater than the Environ Size plus three.
+Bonus Draws: One character's Leadership rating.
+
+Subvert Troops (T)
+*Rebel Player only:*  May attempt to subvert Im-perial Militia, Patrol, or Line Military units to the Rebel cause..
+May be performed only in an Environ occupied by an Imperial military unit(s).
+
+(T) Mission Result:  If the mission let-ter comes up in the Action Deck, the Imperial Player must remove one Imperial Militia military unit from the Environ.  It is replaced with a 1-0 Rebel military unit of the same Environ type.  If the mission letter comes up twice, two Militia, one Patrol or one Line unit is removed and replaces with a 2-1 military unit.
+Bonus Draws: One character's Leadership rating.
+
+Coup (C)
+May attempt to place a small group favorable to the Player's cause in control of an Environ.
+May be performed only in an Environ with a Coup rating and if at least one character in the Mission Group has an Intelligence rating greater than one.
+
+(C) Mission Result:  Every mission let-ter that comes up in the Action Deck shifts the planet Loyalty marker one space in favor of the Phasing Player.  May not place a planet in or out of rebellion.  Some Action Events may abort a Coup mission with adverse effects to the Mission Group.
+Bonus Draws: One character's Leadership rating plus the planet's Coup rating.
+
+Summon Sovereign (E)
+May attempt to summon a sovereign and his loyal followers to the Player's cause..
+May be attempted only in an Environ occupied by a Friendly or Nuetral sovereign, within the restriction os Case 25.1
+
+(E) Mission Result:  If one mission let-ter comes up in the Action Deck, a friendly sovereign has been  summoned, see Case 25.1.  If two mission letters come up, a neutral sovereign has been summoned, with the same effects as above.  If the mission fails, see Case 25.15.
+Bonus Draws: One character's Diplomacy rating plus one chracter's Leadership rating.
+
+Spaceship Quest (J)
+May attempt to free a captured character in an Orbit  Box.  In the Galactic Game, the Rebel Player may attempt to destroy an Imperial Atrocuty  unit in an Orbit Box.
+May be performed only by a character with a Navigation rating of two or higher and a spaceship, in an Orbit Box that contains a cap-tured Friendly character or, if the Rebel performing mission, an Imperial Atrocity unit.
+
+(J) Mission Result:  If one mission let-ter comes up in the Action Deck, one captured character has been rescued; place his counter with the Mission Group. If two mission letters come up , see Section 24.0.  The mission receives only Bonus Draws (see Case 24.0)
+Bonus Draws: Evasion value of the pilot and spaceship (see Case 14.52) plus the Cannon rating of the spaceship.
+
+Steal Enemy Resources (H)
+May attempt to take Force Points from the Enemy player's Resource Track and add them to yours. May only be attempted if there are at least two Force Points on the Enemy Resource Track. Rebel Player may only perform on an imperial controlled Capital or Throne Planet, ot planet in the province scheduled to be taxed this Game-Turn (see Case 33.1). The Imperial Player may only perform on the Rebel secret base, after it is revealed (see Case 34.2)
+
+(H) Mission Result: If one mission let-ter comes up in the Action Deck, two Force Points are subtracted from the Enemy Player's Resource Track and added to the Phasing  Player's  Track.  If two mission letters come up, eight Force Points are subtracted from the Enemy Track and added to the Phasing Player's.
+Bonus Draws: One character's Intelligence rating plus one for each other character in the Mission Group.
+
+Question Prisoner (Q)
+May attempt to learn Enemy secrets by question-ing a captured Enemy character. The Imperial Player may choose to torture a captured Rebel character.
+May be performed by only one character stacked with a captured Enemy character.
+
+(Q) Mission Result:  If one Mission Letter comes up in the Action Deck, the captured character has revealed an Enemy secret (see Case 37.4).
+The mission receives only Bonus Draws (see Case 37.11)
+Bonus Draws: Three plus the questioning character's Intelligence rating. If the Imperial Player  announces  torture, he receives six draws, plus and minus the characters' In-telligence ratings (however, see Case 37.12).
+
+Titles - Arial Black 8pt
+Bold - Arial Black 7pt
+Text - Times New Roman 7pt
+Card # & Type - Times New Roman 6pt
+
