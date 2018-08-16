@@ -10,7 +10,7 @@ public abstract class CardAbstractClass implements Card {
 	}
 
 	@Override
-	public int getCardNumber() {
+	public int cardNumber() {
 		return cardNumber;
 	}
 	

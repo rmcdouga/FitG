@@ -4,10 +4,12 @@ import com.rogers.rmcdouga.fitg.basegame.utils.MarkdownString;
 
 public interface Mission extends Card {
 
-	char getMnemonic();
+	char mnemonic();
 
-	String getName();
+	String missionName();
 
-	MarkdownString getDescription();
+	MarkdownString description();
+
+	MarkdownString result();
 
 }
