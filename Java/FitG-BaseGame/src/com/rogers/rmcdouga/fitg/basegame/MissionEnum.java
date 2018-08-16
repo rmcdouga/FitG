@@ -1,5 +1,7 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
+import com.rogers.rmcdouga.fitg.basegame.utils.MarkdownString;
+
 public enum MissionEnum implements Mission {
 	
 	SABOTAGE(53, 'S', "Sabotage", "TBD"),
@@ -22,13 +24,13 @@ public enum MissionEnum implements Mission {
 	private final MissionCard card;
 	private final char mnemonic;
 	private final String name;
-	private final String description;
+	private final MarkdownString description;
 	
 	private MissionEnum(int cardNumber, char mnemonic, String name, String description) {
 		this.card = new MissionCard(cardNumber);
 		this.mnemonic = mnemonic;
 		this.name = name;
-		this.description = description;
+		this.description = new MarkdownString(description);
 	}
 
 
@@ -60,7 +62,7 @@ public enum MissionEnum implements Mission {
 	 * @see com.rogers.rmcdouga.fitg.basegame.Mission#getDescription()
 	 */
 	@Override
-	public String getDescription() {
+	public MarkdownString getDescription() {
 		return description;
 	}
 
