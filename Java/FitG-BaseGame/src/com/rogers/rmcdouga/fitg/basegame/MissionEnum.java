@@ -1,5 +1,12 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 import com.rogers.rmcdouga.fitg.basegame.utils.MarkdownString;
 
 public enum MissionEnum implements Mission {
@@ -81,6 +88,12 @@ public enum MissionEnum implements Mission {
 	private final String missionName;
 	private final MarkdownString description;
 	private final MarkdownString result;
+	private static final MissionFactory missionFactory = new MissionEnumFactory();
+	protected static final Set<MissionEnum> ALL_MISSIONS = EnumSet.allOf(MissionEnum.class);
+	protected static final String ALL_MISSION_MNEMONICS = ALL_MISSIONS.stream().collect(Collector.of(StringBuilder::new,
+	        (stringBuilder, m) -> stringBuilder.append(m.mnemonic),
+	        StringBuilder::append,
+	        StringBuilder::toString));
 	
 	private MissionEnum(int cardNumber, char mnemonic, String missionName, String description, String result) {
 		this.card = new MissionCard(cardNumber);
@@ -139,4 +152,43 @@ public enum MissionEnum implements Mission {
 		}
 	}
 
+	 public static class MissionEnumFactory implements MissionFactory {
+
+		@Override
+		public Optional<Mission> getMissionFromMnemonic(char mnemonic) {
+			return getMissionEnumFromMnemonic(mnemonic).map(m->(Mission)m);
+		}
+
+		@Override
+		public Optional<Mission> getMissionFromMnemonic(String mnemonic) {
+			return getMissionFromMnemonic(mnemonic.trim().charAt(0));
+		}
+
+		@Override
+		public Set<Mission> getMissionsFromMnemonics(Set<Character> mnemonics) {
+			EnumSet<MissionEnum> result = EnumSet.noneOf(MissionEnum.class);
+			// Look at all the mnemonic Characters and add any that have corresponding missions to result Collection.
+			mnemonics.stream().filter(Character::isLetter).map(this::getMissionEnumFromMnemonic).filter(Optional::isPresent).forEach(m->result.add(m.get()));
+			return Collections.<Mission>unmodifiableSet(result);
+		}
+
+		@Override
+		public Set<Mission> getMissionsFromMnemonics(String mnemonics) {
+			// Convert String to Set of Characters, filtering out any non-alphabetic characters.
+			Set<Character> mnemonicsSet = mnemonics.chars().mapToObj(c->Character.valueOf((char)c)).filter(Character::isAlphabetic).collect(Collectors.toSet());
+
+			return getMissionsFromMnemonics(mnemonicsSet);
+		}
+		 
+		private Optional<MissionEnum> getMissionEnumFromMnemonic(char mnemonic) {
+			return ALL_MISSIONS.stream().filter(mission->mission.mnemonic == Character.toUpperCase(mnemonic)).findFirst();
+		}
+
+	 }
+	 
+	 public static MissionFactory missionFactory() {
+		 return MissionEnum.missionFactory;
+	 }
+	 
+	 
 }
