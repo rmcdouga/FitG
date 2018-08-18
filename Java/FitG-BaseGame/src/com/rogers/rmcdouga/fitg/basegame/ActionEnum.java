@@ -1,6 +1,7 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -132,6 +133,7 @@ public enum ActionEnum implements Action {
 
 	private final ActionCard actionCard;
 	private final Map<EnvironType, Result> results;
+	protected static final Set<ActionEnum> ALL_ACTIONS = EnumSet.allOf(ActionEnum.class);
 	
 	private ActionEnum(int cardNumber, String urbanMissions, String urbanResult, String specialMissions, String specialResult, String wildMissions, String wildResult) {
 		this.actionCard = new ActionCard(cardNumber);

@@ -11,8 +11,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class MissionEnumTest {
@@ -20,14 +18,6 @@ class MissionEnumTest {
 	private static final int EXPECTED_NUM_OF_MISSIONS = 15;
 	private static final int EXPECTED_START_CARD_NO = 53;
 	private static final int EXPECTED_END_CARD_NO = EXPECTED_START_CARD_NO + EXPECTED_NUM_OF_MISSIONS - 1;
-
-	@BeforeEach
-	void setUp() throws Exception {
-	}
-
-	@AfterEach
-	void tearDown() throws Exception {
-	}
 
 	@Test
 	void testGetMissionFromMnemonicChar_valid() {
