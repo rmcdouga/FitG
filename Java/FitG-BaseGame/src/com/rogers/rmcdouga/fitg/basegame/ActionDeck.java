@@ -47,6 +47,7 @@ public class ActionDeck {
 				foundAction = true;
 			}
 		}
+		
 		if (iterator.hasNext()) {
 			// Since there is a next card, we return it.
 			return Optional.of(iterator.next());
@@ -69,4 +70,13 @@ public class ActionDeck {
 		Collections.shuffle(tmpList);
 		drawPile.addAll(tmpList);
 	}
+	
+	public int numberOfCardsInDrawPile() {
+		return drawPile.size();
+	}
+	
+	public int numberOfCardsInDiscard() {
+		return discardPile.size();
+	}
+
 }
