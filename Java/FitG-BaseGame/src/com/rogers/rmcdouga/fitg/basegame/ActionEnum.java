@@ -1,5 +1,6 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
@@ -134,6 +135,7 @@ public enum ActionEnum implements Action {
 	private final ActionCard actionCard;
 	private final Map<EnvironType, Result> results;
 	protected static final Set<ActionEnum> ALL_ACTIONS = EnumSet.allOf(ActionEnum.class);
+	private static final ActionFactory actionFactory = new ActionEnumFactory();
 	
 	private ActionEnum(int cardNumber, String urbanMissions, String urbanResult, String specialMissions, String specialResult, String wildMissions, String wildResult) {
 		this.actionCard = new ActionCard(cardNumber);
@@ -174,7 +176,7 @@ public enum ActionEnum implements Action {
 		private final MarkdownString resultDescription;
 		protected Result(String missions, String result) {
 			super();
-			this.missions = Mission.getDefaultFactory().getMissionsFromMnemonics(missions);
+			this.missions = Mission.defaultFactory().getMissionsFromMnemonics(missions);
 			this.resultDescription = new MarkdownString(result);
 		}
 		/**
@@ -191,5 +193,26 @@ public enum ActionEnum implements Action {
 		}
 	}
 
+	public static class ActionEnumFactory implements ActionFactory {
+
+		@Override
+		public Set<Action> allActions() {
+			return Collections.unmodifiableSet(ALL_ACTIONS);
+		}
+
+		@Override
+		public int numberOfActions() {
+			return ALL_ACTIONS.size();
+		}
+		
+	}
+
+	/**
+	 * @return the actionfactory
+	 */
+	public static ActionFactory actionfactory() {
+		return actionFactory;
+	}
+	
 }
 

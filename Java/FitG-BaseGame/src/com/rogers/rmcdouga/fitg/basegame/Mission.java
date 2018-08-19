@@ -19,7 +19,7 @@ public interface Mission extends Card {
 		public Set<Mission> getMissionsFromMnemonics(String mnemonics);
 	}
 	
-	public static MissionFactory getDefaultFactory() {
+	public static MissionFactory defaultFactory() {
 		return MissionEnum.missionFactory();
 	}
 }
