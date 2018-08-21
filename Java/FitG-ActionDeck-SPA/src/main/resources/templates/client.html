@@ -1,0 +1,15 @@
+<div>
+  <label>Please, enter your name</label>:
+  <input type="text" html:value="userName" html:change="userName"/>
+</div>
+
+<div>
+  Hello, <i><html:text value="userName"/></i>
+</div>
+<div>
+  <i>Action:</i><html:text value="action"/>
+</div>
+<div>
+	<button type="button" event:click="setAction(drawAction())">Draw</button>
+	<button type="button" event:click="setAction('Reset')">Reset</button>
+</div> 
