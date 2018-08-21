@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<project name="MyProject" default="deploy" basedir=".">
+  <description>Deploy .war file to Tomcat.</description>
+  
+  <property name="war" location="target\FitG-ActionDeck-SPA-0.0.1-SNAPSHOT.war"/>
+  <property name="deployDir" location="/Users/Rob.McDougall/Documents/ThirdPartyLibraries/Apache/apache-tomcat-8.5.28/webapps"/>
+  <property name="tomcatStartBat" location="/Users/Rob.McDougall/Documents/ThirdPartyLibraries/Apache/apache-tomcat-8.5.28/bin/startup.bat"/>
+  <property name="java_home" location="/Program Files/Java/jdk1.8.0_181"/>
+  
+  
+  <target name="deploy">
+  	<copy file="${war}" toDir="${deployDir}"/>
+  </target>
+  
+  <target name="launch">
+	  <exec executable="cmd">
+	    <arg value="/c"/>
+	    <arg value="${tomcatStartBat}"/>
+	    <arg value="-p"/>
+	  </exec>
+  </target>
+
+</project>
