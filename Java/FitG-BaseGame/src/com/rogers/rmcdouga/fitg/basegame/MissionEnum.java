@@ -21,12 +21,12 @@ public enum MissionEnum implements Mission {
 			"Every mission let-ter comes up in the Action Deck, shifts the planet Loyalty marker one space in favor of the Phasing Player, to a maximum of two shifts.  May not place a planet in or out of rebellion.\r\n" + 
 			"*Bonus Draws:* One character's Diplomacy rating plus one for each other character on the mission plus current Loyalty Rating (see Case 15.11)."),
 	START_STOP_REBELLION(55, 'R', "Start Rebellion/Stop Rebellion", 
-			"*Rebel Player:* May attempt to start full scale rebellion if planet Loyalty at Unrest.\r\n" + 
-			"*Imperial Player:* May attempt to halt rebellion by non-military means on planet in Rebellion.", 
+			"**Rebel Player:** May attempt to start full scale rebellion if planet Loyalty at Unrest.\r\n" + 
+			"**Imperial Player:** May attempt to halt rebellion by non-military means on planet in Rebellion.", 
 			"Rebel Player:  If the Mission Letter comes up in the Action Deck, flip the Loyalty marker to the Rebellion side.  See Case 15.4.\r\n" + 
 			"Imperial Player:  If the mission letter comes up twice in the Action Deck, flip the Rebellion marker to the Loyalty side. No bonus draws."),
 	SCAVENGE(56, 'P', "Scavenge For Possesions", 
-			"*Rebel Player only:* May attempt to find object of personal use.", 
+			"**Rebel Player only:** May attempt to find object of personal use.", 
 			"If the mission let-ter comes up in the Action Deck, draw a card from the Possesions Deck.  The new item may be assigned to any character in the mission group.  No more than one new possesion may be gained in one mission."),
 	GAIN_CHARACTERS(57, 'G', "Gain Characters", 
 			"May attempt to find new friend of worth to the Player's cause.\r\n" + 
@@ -47,12 +47,12 @@ public enum MissionEnum implements Mission {
 			"If the mission letter comes up in the Action Deck, the  named Enemy character is removed from play.  If it does not come up, roll the die.  On a roll of 4 or 5 all characters on the mission are captured; on a roll of 6, all characters on the mission are killed.\r\n" + 
 			"Bonus Draws: One character's Intelligence rating."),
 	START_REBEL_CAMP(61, 'B', "Start Rebel Camp", 
-			"*Rebel Player only:* May attempt to establish a band of locals dedicated to the Rebel cause.\r\n" + 
+			"**Rebel Player only:** May attempt to establish a band of locals dedicated to the Rebel cause.\r\n" + 
 			"May be performed only on a planet that is cur-rently Patriotic or Loyal.", 
 			"If the mission let-ter comes up in the Action Deck, place a Rebel Camp marker in the Environ.  Beginning with the next Rebel Player-Turn, the camp may perform certain missions, within the restrictions of Case 13.2.  The camp is removed from the game im-mediately if the planet's loyalty becomes Dissent or Unrest, or if there are a number of Imperial military Strength Points in the Environ equal to or greater than the Environ Size plus three.\r\n" + 
 			"Bonus Draws: One character's Leadership rating."),
 	SUBVERT_TROOPS(62, 'T', "Subvert Troops", 
-			"*Rebel Player only:*  May attempt to subvert Im-perial Militia, Patrol, or Line Military units to the Rebel cause..\r\n" + 
+			"**Rebel Player only:**  May attempt to subvert Im-perial Militia, Patrol, or Line Military units to the Rebel cause..\r\n" + 
 			"May be performed only in an Environ occupied by an Imperial military unit(s).", 
 			"If the mission letter comes up in the Action Deck, the Imperial Player must remove one Imperial Militia military unit from the Environ.  It is replaced with a 1-0 Rebel military unit of the same Environ type.  If the mission letter comes up twice, two Militia, one Patrol or one Line unit is removed and replaces with a 2-1 military unit.\r\n" + 
 			"Bonus Draws: One character's Leadership rating."),

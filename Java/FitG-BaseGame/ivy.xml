@@ -28,6 +28,7 @@
 	<dependencies>
 		<dependency org="org.apache.commons" name="commons-lang3" rev="3.7"/>
 		<dependency org="commons-io" name="commons-io" rev="2.6"/>
+		<dependency org="com.atlassian.commonmark" name="commonmark" rev="0.11.0" />
 	</dependencies>
 	
 </ivy-module>

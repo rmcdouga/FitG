@@ -1,36 +1,36 @@
 package com.rogers.rmcdouga.fitg.basegame.utils;
 
-import java.text.AttributedString;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
+import org.commonmark.renderer.text.TextContentRenderer;
 
 public class MarkdownString {
 	private final String rawString;
-	private final AttributedString attributedString;
 
 	public MarkdownString(String string) {
 		super();
 		this.rawString = string;
-		// TODO: Change this to recognize markdown and generate attributes.
-		this.attributedString = new AttributedString(string);
 	}
 
 	public String getAsPlainString() {
-		// TODO: Change this to return the string without the markdown in it.
-		return rawString;
+		Parser parser = Parser.builder().build();
+		Node document = parser.parse(rawString);
+		TextContentRenderer renderer = TextContentRenderer.builder().build();
+		return renderer.render(document);
 	}
 	
 	public String getAsRawString() {
 		return rawString;
 	}
 
-	/**
-	 * Returns as 
-	 * 
-	 * @return the attributed string
-	 */
-	public AttributedString getAsAttributedString() {
-		return attributedString;
+	public String getAsHtmlString() {
+		Parser parser = Parser.builder().build();
+		Node document = parser.parse(rawString);
+		HtmlRenderer renderer = HtmlRenderer.builder().build();
+		return renderer.render(document);
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -38,6 +38,4 @@ public class MarkdownString {
 		return getAsPlainString();
 	}
 	
-	// TODO: Add nested classes that extends AttributedCharacterIterator.Attribute.
-	//       Need Bold and Italic
 }
