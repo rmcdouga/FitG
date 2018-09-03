@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.    
+-->
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+    <info
+        organisation="com.rogers.rmcdouga"
+        module="fitg-web-app-test"
+        status="integration">
+	</info>
+	<dependencies>
+		<dependency org="commons-io" name="commons-io" rev="2.6" />
+		<dependency org="org.apache.commons" name="commons-collections4" rev="4.1" />
+		<dependency org="org.glassfish.jersey.test-framework.providers" name="jersey-test-framework-provider-inmemory" rev="2.27"/>
+		<dependency org="org.glassfish.jersey.test-framework" name="jersey-test-framework-core" rev="2.27"/>
+		<dependency org="org.glassfish.jersey.ext" name="jersey-mvc-mustache" rev="2.27" />
+		<dependency org="org.glassfish.jersey.media" name="jersey-media-multipart" rev="2.27" />
+		<dependency org="org.glassfish.jersey.media" name="jersey-media-json-processing" rev="2.27" />
+		<dependency org="org.jsoup" name="jsoup" rev="1.11.2" />
+		
+		<!-- No longer part of Java 9, but required by jersey test	-->
+		<dependency org="javax.xml.bind" name="jaxb-api" rev="2.2.11" />
+		<dependency org="com.sun.xml.bind" name="jaxb-core" rev="2.2.11" />
+		<dependency org="com.sun.xml.bind" name="jaxb-impl" rev="2.2.11" />
+		<dependency org="javax.activation" name="activation" rev="1.1.1" />
+
+		<dependency org="com.github.hanleyt" name="jersey-junit" rev="1.0.0" />
+
+		<!-- dependency org="org.glassfish.jersey.test-framework.providers" name="jersey-test-framework-provider-external" rev="2.25.1"/ -->
+		<!-- dependency org="org.yaml" name="snakeyaml" rev="[1.15,)"/ -->
+		<!-- dependency org="org.apache.commons" name="commons-lang3" rev="[3.4,)"/ -->
+	</dependencies>
+</ivy-module>
