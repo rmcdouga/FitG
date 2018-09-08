@@ -25,10 +25,12 @@ import com.rogers.rmcdouga.fitg.basegame.Action.EnvironType;
 public class ActionDeckResources {
 	public static final String ACTION_DECK_PATH = "/ActionDeck";
 	public static final String DRAW_PATH = "/Draw";
+	public static final String RESET_PATH = "/Reset";
 	public static final String DISCARD_PATH = "/Discard";
 	private static final String DISCARD_PATH_CARD_NO = DISCARD_PATH + "/{cardNo}";
 
 	public static final String CARD_NO_ID = "card_no_id";
+	public static final String EMPTY_DISCARD_ID = "empty_discard_id";
 	
 	// Specifies that the method processes HTTP GET requests
 	@GET
@@ -39,35 +41,37 @@ public class ActionDeckResources {
 		Map<String, Object> parms = new HashMap<>();
 		
 		System.out.println("Retreiving discard #" + cardNo);
+		boolean hasCard = false;
 		// TBD - Clean this up, surely this can be more elegant.
 		Optional<Action> topDiscard = FitGWebApplication.game.actionDeck().peekDiscard();
-		if (!topDiscard.isPresent()) {
-			topDiscard = FitGWebApplication.game.actionDeck().draw();
-			if (!topDiscard.isPresent()) {
-				// This should never happen
-				throw new IllegalStateException("Action Deck is empty!! (No cards in discard and couldn't draw top card either.)");
+		if (topDiscard.isPresent()) {
+			hasCard = true;
+			
+			// if cardNo is > 0, then we go through the discard pile to get the indicated card.
+			Optional<Action> nextDiscard = topDiscard;
+			for(int i = 0; i < cardNo && nextDiscard.isPresent(); i++) {
+				nextDiscard = FitGWebApplication.game.actionDeck().peekDiscard(nextDiscard.get());
+				if (nextDiscard.isPresent()) {
+					topDiscard = nextDiscard;
+				}
 			}
-		}
-		Optional<Action> nextDiscard = topDiscard;
-		for(int i = 0; i < cardNo && nextDiscard.isPresent(); i++) {
-			nextDiscard = FitGWebApplication.game.actionDeck().peekDiscard(nextDiscard.get());
-			if (nextDiscard.isPresent()) {
-				topDiscard = nextDiscard;
+			Action action = topDiscard.get();
+			
+			parms.put("card_number", Integer.toString(action.cardNumber()));
+			parms.put("card_number_id", CARD_NO_ID);
+			for (EnvironType environType : EnumSet.allOf(EnvironType.class)) {
+				String key = environType.name().toLowerCase() + "_desc";
+				System.out.println("Writing desc key '" + key + "'.");
+				parms.put(key, action.getResultDescription(environType).getAsHtmlString());
+				String keyId = key  + "_id";
+				parms.put(keyId, keyId);
 			}
+			System.out.println("Returning card #" + action.cardNumber());
+		} else {
+			parms.put("empty_discard_id", EMPTY_DISCARD_ID);
+			System.out.println("Discard is empty.");
 		}
-		
-		Action action = topDiscard.get();
-		
-		parms.put("card_number", Integer.toString(action.cardNumber()));
-		parms.put("card_number_id", CARD_NO_ID);
-		for (EnvironType environType : EnumSet.allOf(EnvironType.class)) {
-			String key = environType.name().toLowerCase() + "_desc";
-			System.out.println("Writing desc key '" + key + "'.");
-			parms.put(key, action.getResultDescription(environType).getAsHtmlString());
-			String keyId = key  + "_id";
-			parms.put(keyId, keyId);
-		}
-		System.out.println("Returning cad #" + action.cardNumber());
+		parms.put("has_card", hasCard);
 		
 		return parms;
 	}
@@ -79,6 +83,16 @@ public class ActionDeckResources {
 	public Response drawActionCard() throws URISyntaxException {
 		FitGWebApplication.game.actionDeck().draw();
 		// After drawing, redirect the user to GET the top card on the discard (i.e. the card drawn)
+		return Response.seeOther(new URI(ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
+	}
+
+	// Specifies that the method processes HTTP POST requests
+	@POST
+	@Path(RESET_PATH)
+	@Produces(MediaType.TEXT_HTML)
+	public Response resetActionCards() throws URISyntaxException {
+		FitGWebApplication.game.actionDeck().reset();
+		// After reseting, redirect the user to GET the top card on the discard (i.e. the card drawn)
 		return Response.seeOther(new URI(ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
 	}
 

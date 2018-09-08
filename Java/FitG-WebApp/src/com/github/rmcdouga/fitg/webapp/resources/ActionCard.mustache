@@ -5,10 +5,16 @@
 <title>Action Deck</title>
 </head>
 <body>
+{{#has_card}}
 <h2 id="{{card_number_id}}">{{card_number}}</h2>
 <div id="{{urban_desc_id}}">{{{urban_desc}}}</div>
 <div id="{{special_desc_id}}">{{{special_desc}}}</div>
 <div id="{{wild_desc_id}}">{{{wild_desc}}}</div>
+{{/has_card}}
+{{^has_card}}
+<h2 id="{{empty_discard_id}}">No cards have been drawn yet.</h2>
+{{/has_card}}
 <button type="submit" formmethod="post" name="draw">Draw Card</button>
+<button type="submit" formmethod="post" name="reset">Reset Deck</button>
 </body>
 </html>

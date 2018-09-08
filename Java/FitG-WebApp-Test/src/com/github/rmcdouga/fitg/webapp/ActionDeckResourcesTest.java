@@ -57,20 +57,22 @@ class ActionDeckResourcesTest {
 	@Test
 	void testDrawAndDiscard(WebTarget target) throws IOException {
 		System.out.println("DrawAndDiscard WebTarget='" + target.toString() + "'.");
+		int emptyDiscardCard = getDiscardCard(target, 0, false);
+		assertEquals(0, emptyDiscardCard, "Expceted the discard to be empty.");
 
 		int firstCardDrawnNum = drawCard(target);
 		int secondCardDrawnNum = drawCard(target);
 		int thirdCardDrawnNum = drawCard(target);
 		
-		int firstDiscardCard = getDiscardCard(target, 0);
+		int firstDiscardCard = getDiscardCard(target, 0, true);
 		assertEquals(thirdCardDrawnNum, firstDiscardCard, "Expceted top of the discard to be the last card drawn");
-		int secondDiscardCard = getDiscardCard(target, 1);
+		int secondDiscardCard = getDiscardCard(target, 1, true);
 		assertEquals(secondCardDrawnNum, secondDiscardCard, "Expceted second discard card to be the second card drawn");
-		int thirdDiscardCard = getDiscardCard(target, 2);
+		int thirdDiscardCard = getDiscardCard(target, 2, true);
 		assertEquals(firstCardDrawnNum, thirdDiscardCard, "Expceted last discard card to be the first card drawn");
 	}
 
-	private int getDiscardCard(WebTarget target, int discardCardLocation) throws IOException {
+	private int getDiscardCard(WebTarget target, int discardCardLocation, boolean expectCard) throws IOException {
 		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/" + Integer.toString(discardCardLocation);
 		Response result = TestUtils.trace(target.path(targetPath).request())
 				 .buildGet()
@@ -82,8 +84,12 @@ class ActionDeckResourcesTest {
 		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + targetPath + "' should be OK");
 		assertTrue(result.hasEntity(), "Expected response to have body.");
 		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
-		int cardDrawnNum = getCardDrawnNum(entity);
-		return cardDrawnNum;
+		if (expectCard) {
+			return getCardDrawnNum(entity);
+		} else {
+			testForResetDeck(entity);
+			return 0;
+		}
 	}
 
 	private int drawCard(WebTarget target) throws IOException {
@@ -118,6 +124,15 @@ class ActionDeckResourcesTest {
 		return cardDrawnNum;
 	}
 
+	private void testForResetDeck(byte[] result) throws IOException {
+		Document html = Jsoup.parse(new ByteArrayInputStream(result), StandardCharsets.UTF_8.name(), "/");
+		Element paragraph = html.getElementById(ActionDeckResources.EMPTY_DISCARD_ID);
+		assertNotNull(paragraph, "Couldnm't find empty discard paragraph");
+	}
+
+	
+	// For the time being it appears that I can only run one test in a test run using the in-memory container.  I don't
+	// know why that is, however I am living with it for now.
 	@Disabled
 	void testPing_ThisLevel(WebTarget target) throws IOException {
 		System.out.println("Ping WebTarget='" + target.toString() + "'.");
