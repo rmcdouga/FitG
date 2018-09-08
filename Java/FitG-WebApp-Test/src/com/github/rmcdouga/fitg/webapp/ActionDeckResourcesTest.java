@@ -57,9 +57,12 @@ class ActionDeckResourcesTest {
 	@Test
 	void testDrawAndDiscard(WebTarget target) throws IOException {
 		System.out.println("DrawAndDiscard WebTarget='" + target.toString() + "'.");
+		
+		// Test that we start with an empty discard.
 		int emptyDiscardCard = getDiscardCard(target, 0, false);
 		assertEquals(0, emptyDiscardCard, "Expceted the discard to be empty.");
 
+		// Draw a few cards and test that the discard pile contains the cards drawn in reverse order of drawing
 		int firstCardDrawnNum = drawCard(target);
 		int secondCardDrawnNum = drawCard(target);
 		int thirdCardDrawnNum = drawCard(target);
@@ -70,6 +73,12 @@ class ActionDeckResourcesTest {
 		assertEquals(secondCardDrawnNum, secondDiscardCard, "Expceted second discard card to be the second card drawn");
 		int thirdDiscardCard = getDiscardCard(target, 2, true);
 		assertEquals(firstCardDrawnNum, thirdDiscardCard, "Expceted last discard card to be the first card drawn");
+		
+		// Reset the deck and check that the discard pile is empty.
+		resetDeck(target);
+		int emptyDiscardCardAgain = getDiscardCard(target, 0, false);
+		assertEquals(0, emptyDiscardCardAgain, "Expceted the discard to be empty after reset.");
+
 	}
 
 	private int getDiscardCard(WebTarget target, int discardCardLocation, boolean expectCard) throws IOException {
@@ -130,6 +139,27 @@ class ActionDeckResourcesTest {
 		assertNotNull(paragraph, "Couldnm't find empty discard paragraph");
 	}
 
+
+	private void resetDeck(WebTarget target) throws IOException {
+		Form form = new Form();
+		
+		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.RESET_PATH;
+		System.out.println("TargetPath='" + targetPath + "'.");
+		WebTarget path = target.path(targetPath);
+		System.out.println("DrawCard WebTarget='" + path.toString() + "'.");
+		Invocation buildPost = TestUtils.trace(path.request())
+				 .buildPost(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+		Response result = buildPost
+				 .invoke();
+	
+		if (Response.Status.OK.getStatusCode() != result.getStatus()) {
+			TestUtils.printTrace(result);
+		}
+		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + targetPath + "' should be OK");
+		assertTrue(result.hasEntity(), "Expected response to have body.");
+		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
+		System.out.println("HTML Result='" + new String(entity) + "'.");		
+	}
 	
 	// For the time being it appears that I can only run one test in a test run using the in-memory container.  I don't
 	// know why that is, however I am living with it for now.
