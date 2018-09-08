@@ -10,7 +10,7 @@ import com.rogers.rmcdouga.fitg.basegame.utils.MarkdownString;
 
 public enum ActionEnum implements Action {
 	CARD_68(68, 
-			"RH",	"Creature attacks one Mission Group. If a creature is named in the Environ, look it up in the Galactic Guide to determine its attributes.  If  no creature is named, ignore Event.", 
+			"H R",	"Creature attacks one Mission Group. If a creature is named in the Environ, look it up in the Galactic Guide to determine its attributes.  If  no creature is named, ignore Event.", 
 			"B",	"Locals raid Enemy forces.  Non-Phasing Player must eliminate one of his military units in the Environ, or, if he controls a PDB that is Up on the planet, place it Down (non-Phasing Player's choice).", 
 			"P",	"Locals shelter character from Enemy.  No Enemy searches may be conducted in the Environ for the remainder of the Mission Phase."),
 	CARD_69(69, 
@@ -155,10 +155,9 @@ public enum ActionEnum implements Action {
 	}
 
 	@Override
-	public boolean isSuccessful(Mission mission, EnvironType environType) {
-		return this.results.get(environType).missions().contains(mission);
+	public Set<Mission> getMissions(EnvironType environType) {
+		return this.results.get(environType).missions();
 	}
-
 
 	@Override
 	public MarkdownString getResultDescription(EnvironType environType) {

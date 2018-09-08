@@ -38,5 +38,30 @@ class ActionEnumTest {
 		
 		assertEquals(expectedCards, foundCards, "Expected card numbers and found card numbers should match.");
 	}
+	
+	@Test
+	void testGetMissions() {
+		Action action = ActionEnum.CARD_68;
+		Set<Mission> missions = action.getMissions(Action.EnvironType.URBAN);
+		assertEquals(2, missions.size(), "Expected only two missions for card 68.");
+		assertTrue(missions.contains(MissionEnum.STEAL_ENEMY_RESOURCES), "Expected Card 68 missions to contain STEAL EMENY RESOURCES");
+		assertTrue(missions.contains(MissionEnum.START_STOP_REBELLION), "Expected Card 68 missions to contain START_STOP_REBELLION");
+		assertFalse(missions.contains(MissionEnum.ASSASSINATION), "Expected Card 68 missions to not contain ASSASSINATION");
+	}
+	
+	@Test
+	void testGetMissionLetters_NoDelim() {
+		Action action = ActionEnum.CARD_68;
+		String missionLetters = action.getMissionLetters(Action.EnvironType.URBAN);
+		assertEquals("H R", missionLetters, "Expected mission letters to be 'R H'.");
+	
+	}
+	
+	@Test
+	void testGetMissionLetters_WithDelim() {
+		Action action = ActionEnum.CARD_68;
+		String missionLetters = action.getMissionLetters(Action.EnvironType.URBAN, "|");
+		assertEquals("H|R", missionLetters, "Expected mission letters to be 'R|H'.");
+	}
 
 }

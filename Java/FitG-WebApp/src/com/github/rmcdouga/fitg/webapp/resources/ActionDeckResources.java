@@ -65,6 +65,10 @@ public class ActionDeckResources {
 				parms.put(key, action.getResultDescription(environType).getAsHtmlString());
 				String keyId = key  + "_id";
 				parms.put(keyId, keyId);
+				String missionLettersKey = environType.name().toLowerCase() + "_missionLetters";;
+				parms.put(missionLettersKey, action.getMissionLetters(environType));
+				String missionLettersKeyId = missionLettersKey  + "_id";
+				parms.put(missionLettersKeyId, missionLettersKeyId);
 			}
 			System.out.println("Returning card #" + action.cardNumber());
 		} else {
