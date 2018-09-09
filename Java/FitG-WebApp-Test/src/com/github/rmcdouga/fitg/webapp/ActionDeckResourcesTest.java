@@ -59,29 +59,34 @@ class ActionDeckResourcesTest {
 		System.out.println("DrawAndDiscard WebTarget='" + target.toString() + "'.");
 		
 		// Test that we start with an empty discard.
-		int emptyDiscardCard = getDiscardCard(target, 0, false);
+		int emptyDiscardCard = getDiscardCard(target, 0, false, false, false);
 		assertEquals(0, emptyDiscardCard, "Expceted the discard to be empty.");
 
 		// Draw a few cards and test that the discard pile contains the cards drawn in reverse order of drawing
-		int firstCardDrawnNum = drawCard(target);
-		int secondCardDrawnNum = drawCard(target);
-		int thirdCardDrawnNum = drawCard(target);
+		int firstCardDrawnNum = drawCard(target, false);
+		int secondCardDrawnNum = drawCard(target, true);
+		int thirdCardDrawnNum = drawCard(target, true);
 		
-		int firstDiscardCard = getDiscardCard(target, 0, true);
+		int firstDiscardCard = getDiscardCard(target, 0, true, false, true);
 		assertEquals(thirdCardDrawnNum, firstDiscardCard, "Expceted top of the discard to be the last card drawn");
-		int secondDiscardCard = getDiscardCard(target, 1, true);
+		int secondDiscardCard = getDiscardCard(target, 1, true, true, true);
 		assertEquals(secondCardDrawnNum, secondDiscardCard, "Expceted second discard card to be the second card drawn");
-		int thirdDiscardCard = getDiscardCard(target, 2, true);
+		int thirdDiscardCard = getDiscardCard(target, 2, true, true, false);
 		assertEquals(firstCardDrawnNum, thirdDiscardCard, "Expceted last discard card to be the first card drawn");
 		
 		// Reset the deck and check that the discard pile is empty.
 		resetDeck(target);
-		int emptyDiscardCardAgain = getDiscardCard(target, 0, false);
+		int emptyDiscardCardAgain = getDiscardCard(target, 0, false, false, false);
 		assertEquals(0, emptyDiscardCardAgain, "Expceted the discard to be empty after reset.");
 
+		// Expect 404 if we seek past the end of the discard when the discard is not empty.
+		emptyDiscardCardAgain = getDiscardCard(target, 10, false, false, false);
+		assertEquals(0, emptyDiscardCardAgain, "Expceted the discard to return empty no matter what discard number is requested.");
+		firstCardDrawnNum = drawCard(target, false);
+		getDiscardCardExpectNotFound(target, 10);
 	}
 
-	private int getDiscardCard(WebTarget target, int discardCardLocation, boolean expectCard) throws IOException {
+	private int getDiscardCard(WebTarget target, int discardCardLocation, boolean expectCard, boolean expectPrevCard, boolean expectNextCard) throws IOException {
 		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/" + Integer.toString(discardCardLocation);
 		Response result = TestUtils.trace(target.path(targetPath).request())
 				 .buildGet()
@@ -94,14 +99,26 @@ class ActionDeckResourcesTest {
 		assertTrue(result.hasEntity(), "Expected response to have body.");
 		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
 		if (expectCard) {
-			return getCardDrawnNum(entity);
+			return getCardDrawnNum(entity, expectPrevCard, expectNextCard);
 		} else {
 			testForResetDeck(entity);
 			return 0;
 		}
 	}
 
-	private int drawCard(WebTarget target) throws IOException {
+	private void getDiscardCardExpectNotFound(WebTarget target, int discardCardLocation) throws IOException {
+		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/" + Integer.toString(discardCardLocation);
+		Response result = TestUtils.trace(target.path(targetPath).request())
+				 .buildGet()
+				 .invoke();
+	
+		if (Response.Status.NOT_FOUND.getStatusCode() != result.getStatus()) {
+			TestUtils.printTrace(result);
+		}
+		assertEquals(Response.Status.NOT_FOUND.getStatusCode(), result.getStatus(), ()->"Response from '" + targetPath + "' should be OK");
+	}
+	
+	private int drawCard(WebTarget target, boolean expectNextCard) throws IOException {
 		Form form = new Form();
 	
 		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DRAW_PATH;
@@ -120,16 +137,22 @@ class ActionDeckResourcesTest {
 		assertTrue(result.hasEntity(), "Expected response to have body.");
 		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
 		System.out.println("HTML Result='" + new String(entity) + "'.");
-		return getCardDrawnNum(entity);
+		return getCardDrawnNum(entity, false, expectNextCard);
 	}
 
-	private int getCardDrawnNum(byte[] result) throws IOException {
+	private int getCardDrawnNum(byte[] result, boolean expectPrevCard, boolean expectNextCard) throws IOException {
 		Document html = Jsoup.parse(new ByteArrayInputStream(result), StandardCharsets.UTF_8.name(), "/");
 		Element paragraph = html.getElementById(ActionDeckResources.CARD_NO_ID);
-		assertNotNull(paragraph, "Couldnm't find welcome text paragraph");
+		assertNotNull(paragraph, "Couldn't find card number.");
 		String paraText = paragraph.ownText();
 		int cardDrawnNum = Integer.parseInt(paraText);
 		assertNotEquals(0, cardDrawnNum, "Card # Drawn should not be 0");
+		if (expectPrevCard) {
+			assertNotNull(html.getElementById(ActionDeckResources.PREV_CARD_NO_ID), "Couldn't find previous card link.");
+		}
+		if (expectNextCard) {
+			assertNotNull(html.getElementById(ActionDeckResources.NEXT_CARD_NO_ID), "Couldn't find next card link.");
+		}
 		return cardDrawnNum;
 	}
 

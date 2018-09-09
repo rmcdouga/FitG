@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -20,6 +21,7 @@ import org.glassfish.jersey.server.mvc.Template;
 import com.github.rmcdouga.fitg.webapp.FitGWebApplication;
 import com.rogers.rmcdouga.fitg.basegame.Action;
 import com.rogers.rmcdouga.fitg.basegame.Action.EnvironType;
+import com.rogers.rmcdouga.fitg.basegame.ActionDeck;
 
 @Path(ActionDeckResources.ACTION_DECK_PATH)
 public class ActionDeckResources {
@@ -31,6 +33,8 @@ public class ActionDeckResources {
 
 	public static final String CARD_NO_ID = "card_no_id";
 	public static final String EMPTY_DISCARD_ID = "empty_discard_id";
+	public static final String PREV_CARD_NO_ID = "prev_cardno_id";
+	public static final String NEXT_CARD_NO_ID = "next_cardno_id";
 	
 	// Specifies that the method processes HTTP GET requests
 	@GET
@@ -42,15 +46,21 @@ public class ActionDeckResources {
 		
 		System.out.println("Retreiving discard #" + cardNo);
 		boolean hasCard = false;
+
 		// TBD - Clean this up, surely this can be more elegant.
-		Optional<Action> topDiscard = FitGWebApplication.game.actionDeck().peekDiscard();
+		ActionDeck actionDeck = FitGWebApplication.game.actionDeck();
+		Optional<Action> topDiscard = actionDeck.peekDiscard();
 		if (topDiscard.isPresent()) {
 			hasCard = true;
 			
+			int numberOfCardsInDiscard = actionDeck.numberOfCardsInDiscard();
+			if (cardNo > numberOfCardsInDiscard) {
+				throw new NotFoundException("Invalid card number, there are only " + numberOfCardsInDiscard + " cards in the discard pile.");
+			}
 			// if cardNo is > 0, then we go through the discard pile to get the indicated card.
 			Optional<Action> nextDiscard = topDiscard;
 			for(int i = 0; i < cardNo && nextDiscard.isPresent(); i++) {
-				nextDiscard = FitGWebApplication.game.actionDeck().peekDiscard(nextDiscard.get());
+				nextDiscard = actionDeck.peekDiscard(nextDiscard.get());
 				if (nextDiscard.isPresent()) {
 					topDiscard = nextDiscard;
 				}
@@ -70,6 +80,20 @@ public class ActionDeckResources {
 				String missionLettersKeyId = missionLettersKey  + "_id";
 				parms.put(missionLettersKeyId, missionLettersKeyId);
 			}
+
+			boolean hasPrevCard = cardNo > 0;	// Is there a previous card
+			parms.put("has_prev_card", hasPrevCard);
+			if (hasPrevCard) {
+				parms.put("prev_cardno", cardNo - 1);
+				parms.put(PREV_CARD_NO_ID, PREV_CARD_NO_ID);
+			}
+			boolean hasNextCard = cardNo + 1 < numberOfCardsInDiscard;
+			parms.put("has_next_card", hasNextCard);
+			if (hasNextCard) {
+				parms.put("next_cardno", cardNo + 1);
+				parms.put(NEXT_CARD_NO_ID, NEXT_CARD_NO_ID);
+			}
+			
 			System.out.println("Returning card #" + action.cardNumber());
 		} else {
 			parms.put("empty_discard_id", EMPTY_DISCARD_ID);
