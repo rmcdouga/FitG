@@ -93,6 +93,8 @@ public class ActionDeckResources {
 			if (hasNextCard) {
 				parms.put("next_cardno", cardNo + 1);
 			}
+			parms.put("discard_card_number", Integer.toString(cardNo + 1));
+			parms.put("discard_num_cards", Integer.toString(actionDeck.numberOfCardsInDiscard()));
 			
 			System.out.println("Returning card #" + action.cardNumber() + " hasPrevCard=" + Boolean.toString(hasPrevCard) + " hasNextCard=" + Boolean.toString(hasNextCard));
 		} else {
