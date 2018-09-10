@@ -27,6 +27,6 @@
 <button type="submit" name="draw" formaction="draw">Draw Card</button>
 <button type="submit" name="reset" formaction="reset">Reset Deck</button>
 </form>
-{{#has_prev_card}}<a id="{{prev_cardno_id}}" href="{{prev_cardno}}">Previous Discard</a>&nbsp;&nbsp;&nbsp;&nbsp;{{/has_prev_card}}{{#has_next_card}}<a id="{{next_cardno_id}}" href="{{next_cardno}}">Next Discard</a>{{/has_next_card}}
+<a id="{{prev_cardno_id}}" href="{{prev_cardno}}"{{^has_prev_card}} disabled="true"{{/has_prev_card}}>Previous Discard</a>&nbsp;&nbsp;&nbsp;&nbsp;<a id="{{next_cardno_id}}" href="{{next_cardno}}"{{^has_next_card}} disabled="true"{{/has_next_card}}>Next Discard</a>
 </body>
 </html>

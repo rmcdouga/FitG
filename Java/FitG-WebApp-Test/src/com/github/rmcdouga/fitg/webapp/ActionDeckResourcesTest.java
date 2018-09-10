@@ -3,8 +3,10 @@ package com.github.rmcdouga.fitg.webapp;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -147,11 +149,21 @@ class ActionDeckResourcesTest {
 		String paraText = paragraph.ownText();
 		int cardDrawnNum = Integer.parseInt(paraText);
 		assertNotEquals(0, cardDrawnNum, "Card # Drawn should not be 0");
+		Element prevCardAnchor = html.getElementById(ActionDeckResources.PREV_CARD_NO_ID);
+		assertNotNull(prevCardAnchor, "Couldn't find previous card link.");
+		String prevCardDisabled = prevCardAnchor.attr("disabled");
 		if (expectPrevCard) {
-			assertNotNull(html.getElementById(ActionDeckResources.PREV_CARD_NO_ID), "Couldn't find previous card link.");
+			assertTrue(prevCardDisabled.isEmpty(), "Expected previous card link to be enabled.");
+		} else {
+			assertFalse(prevCardDisabled.isEmpty(), "Expected previous card link to be disabled.");
 		}
+		Element nextCardAnchor = html.getElementById(ActionDeckResources.NEXT_CARD_NO_ID);
+		assertNotNull(nextCardAnchor, "Couldn't find next card link.");
+		String nextCardDisabled = nextCardAnchor.attr("disabled");
 		if (expectNextCard) {
-			assertNotNull(html.getElementById(ActionDeckResources.NEXT_CARD_NO_ID), "Couldn't find next card link.");
+			assertTrue(nextCardDisabled.isEmpty(), "Expected next card link to be enabled.");
+		} else {
+			assertFalse(nextCardDisabled.isEmpty(), "Expected next card link to be disabled.");
 		}
 		return cardDrawnNum;
 	}

@@ -83,18 +83,18 @@ public class ActionDeckResources {
 
 			boolean hasPrevCard = cardNo > 0;	// Is there a previous card
 			parms.put("has_prev_card", hasPrevCard);
+			parms.put(PREV_CARD_NO_ID, PREV_CARD_NO_ID);
 			if (hasPrevCard) {
 				parms.put("prev_cardno", cardNo - 1);
-				parms.put(PREV_CARD_NO_ID, PREV_CARD_NO_ID);
 			}
 			boolean hasNextCard = cardNo + 1 < numberOfCardsInDiscard;
 			parms.put("has_next_card", hasNextCard);
+			parms.put(NEXT_CARD_NO_ID, NEXT_CARD_NO_ID);
 			if (hasNextCard) {
 				parms.put("next_cardno", cardNo + 1);
-				parms.put(NEXT_CARD_NO_ID, NEXT_CARD_NO_ID);
 			}
 			
-			System.out.println("Returning card #" + action.cardNumber());
+			System.out.println("Returning card #" + action.cardNumber() + " hasPrevCard=" + Boolean.toString(hasPrevCard) + " hasNextCard=" + Boolean.toString(hasNextCard));
 		} else {
 			parms.put("empty_discard_id", EMPTY_DISCARD_ID);
 			System.out.println("Discard is empty.");
