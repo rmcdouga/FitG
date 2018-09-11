@@ -75,7 +75,7 @@ public class ActionDeckResources {
 				parms.put(key, action.getResultDescription(environType).getAsHtmlString());
 				String keyId = key  + "_id";
 				parms.put(keyId, keyId);
-				String missionLettersKey = environType.name().toLowerCase() + "_missionLetters";;
+				String missionLettersKey = environType.name().toLowerCase() + "_missionLetters";
 				parms.put(missionLettersKey, action.getMissionLetters(environType));
 				String missionLettersKeyId = missionLettersKey  + "_id";
 				parms.put(missionLettersKeyId, missionLettersKeyId);
@@ -113,7 +113,7 @@ public class ActionDeckResources {
 	public Response drawActionCard() throws URISyntaxException {
 		FitGWebApplication.game.actionDeck().draw();
 		// After drawing, redirect the user to GET the top card on the discard (i.e. the card drawn)
-		return Response.seeOther(new URI(ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
+		return Response.seeOther(new URI(".." + FitGWebApplication.APPLICATION_TOP_LEVEL + ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
 	}
 
 	// Specifies that the method processes HTTP POST requests
@@ -123,7 +123,7 @@ public class ActionDeckResources {
 	public Response resetActionCards() throws URISyntaxException {
 		FitGWebApplication.game.actionDeck().reset();
 		// After reseting, redirect the user to GET the top card on the discard (i.e. the card drawn)
-		return Response.seeOther(new URI(ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
+		return Response.seeOther(new URI(".." + FitGWebApplication.APPLICATION_TOP_LEVEL + ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
 	}
 
 	// Ping Test

@@ -34,5 +34,9 @@
 		
 		<!-- dependency org="org.yaml" name="snakeyaml" rev="[1.15,)"/ -->
 		<!-- dependency org="org.apache.commons" name="commons-lang3" rev="[3.4,)"/ -->
+		
+		<!-- FitG Basegame Dependencies	-->
+		<dependency org="com.atlassian.commonmark" name="commonmark" rev="0.11.0" />
+		
 	</dependencies>
 </ivy-module>
