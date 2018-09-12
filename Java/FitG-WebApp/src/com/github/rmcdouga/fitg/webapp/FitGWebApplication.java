@@ -17,7 +17,7 @@ import com.rogers.rmcdouga.fitg.basegame.Game;
 @ApplicationPath(FitGWebApplication.APPLICATION_TOP_LEVEL)
 public class FitGWebApplication extends ResourceConfig {
 
-	public static final String APPLICATION_TOP_LEVEL = "/FitG";
+	public static final String APPLICATION_TOP_LEVEL = "/";
 	public static final String PING_PATH = "/ping";
 	public static final String PING_RESPONSE = "Ping!";
 

@@ -25,7 +25,8 @@ import com.rogers.rmcdouga.fitg.basegame.ActionDeck;
 
 @Path(ActionDeckResources.ACTION_DECK_PATH)
 public class ActionDeckResources {
-	public static final String ACTION_DECK_PATH = "/ActionDeck";
+	public static final String REL_ACTION_DECK_PATH = "ActionDeck";
+	public static final String ACTION_DECK_PATH = "/" + REL_ACTION_DECK_PATH;
 	public static final String DRAW_PATH = "/Draw";
 	public static final String RESET_PATH = "/Reset";
 	public static final String DISCARD_PATH = "/Discard";
@@ -113,7 +114,7 @@ public class ActionDeckResources {
 	public Response drawActionCard() throws URISyntaxException {
 		FitGWebApplication.game.actionDeck().draw();
 		// After drawing, redirect the user to GET the top card on the discard (i.e. the card drawn)
-		return Response.seeOther(new URI(".." + FitGWebApplication.APPLICATION_TOP_LEVEL + ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
+		return Response.seeOther(new URI(REL_ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
 	}
 
 	// Specifies that the method processes HTTP POST requests
@@ -123,7 +124,7 @@ public class ActionDeckResources {
 	public Response resetActionCards() throws URISyntaxException {
 		FitGWebApplication.game.actionDeck().reset();
 		// After reseting, redirect the user to GET the top card on the discard (i.e. the card drawn)
-		return Response.seeOther(new URI(".." + FitGWebApplication.APPLICATION_TOP_LEVEL + ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
+		return Response.seeOther(new URI(REL_ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
 	}
 
 	// Ping Test
