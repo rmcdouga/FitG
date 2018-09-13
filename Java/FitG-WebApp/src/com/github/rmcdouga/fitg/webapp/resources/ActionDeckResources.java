@@ -71,11 +71,11 @@ public class ActionDeckResources {
 			parms.put("card_number", Integer.toString(action.cardNumber()));
 			parms.put("card_number_id", CARD_NO_ID);
 			for (EnvironType environType : EnumSet.allOf(EnvironType.class)) {
-				String key = environType.name().toLowerCase() + "_desc";
-				System.out.println("Writing desc key '" + key + "'.");
-				parms.put(key, action.getResultDescription(environType).getAsHtmlString());
-				String keyId = key  + "_id";
-				parms.put(keyId, keyId);
+				String descKey = environType.name().toLowerCase() + "_desc";
+				System.out.println("Writing desc key '" + descKey + "'.");
+				parms.put(descKey, action.getResultDescription(environType).getAsHtmlString());
+				String descKeyId = descKey  + "_id";
+				parms.put(descKeyId, descKeyId);
 				String missionLettersKey = environType.name().toLowerCase() + "_missionLetters";
 				parms.put(missionLettersKey, action.getMissionLetters(environType));
 				String missionLettersKeyId = missionLettersKey  + "_id";
@@ -97,6 +97,7 @@ public class ActionDeckResources {
 			parms.put("discard_card_number", Integer.toString(cardNo + 1));
 			parms.put("discard_num_cards", Integer.toString(actionDeck.numberOfCardsInDiscard()));
 			
+			System.out.println("parms='" + parms.toString() + "'");
 			System.out.println("Returning card #" + action.cardNumber() + " hasPrevCard=" + Boolean.toString(hasPrevCard) + " hasNextCard=" + Boolean.toString(hasNextCard));
 		} else {
 			parms.put("empty_discard_id", EMPTY_DISCARD_ID);

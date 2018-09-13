@@ -3,30 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <title>Action Deck</title>
+<style>
+strong.missionLetters {
+    font-family: Arial Black;
+}
+
+span.environType {
+    font-family: Arial Black;
+    font-style: italic;
+}
+
+span.desc {
+	font-family: serif;
+}
+</style>
 </head>
 <body>
 {{#has_card}}
-<h2 id="{{card_number_id}}">{{card_number}}</h2>
-<div>Urban: 
-<strong id="{{urban_missionLetters_id}}">{{{urban_missionLetters}}}</strong>
-<span id="{{urban_desc_id"}}">{{{urban_desc}}}</span>
+<h2 id="{{card_number_id}}">nr. {{card_number}}</h2>
+<div><span class="environType">Urban:</span> 
+<strong id="{{urban_missionLetters_id}}" class="missionLetters">{{{urban_missionLetters}}}</strong>
+<span id="{{urban_desc_id}}" class="desc">{{{urban_desc}}}</span>
 </div>
-<div>Special: 
-<strong id="{{special_missionLetters_id}}">{{{special_missionLetters}}}</strong>
-<span id="{{special_desc_id"}}">{{{special_desc}}}</span>
+<div><span class="environType">Special:</span> 
+<strong id="{{special_missionLetters_id}}" class="missionLetters">{{{special_missionLetters}}}</strong>
+<span id="{{special_desc_id}}" class="desc">{{{special_desc}}}</span>
 </div>
-<div>Wild: 
-<strong id="{{wild_missionLetters_id}}">{{{wild_missionLetters}}}</strong>
-<span id="{{wild_desc_id"}}">{{{wild_desc}}}</span>
+<div><span class="environType">Wild: </span>
+<strong id="{{wild_missionLetters_id}}" class="missionLetters">{{{wild_missionLetters}}}</strong>
+<span id="{{wild_desc_id}}" class="desc">{{{wild_desc}}}</span>
 </div>
 {{/has_card}}
 {{^has_card}}
 <h2 id="{{empty_discard_id}}">No cards have been drawn yet.</h2>
 {{/has_card}}
+<div>
+<p></p>
 <form >
 <button type="submit" name="draw" formaction="../Draw" formmethod="post">Draw Card</button>
 <button type="submit" name="reset" formaction="../Reset" formmethod="post">Reset Deck</button>
 </form>
+<p></p>
 <a id="{{prev_cardno_id}}" href="{{prev_cardno}}"{{^has_prev_card}} disabled="true"{{/has_prev_card}}>Previous Discard</a>&nbsp{{discard_card_number}}/{{discard_num_cards}}&nbsp;<a id="{{next_cardno_id}}" href="{{next_cardno}}"{{^has_next_card}} disabled="true"{{/has_next_card}}>Next Discard</a>
+</div>
 </body>
 </html>
