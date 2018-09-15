@@ -5,16 +5,20 @@
 <title>Action Deck</title>
 <style>
 strong.missionLetters {
-    font-family: Arial Black;
+    font-family: "Arial Black", Arial-BoldMT;
 }
 
 span.environType {
-    font-family: Arial Black;
+    font-family: "Arial Black", Arial-BoldItalicMT;
     font-style: italic;
 }
 
 span.desc {
 	font-family: serif;
+}
+
+button.deckAction {
+	font-size: medium;
 }
 </style>
 </head>
@@ -40,8 +44,8 @@ span.desc {
 <div>
 <p></p>
 <form >
-<button type="submit" name="draw" formaction="../Draw" formmethod="post">Draw Card</button>
-<button type="submit" name="reset" formaction="../Reset" formmethod="post">Reset Deck</button>
+<button type="submit" name="draw" formaction="../Draw" formmethod="post" class="deckAction">Draw Card</button>
+<button type="submit" name="reset" formaction="../Reset" formmethod="post" class="deckAction">Reset Deck</button>
 </form>
 <p></p>
 <a id="{{prev_cardno_id}}" href="{{prev_cardno}}"{{^has_prev_card}} disabled="true"{{/has_prev_card}}>Previous Discard</a>&nbsp{{discard_card_number}}/{{discard_num_cards}}&nbsp;<a id="{{next_cardno_id}}" href="{{next_cardno}}"{{^has_next_card}} disabled="true"{{/has_next_card}}>Next Discard</a>

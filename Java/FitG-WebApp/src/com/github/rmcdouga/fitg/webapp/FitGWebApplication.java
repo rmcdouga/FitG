@@ -1,10 +1,15 @@
 package com.github.rmcdouga.fitg.webapp;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -12,9 +17,11 @@ import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.mvc.MvcFeature;
 import org.glassfish.jersey.server.mvc.mustache.MustacheMvcFeature;
 
+import com.github.rmcdouga.fitg.webapp.resources.ActionDeckResources;
 import com.rogers.rmcdouga.fitg.basegame.Game;
 
 @ApplicationPath(FitGWebApplication.APPLICATION_TOP_LEVEL)
+@Path("")
 public class FitGWebApplication extends ResourceConfig {
 
 	public static final String APPLICATION_TOP_LEVEL = "/";
@@ -38,7 +45,15 @@ public class FitGWebApplication extends ResourceConfig {
 
 
 	public static final Game game = new Game();
-	
+
+	// Specifies that the method processes HTTP POST requests
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public Response resetActionCards() throws URISyntaxException {
+		System.out.println("Main Page redirect");
+		return Response.seeOther(new URI(ActionDeckResources.REL_ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/0")).build();
+	}
+
 	// Ping Test
 	@GET
 	@Path(FitGWebApplication.PING_PATH)
