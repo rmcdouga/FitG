@@ -23,6 +23,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
+import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.mvc.MvcFeature;
@@ -41,7 +43,7 @@ import com.github.rmcdouga.fitg.webapp.resources.ActionDeckResources;
 class ActionDeckResourcesTest {
 	
 	@RegisterExtension
-	JerseyExtension jerseyExtension = new JerseyExtension(this::configureJersey);
+	JerseyExtension jerseyExtension = new JerseyExtension(this::configureJersey, this::configureJerseyClient);
 
 	private Application configureJersey(ExtensionContext extensionContext) {
 		ResourceConfig resourceConfig = new ResourceConfig(FitGWebApplication.class);
@@ -54,6 +56,11 @@ class ActionDeckResourcesTest {
 		resourceConfig.property("com.sun.jersey.config.feature.Debug", "true");
 
 		return resourceConfig;
+	}
+	
+	private ClientConfig configureJerseyClient(ExtensionContext extensionContext, ClientConfig clientConfig) {
+		clientConfig.connectorProvider(new ApacheConnectorProvider());
+		return clientConfig;
 	}
 	
 	@Test
@@ -86,6 +93,17 @@ class ActionDeckResourcesTest {
 		assertEquals(0, emptyDiscardCardAgain, "Expceted the discard to return empty no matter what discard number is requested.");
 		firstCardDrawnNum = drawCard(target, false);
 		getDiscardCardExpectNotFound(target, 10);
+		
+		// Start JSON Tests
+		resetDeck(target);
+		int emptyDiscardCardJson = getDiscardCardJson(target, 0, false, false, false);
+		assertEquals(0, emptyDiscardCardJson, "Expceted the discard to be empty.");
+		// Draw a few cards and test that the discard pile contains the cards drawn in reverse order of drawing
+		int firstCardDrawnNumJson = drawCardJson(target, false);
+		int secondCardDrawnNumJson = drawCardJson(target, true);
+		int thirdCardDrawnNumJson = drawCardJson(target, true);
+		
+		
 	}
 
 	private int getDiscardCard(WebTarget target, int discardCardLocation, boolean expectCard, boolean expectPrevCard, boolean expectNextCard) throws IOException {
@@ -146,8 +164,9 @@ class ActionDeckResourcesTest {
 		Document html = Jsoup.parse(new ByteArrayInputStream(result), StandardCharsets.UTF_8.name(), "/");
 		Element paragraph = html.getElementById(ActionDeckResources.CARD_NO_ID);
 		assertNotNull(paragraph, "Couldn't find card number.");
-		String paraText = paragraph.ownText();
-		int cardDrawnNum = Integer.parseInt(paraText);
+		String paraText[] = paragraph.ownText().split(" ");	// Should be nr. ##
+		assertEquals("nr.", paraText[0], "Expected Card Number text to start with 'nr.'");
+		int cardDrawnNum = Integer.parseInt(paraText[1]);
 		assertNotEquals(0, cardDrawnNum, "Card # Drawn should not be 0");
 		Element prevCardAnchor = html.getElementById(ActionDeckResources.PREV_CARD_NO_ID);
 		assertNotNull(prevCardAnchor, "Couldn't find previous card link.");
@@ -209,5 +228,86 @@ class ActionDeckResourcesTest {
 		String string = IOUtils.toString((InputStream) result.getEntity(), StandardCharsets.UTF_8);
 		assertThat(string, containsString(FitGWebApplication.PING_RESPONSE));
 	}
+
+	private int getDiscardCardJson(WebTarget target, int discardCardLocation, boolean expectCard, boolean expectPrevCard, boolean expectNextCard) throws IOException {
+		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/" + Integer.toString(discardCardLocation);
+		Response result = TestUtils.trace(target.path(targetPath).request())
+				.accept(MediaType.APPLICATION_JSON)
+				.buildGet().invoke();
+
+		if (Response.Status.OK.getStatusCode() != result.getStatus()) {
+			TestUtils.printTrace(result);
+		}
+		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + targetPath + "' should be OK");
+		assertTrue(result.hasEntity(), "Expected response to have body.");
+		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
+		System.out.println("---- JSON Response ----");
+		System.out.println(new String(entity));
+		System.out.println("-----------------------");
+//		if (expectCard) {
+//			return getCardDrawnNum(entity, expectPrevCard, expectNextCard);
+//		} else {
+//			testForResetDeck(entity);
+//			return 0;
+//		}
+		return 0;
+	}
+
+	private int drawCardJson(WebTarget target, boolean expectNextCard) throws IOException {
+		Form form = new Form();
+	
+		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DRAW_PATH;
+		System.out.println("TargetPath='" + targetPath + "'.");
+		WebTarget path = target.path(targetPath);
+		System.out.println("DrawCard WebTarget='" + path.toString() + "'.");
+		Invocation buildPost = TestUtils.trace(path.request())
+				 .accept(MediaType.APPLICATION_JSON)
+				 .buildPost(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+		Response result = buildPost
+				 .invoke();
+	
+		if (Response.Status.OK.getStatusCode() != result.getStatus()) {
+			TestUtils.printTrace(result);
+		}
+		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + targetPath + "' should be OK");
+		assertTrue(result.hasEntity(), "Expected response to have body.");
+		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
+		System.out.println("---- JSON Response ----");
+		System.out.println(new String(entity));
+		System.out.println("-----------------------");
+		return getCardDrawnNumJson(entity, false, expectNextCard);
+	}
+
+
+	private int getCardDrawnNumJson(byte[] result, boolean expectPrevCard, boolean expectNextCard) throws IOException {
+		// TODO: Make this work on JSON
+//		Document html = Jsoup.parse(new ByteArrayInputStream(result), StandardCharsets.UTF_8.name(), "/");
+//		Element paragraph = html.getElementById(ActionDeckResources.CARD_NO_ID);
+//		assertNotNull(paragraph, "Couldn't find card number.");
+//		String paraText[] = paragraph.ownText().split(" ");	// Should be nr. ##
+//		assertEquals("nr.", paraText[0], "Expected Card Number text to start with 'nr.'");
+//		int cardDrawnNum = Integer.parseInt(paraText[1]);
+//		assertNotEquals(0, cardDrawnNum, "Card # Drawn should not be 0");
+//		Element prevCardAnchor = html.getElementById(ActionDeckResources.PREV_CARD_NO_ID);
+//		assertNotNull(prevCardAnchor, "Couldn't find previous card link.");
+//		String prevCardDisabled = prevCardAnchor.attr("disabled");
+//		if (expectPrevCard) {
+//			assertTrue(prevCardDisabled.isEmpty(), "Expected previous card link to be enabled.");
+//		} else {
+//			assertFalse(prevCardDisabled.isEmpty(), "Expected previous card link to be disabled.");
+//		}
+//		Element nextCardAnchor = html.getElementById(ActionDeckResources.NEXT_CARD_NO_ID);
+//		assertNotNull(nextCardAnchor, "Couldn't find next card link.");
+//		String nextCardDisabled = nextCardAnchor.attr("disabled");
+//		if (expectNextCard) {
+//			assertTrue(nextCardDisabled.isEmpty(), "Expected next card link to be enabled.");
+//		} else {
+//			assertFalse(nextCardDisabled.isEmpty(), "Expected next card link to be disabled.");
+//		}
+//		return cardDrawnNum;
+		return 0;
+	}
+
+
 
 }

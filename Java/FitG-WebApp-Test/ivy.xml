@@ -39,8 +39,10 @@
 		<dependency org="com.sun.xml.bind" name="jaxb-core" rev="2.2.11" />
 		<dependency org="com.sun.xml.bind" name="jaxb-impl" rev="2.2.11" />
 		<dependency org="javax.activation" name="activation" rev="1.1.1" />
-
-		<dependency org="com.github.hanleyt" name="jersey-junit" rev="1.0.0" />
+		
+		<!-- Grabbed a copy of this.
+			<dependency org="com.github.hanleyt" name="jersey-junit" rev="1.0.0" />
+		-->
 
 		<!-- dependency org="org.glassfish.jersey.test-framework.providers" name="jersey-test-framework-provider-external" rev="2.25.1"/ -->
 		<!-- dependency org="org.yaml" name="snakeyaml" rev="[1.15,)"/ -->
