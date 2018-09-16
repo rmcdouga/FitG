@@ -28,7 +28,13 @@ public class MarkdownString {
 		Parser parser = Parser.builder().build();
 		Node document = parser.parse(rawString);
 		HtmlRenderer renderer = HtmlRenderer.builder().build();
-		return renderer.render(document);
+		String renderedString = renderer.render(document);
+		final String startParaTeg = "<p>";
+		final String endParaTag = "</p>\n";
+		if (renderedString.startsWith(startParaTeg) && renderedString.endsWith(endParaTag)) {
+			renderedString = renderedString.substring(startParaTeg.length(), renderedString.length() - endParaTag.length());
+		}
+		return renderedString;
 	}
 	
 	/* (non-Javadoc)
