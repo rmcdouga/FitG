@@ -14,6 +14,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonStructure;
+import javax.json.JsonValue;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
@@ -67,6 +72,7 @@ class ActionDeckResourcesTest {
 	void testDrawAndDiscard(WebTarget target) throws IOException {
 		System.out.println("DrawAndDiscard WebTarget='" + target.toString() + "'.");
 		
+		{
 		// Test that we start with an empty discard.
 		int emptyDiscardCard = getDiscardCard(target, 0, false, false, false);
 		assertEquals(0, emptyDiscardCard, "Expceted the discard to be empty.");
@@ -93,9 +99,11 @@ class ActionDeckResourcesTest {
 		assertEquals(0, emptyDiscardCardAgain, "Expceted the discard to return empty no matter what discard number is requested.");
 		firstCardDrawnNum = drawCard(target, false);
 		getDiscardCardExpectNotFound(target, 10);
+		}
 		
+		{
 		// Start JSON Tests
-		resetDeck(target);
+		resetDeck(target);  // TODO: Change this to JSON
 		int emptyDiscardCardJson = getDiscardCardJson(target, 0, false, false, false);
 		assertEquals(0, emptyDiscardCardJson, "Expceted the discard to be empty.");
 		// Draw a few cards and test that the discard pile contains the cards drawn in reverse order of drawing
@@ -103,12 +111,30 @@ class ActionDeckResourcesTest {
 		int secondCardDrawnNumJson = drawCardJson(target, true);
 		int thirdCardDrawnNumJson = drawCardJson(target, true);
 		
+		int firstDiscardCardJson = getDiscardCardJson(target, 0, true, false, true);
+		assertEquals(thirdCardDrawnNumJson, firstDiscardCardJson, "Expceted top of the discard to be the last card drawn");
+		int secondDiscardCardJson = getDiscardCardJson(target, 1, true, true, true);
+		assertEquals(secondCardDrawnNumJson, secondDiscardCardJson, "Expceted second discard card to be the second card drawn");
+		int thirdDiscardCardJson = getDiscardCardJson(target, 2, true, true, false);
+		assertEquals(firstCardDrawnNumJson, thirdDiscardCardJson, "Expceted last discard card to be the first card drawn");
 		
+		// Reset the deck and check that the discard pile is empty.
+		resetDeck(target);
+		int emptyDiscardCardAgainJson = getDiscardCardJson(target, 0, false, false, false);
+		assertEquals(0, emptyDiscardCardAgainJson, "Expceted the discard to be empty after reset.");
+
+		// Expect 404 if we seek past the end of the discard when the discard is not empty.
+		emptyDiscardCardAgainJson = getDiscardCardJson(target, 10, false, false, false);
+		assertEquals(0, emptyDiscardCardAgainJson, "Expceted the discard to return empty no matter what discard number is requested.");
+		firstCardDrawnNumJson = drawCardJson(target, false);
+		getDiscardCardExpectNotFound(target, 10);
+		}
 	}
 
 	private int getDiscardCard(WebTarget target, int discardCardLocation, boolean expectCard, boolean expectPrevCard, boolean expectNextCard) throws IOException {
 		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/" + Integer.toString(discardCardLocation);
 		Response result = TestUtils.trace(target.path(targetPath).request())
+				 .accept(MediaType.TEXT_HTML_TYPE)
 				 .buildGet()
 				 .invoke();
 	
@@ -129,6 +155,7 @@ class ActionDeckResourcesTest {
 	private void getDiscardCardExpectNotFound(WebTarget target, int discardCardLocation) throws IOException {
 		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/" + Integer.toString(discardCardLocation);
 		Response result = TestUtils.trace(target.path(targetPath).request())
+				 .accept(MediaType.TEXT_HTML_TYPE)
 				 .buildGet()
 				 .invoke();
 	
@@ -146,6 +173,7 @@ class ActionDeckResourcesTest {
 		WebTarget path = target.path(targetPath);
 		System.out.println("DrawCard WebTarget='" + path.toString() + "'.");
 		Invocation buildPost = TestUtils.trace(path.request())
+				 .accept(MediaType.TEXT_HTML_TYPE)
 				 .buildPost(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 		Response result = buildPost
 				 .invoke();
@@ -202,6 +230,7 @@ class ActionDeckResourcesTest {
 		WebTarget path = target.path(targetPath);
 		System.out.println("DrawCard WebTarget='" + path.toString() + "'.");
 		Invocation buildPost = TestUtils.trace(path.request())
+				 .accept(MediaType.TEXT_HTML_TYPE)
 				 .buildPost(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 		Response result = buildPost
 				 .invoke();
@@ -212,7 +241,7 @@ class ActionDeckResourcesTest {
 		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + targetPath + "' should be OK");
 		assertTrue(result.hasEntity(), "Expected response to have body.");
 		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
-		System.out.println("HTML Result='" + new String(entity) + "'.");		
+		testForResetDeck(entity);
 	}
 	
 	// For the time being it appears that I can only run one test in a test run using the in-memory container.  I don't
@@ -244,13 +273,12 @@ class ActionDeckResourcesTest {
 		System.out.println("---- JSON Response ----");
 		System.out.println(new String(entity));
 		System.out.println("-----------------------");
-//		if (expectCard) {
-//			return getCardDrawnNum(entity, expectPrevCard, expectNextCard);
-//		} else {
-//			testForResetDeck(entity);
-//			return 0;
-//		}
-		return 0;
+		if (expectCard) {
+			return getCardDrawnNumJson(entity, expectPrevCard, expectNextCard);
+		} else {
+			testForResetDeckJson(entity);
+			return 0;
+		}
 	}
 
 	private int drawCardJson(WebTarget target, boolean expectNextCard) throws IOException {
@@ -280,34 +308,68 @@ class ActionDeckResourcesTest {
 
 
 	private int getCardDrawnNumJson(byte[] result, boolean expectPrevCard, boolean expectNextCard) throws IOException {
-		// TODO: Make this work on JSON
-//		Document html = Jsoup.parse(new ByteArrayInputStream(result), StandardCharsets.UTF_8.name(), "/");
-//		Element paragraph = html.getElementById(ActionDeckResources.CARD_NO_ID);
-//		assertNotNull(paragraph, "Couldn't find card number.");
-//		String paraText[] = paragraph.ownText().split(" ");	// Should be nr. ##
-//		assertEquals("nr.", paraText[0], "Expected Card Number text to start with 'nr.'");
-//		int cardDrawnNum = Integer.parseInt(paraText[1]);
-//		assertNotEquals(0, cardDrawnNum, "Card # Drawn should not be 0");
-//		Element prevCardAnchor = html.getElementById(ActionDeckResources.PREV_CARD_NO_ID);
-//		assertNotNull(prevCardAnchor, "Couldn't find previous card link.");
-//		String prevCardDisabled = prevCardAnchor.attr("disabled");
-//		if (expectPrevCard) {
-//			assertTrue(prevCardDisabled.isEmpty(), "Expected previous card link to be enabled.");
-//		} else {
-//			assertFalse(prevCardDisabled.isEmpty(), "Expected previous card link to be disabled.");
-//		}
-//		Element nextCardAnchor = html.getElementById(ActionDeckResources.NEXT_CARD_NO_ID);
-//		assertNotNull(nextCardAnchor, "Couldn't find next card link.");
-//		String nextCardDisabled = nextCardAnchor.attr("disabled");
-//		if (expectNextCard) {
-//			assertTrue(nextCardDisabled.isEmpty(), "Expected next card link to be enabled.");
-//		} else {
-//			assertFalse(nextCardDisabled.isEmpty(), "Expected next card link to be disabled.");
-//		}
-//		return cardDrawnNum;
-		return 0;
+		JsonReader reader = Json.createReader(new ByteArrayInputStream(result));
+		JsonStructure jsonStructure = reader.read();
+		assertEquals(JsonValue.ValueType.OBJECT, jsonStructure.getValueType(), "Expected top level structure to be an object.");
+		
+		JsonObject jsonObject = jsonStructure.asJsonObject();
+		JsonObject actioCardDiscardObject = jsonObject.getJsonObject(ActionDeckResources.ACTION_CARD_DISCARD_LABEL);
+		boolean hasCard = actioCardDiscardObject.getBoolean(ActionDeckResources.HAS_CARD_LABEL);
+		assertTrue(hasCard, "Expected hasCard to be true.");
+
+		int cardDrawnNum = actioCardDiscardObject.getInt(ActionDeckResources.CARD_NUMBER_LABEL);
+		assertNotEquals(0, cardDrawnNum, "Card # Drawn should not be 0");
+
+		boolean hasPrevCard = actioCardDiscardObject.getBoolean(ActionDeckResources.HAS_PREV_CARD_LABEL);
+		assertEquals(expectPrevCard, hasPrevCard, "Expected hasPrevCard to be '" + Boolean.toString(expectPrevCard) + "'.");
+		if (hasPrevCard) {
+			int prevCardNo = actioCardDiscardObject.getInt(ActionDeckResources.PREV_CARDNO_LABEL);
+			assertTrue(prevCardNo >= 0 && prevCardNo < 30, "Expecte previous card number to be >= 0 & < 30, but was '" + Integer.toString(prevCardNo) + "'.");
+		}
+		
+		boolean hasNextCard = actioCardDiscardObject.getBoolean(ActionDeckResources.HAS_NEXT_CARD_LABEL);
+		assertEquals(expectNextCard, hasNextCard, "Expected hasNextCard to be '" + Boolean.toString(expectNextCard) + "'.");
+		if (hasNextCard) {
+			int nextCardNo = actioCardDiscardObject.getInt(ActionDeckResources.NEXT_CARDNO_LABEL);
+			assertTrue(nextCardNo > 0 && nextCardNo < 30, "Expecte next card number to be > 0 & < 30, but was '" + Integer.toString(nextCardNo) + "'.");
+		}
+		return cardDrawnNum;
 	}
 
+	private void testForResetDeckJson(byte[] result) throws IOException {
+		JsonReader reader = Json.createReader(new ByteArrayInputStream(result));
+		JsonStructure jsonStructure = reader.read();
+		assertEquals(JsonValue.ValueType.OBJECT, jsonStructure.getValueType(), "Expected top level structure to be an object.");
+		
+		JsonObject jsonObject = jsonStructure.asJsonObject();
+		JsonObject actioCardDiscardObject = jsonObject.getJsonObject(ActionDeckResources.ACTION_CARD_DISCARD_LABEL);
+
+		boolean hasCard = actioCardDiscardObject.getBoolean(ActionDeckResources.HAS_CARD_LABEL);
+		assertFalse(hasCard, "Expected hasCard to be false.");
+	}
+
+	private void resetDeckJson(WebTarget target) throws IOException {
+		Form form = new Form();
+		
+		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.RESET_PATH;
+		System.out.println("TargetPath='" + targetPath + "'.");
+		WebTarget path = target.path(targetPath);
+		System.out.println("DrawCard WebTarget='" + path.toString() + "'.");
+		Invocation buildPost = TestUtils.trace(path.request())
+				 .accept(MediaType.APPLICATION_JSON_TYPE)
+				 .buildPost(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+		Response result = buildPost
+				 .invoke();
+	
+		if (Response.Status.OK.getStatusCode() != result.getStatus()) {
+			TestUtils.printTrace(result);
+		}
+		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + targetPath + "' should be OK");
+		assertTrue(result.hasEntity(), "Expected response to have body.");
+		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
+		testForResetDeckJson(entity);
+	}
+	
 
 
 }

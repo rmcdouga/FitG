@@ -1,16 +1,21 @@
 package com.github.rmcdouga.fitg.webapp.util;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 
+import javax.json.Json;
 import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonException;
 import javax.json.JsonNumber;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.json.JsonString;
 import javax.json.JsonValue;
 
@@ -26,12 +31,7 @@ public class JsonUtil {
 	
 	
 	public static Map<String, Object> JsonToMap(JsonObject Json) throws JsonException {
-	    Map<String, Object> retMap = new HashMap<String, Object>();
-
-	    if(Json != JsonObject.NULL) {
-	        retMap = toMap(Json);
-	    }
-	    return retMap;
+	    return Json != JsonObject.NULL ? toMap(Json) : new HashMap<String, Object>();
 	}
 
 	private static Map<String, Object> toMap(JsonObject object) throws JsonException {
@@ -102,5 +102,74 @@ public class JsonUtil {
 	
 	public static <T extends Comparable<T>> boolean isBetween(T min, T value, T max) {
 		return (value.compareTo(max) <= 0 && value.compareTo(min) >= 0) ? true : false;
+	}
+	
+	public static JsonObject MapToJson(Map<String, Object> map, String rootElement) throws JsonException {
+		JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+		objectBuilder.add(rootElement, toJson(map));
+		return objectBuilder.build();
+	}
+
+	private static JsonObjectBuilder toJson(Map<String, Object> map) {
+		JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+		for (Entry<String, Object> entry: map.entrySet()) {
+			Object value = entry.getValue();
+			String key = entry.getKey();
+			if (value == null) {
+				objectBuilder.addNull(key);
+			} else if (value instanceof Map) {
+				objectBuilder.add(key, toJson((Map<String, Object>)value));
+			} else if (value instanceof List) {
+				objectBuilder.add(key, toJson((List<Object>)value));
+			} else if (value instanceof String) {
+				objectBuilder.add(key, (String)value);
+			} else if (value instanceof Integer) {
+				objectBuilder.add(key, ((Integer)value).intValue());
+			} else if (value instanceof Boolean) {
+				objectBuilder.add(key, ((Boolean)value).booleanValue());
+			} else if (value instanceof Double) {
+				objectBuilder.add(key, ((Double)value).doubleValue());
+			} else if (value instanceof Long) {
+				objectBuilder.add(key, ((Long)value).longValue());
+			} else if (value instanceof BigDecimal) {
+				objectBuilder.add(key, ((BigDecimal)value));
+			} else if (value instanceof BigInteger) {
+				objectBuilder.add(key, ((BigInteger)value));
+			} else {
+	        	throw new IllegalArgumentException("Unknown object primitive type '" + value.getClass().getName() + "'.");
+			}
+		}
+		return objectBuilder;
+	}
+
+	private static JsonArrayBuilder toJson(List<Object> list) {
+		JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+		for (Object object : list) {
+			if (object == null) {
+				arrayBuilder.addNull();
+			} else if (object instanceof Map) {
+				arrayBuilder.add(toJson((Map<String,Object>)object));
+			} else if (object instanceof List) {
+				arrayBuilder.add(toJson((List<Object>)object));
+			} else if (object instanceof String) {
+				arrayBuilder.add((String)object);
+			} else if (object instanceof Integer) {
+				arrayBuilder.add(((Integer)object).intValue());
+			} else if (object instanceof Boolean) {
+				arrayBuilder.add(((Boolean)object).booleanValue());
+			} else if (object instanceof Double) {
+				arrayBuilder.add(((Double)object).doubleValue());
+			} else if (object instanceof Long) {
+				arrayBuilder.add(((Long)object).longValue());
+			} else if (object instanceof BigDecimal) {
+				arrayBuilder.add(((BigDecimal)object));
+			} else if (object instanceof BigInteger) {
+				arrayBuilder.add(((BigInteger)object));
+			} else {
+	        	throw new IllegalArgumentException("Unknown object primitive type '" + object.getClass().getName() + "'.");
+			}
+			
+		}
+		return arrayBuilder;
 	}
 }

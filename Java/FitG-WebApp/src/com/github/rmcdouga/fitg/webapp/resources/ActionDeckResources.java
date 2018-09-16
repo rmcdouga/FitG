@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
@@ -19,12 +22,20 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.server.mvc.Template;
 
 import com.github.rmcdouga.fitg.webapp.FitGWebApplication;
+import com.github.rmcdouga.fitg.webapp.util.JsonUtil;
 import com.rogers.rmcdouga.fitg.basegame.Action;
 import com.rogers.rmcdouga.fitg.basegame.Action.EnvironType;
 import com.rogers.rmcdouga.fitg.basegame.ActionDeck;
 
 @Path(ActionDeckResources.ACTION_DECK_PATH)
 public class ActionDeckResources {
+	public static final String HAS_CARD_LABEL = "has_card";
+	public static final String HAS_NEXT_CARD_LABEL = "has_next_card";
+	public static final String HAS_PREV_CARD_LABEL = "has_prev_card";
+	public static final String NEXT_CARDNO_LABEL = "next_cardno";
+	public static final String PREV_CARDNO_LABEL = "prev_cardno";
+	public static final String CARD_NUMBER_LABEL = "card_number";
+	public static final String ACTION_CARD_DISCARD_LABEL = "ActionCardDiscard";
 	public static final String REL_ACTION_DECK_PATH = "ActionDeck";
 	public static final String ACTION_DECK_PATH = "/" + REL_ACTION_DECK_PATH;
 	public static final String DRAW_PATH = "/Draw";
@@ -42,7 +53,22 @@ public class ActionDeckResources {
 	@Path(DISCARD_PATH_CARD_NO)
 	@Produces(MediaType.TEXT_HTML)
 	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/ActionCard.mustache")
-	public Map<String, Object> actionCardDiscard(@PathParam("cardNo") int cardNo) {
+	public Map<String, Object> actionCardDiscardHtml(@PathParam("cardNo") int cardNo) {
+		System.out.println("actionCardDiscardHtml");
+		return actionCardDiscard(cardNo, true);
+	}
+
+	// Specifies that the method processes HTTP GET requests
+	@GET
+	@Path(DISCARD_PATH_CARD_NO)
+	@Produces(MediaType.APPLICATION_JSON)
+	public JsonObject actionCardDiscardJson(@PathParam("cardNo") int cardNo) {
+		System.out.println("actionCardDiscardJson");
+		Map<String, Object> actionCardDiscard = actionCardDiscard(cardNo, false);
+		return JsonUtil.MapToJson(actionCardDiscard, ACTION_CARD_DISCARD_LABEL);
+	}
+
+	private Map<String, Object> actionCardDiscard(int cardNo, boolean includeIds) {
 		Map<String, Object> parms = new HashMap<>();
 		
 		System.out.println("Retreiving discard #" + cardNo);
@@ -68,42 +94,50 @@ public class ActionDeckResources {
 			}
 			Action action = topDiscard.get();
 			
-			parms.put("card_number", Integer.toString(action.cardNumber()));
-			parms.put("card_number_id", CARD_NO_ID);
+			parms.put(CARD_NUMBER_LABEL, action.cardNumber());
 			for (EnvironType environType : EnumSet.allOf(EnvironType.class)) {
 				String descKey = environType.name().toLowerCase() + "_desc";
 				System.out.println("Writing desc key '" + descKey + "'.");
 				parms.put(descKey, action.getResultDescription(environType).getAsHtmlString());
-				String descKeyId = descKey  + "_id";
-				parms.put(descKeyId, descKeyId);
+				if (includeIds) {
+					String descKeyId = descKey  + "_id";
+					parms.put(descKeyId, descKeyId);
+				}
 				String missionLettersKey = environType.name().toLowerCase() + "_missionLetters";
 				parms.put(missionLettersKey, action.getMissionLetters(environType));
-				String missionLettersKeyId = missionLettersKey  + "_id";
-				parms.put(missionLettersKeyId, missionLettersKeyId);
+				if (includeIds) {
+					String missionLettersKeyId = missionLettersKey  + "_id";
+					parms.put(missionLettersKeyId, missionLettersKeyId);
+				}
 			}
 
 			boolean hasPrevCard = cardNo > 0;	// Is there a previous card
-			parms.put("has_prev_card", hasPrevCard);
-			parms.put(PREV_CARD_NO_ID, PREV_CARD_NO_ID);
+			parms.put(HAS_PREV_CARD_LABEL, hasPrevCard);
 			if (hasPrevCard) {
-				parms.put("prev_cardno", cardNo - 1);
+				parms.put(PREV_CARDNO_LABEL, cardNo - 1);
 			}
 			boolean hasNextCard = cardNo + 1 < numberOfCardsInDiscard;
-			parms.put("has_next_card", hasNextCard);
-			parms.put(NEXT_CARD_NO_ID, NEXT_CARD_NO_ID);
+			parms.put(HAS_NEXT_CARD_LABEL, hasNextCard);
 			if (hasNextCard) {
-				parms.put("next_cardno", cardNo + 1);
+				parms.put(NEXT_CARDNO_LABEL, cardNo + 1);
 			}
-			parms.put("discard_card_number", Integer.toString(cardNo + 1));
-			parms.put("discard_num_cards", Integer.toString(actionDeck.numberOfCardsInDiscard()));
+			if (includeIds) {
+				parms.put("card_number_id", CARD_NO_ID);
+				parms.put(PREV_CARD_NO_ID, PREV_CARD_NO_ID);
+				parms.put(NEXT_CARD_NO_ID, NEXT_CARD_NO_ID);
+			}
+			parms.put("discard_card_number", cardNo + 1);
+			parms.put("discard_num_cards", actionDeck.numberOfCardsInDiscard());
 			
 			System.out.println("parms='" + parms.toString() + "'");
 			System.out.println("Returning card #" + action.cardNumber() + " hasPrevCard=" + Boolean.toString(hasPrevCard) + " hasNextCard=" + Boolean.toString(hasNextCard));
 		} else {
-			parms.put("empty_discard_id", EMPTY_DISCARD_ID);
+			if (includeIds) {
+				parms.put("empty_discard_id", EMPTY_DISCARD_ID);
+			}
 			System.out.println("Discard is empty.");
 		}
-		parms.put("has_card", hasCard);
+		parms.put(HAS_CARD_LABEL, hasCard);
 		
 		return parms;
 	}
@@ -112,7 +146,7 @@ public class ActionDeckResources {
 	@POST
 	@Path(DRAW_PATH)
 	@Produces(MediaType.TEXT_HTML)
-	public Response drawActionCard() throws URISyntaxException {
+	public Response drawActionCardHtml() throws URISyntaxException {
 		FitGWebApplication.game.actionDeck().draw();
 		// After drawing, redirect the user to GET the top card on the discard (i.e. the card drawn)
 		return Response.seeOther(new URI(REL_ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
@@ -122,7 +156,27 @@ public class ActionDeckResources {
 	@POST
 	@Path(RESET_PATH)
 	@Produces(MediaType.TEXT_HTML)
-	public Response resetActionCards() throws URISyntaxException {
+	public Response resetActionCardsHtml() throws URISyntaxException {
+		FitGWebApplication.game.actionDeck().reset();
+		// After reseting, redirect the user to GET the top card on the discard (i.e. the card drawn)
+		return Response.seeOther(new URI(REL_ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
+	}
+
+	// Specifies that the method processes HTTP POST requests
+	@POST
+	@Path(DRAW_PATH)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response drawActionCardJson() throws URISyntaxException {
+		FitGWebApplication.game.actionDeck().draw();
+		// After drawing, redirect the user to GET the top card on the discard (i.e. the card drawn)
+		return Response.seeOther(new URI(REL_ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
+	}
+
+	// Specifies that the method processes HTTP POST requests
+	@POST
+	@Path(RESET_PATH)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response resetActionCardsJson() throws URISyntaxException {
 		FitGWebApplication.game.actionDeck().reset();
 		// After reseting, redirect the user to GET the top card on the discard (i.e. the card drawn)
 		return Response.seeOther(new URI(REL_ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
