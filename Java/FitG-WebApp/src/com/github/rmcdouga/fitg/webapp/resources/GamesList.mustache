@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Running Games</title>
+</head>
+<body>
+  <h2>List of Currently Running Games</h2>
+  <ol>
+  	<li>
+  		{{#gamesList}}
+  		<span class="gameName">{{gameName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="Delete?game={{gameName}}">Delete Game</a>
+  		{{/gamesList}}
+  		{{^gamesList}}
+  		<strong id="noGames">No Games were found.</strong>
+  		{{/gamesList}}
+  	</li>
+  </ol>
+</body>
+</html>
