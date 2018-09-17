@@ -7,9 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
@@ -26,8 +24,9 @@ import com.github.rmcdouga.fitg.webapp.util.JsonUtil;
 import com.rogers.rmcdouga.fitg.basegame.Action;
 import com.rogers.rmcdouga.fitg.basegame.Action.EnvironType;
 import com.rogers.rmcdouga.fitg.basegame.ActionDeck;
+import com.rogers.rmcdouga.fitg.basegame.Game;
 
-@Path(ActionDeckResources.ACTION_DECK_PATH)
+@Path(ActionDeckResources.ACTION_DECK_RESOURCE_PATH)
 public class ActionDeckResources {
 	public static final String HAS_CARD_LABEL = "has_card";
 	public static final String HAS_NEXT_CARD_LABEL = "has_next_card";
@@ -38,6 +37,7 @@ public class ActionDeckResources {
 	public static final String ACTION_CARD_DISCARD_LABEL = "ActionCardDiscard";
 	public static final String REL_ACTION_DECK_PATH = "ActionDeck";
 	public static final String ACTION_DECK_PATH = "/" + REL_ACTION_DECK_PATH;
+	public static final String ACTION_DECK_RESOURCE_PATH = "{gameStr}" + ACTION_DECK_PATH;
 	public static final String DRAW_PATH = "/Draw";
 	public static final String RESET_PATH = "/Reset";
 	public static final String DISCARD_PATH = "/Discard";
@@ -53,29 +53,25 @@ public class ActionDeckResources {
 	@Path(DISCARD_PATH_CARD_NO)
 	@Produces(MediaType.TEXT_HTML)
 	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/ActionCard.mustache")
-	public Map<String, Object> actionCardDiscardHtml(@PathParam("cardNo") int cardNo) {
-		System.out.println("actionCardDiscardHtml");
-		return actionCardDiscard(cardNo, true);
+	public Map<String, Object> actionCardDiscardHtml(@PathParam("gameStr") String gameStr, @PathParam("cardNo") int cardNo) {
+		return actionCardDiscard(getActionDeck(gameStr), cardNo, true);
 	}
 
 	// Specifies that the method processes HTTP GET requests
 	@GET
 	@Path(DISCARD_PATH_CARD_NO)
 	@Produces(MediaType.APPLICATION_JSON)
-	public JsonObject actionCardDiscardJson(@PathParam("cardNo") int cardNo) {
-		System.out.println("actionCardDiscardJson");
-		Map<String, Object> actionCardDiscard = actionCardDiscard(cardNo, false);
-		return JsonUtil.MapToJson(actionCardDiscard, ACTION_CARD_DISCARD_LABEL);
+	public JsonObject actionCardDiscardJson(@PathParam("gameStr") String gameStr, @PathParam("cardNo") int cardNo) {
+		return JsonUtil.MapToJson(actionCardDiscard(getActionDeck(gameStr), cardNo, false), ACTION_CARD_DISCARD_LABEL);
 	}
 
-	private Map<String, Object> actionCardDiscard(int cardNo, boolean includeIds) {
+	private Map<String, Object> actionCardDiscard(ActionDeck actionDeck, int cardNo, boolean includeIds) {
 		Map<String, Object> parms = new HashMap<>();
 		
 		System.out.println("Retreiving discard #" + cardNo);
 		boolean hasCard = false;
 
 		// TBD - Clean this up, surely this can be more elegant.
-		ActionDeck actionDeck = FitGWebApplication.game.actionDeck();
 		Optional<Action> topDiscard = actionDeck.peekDiscard();
 		if (topDiscard.isPresent()) {
 			hasCard = true;
@@ -146,47 +142,53 @@ public class ActionDeckResources {
 	@POST
 	@Path(DRAW_PATH)
 	@Produces(MediaType.TEXT_HTML)
-	public Response drawActionCardHtml() throws URISyntaxException {
-		FitGWebApplication.game.actionDeck().draw();
+	public Response drawActionCardHtml(@PathParam("gameStr") String gameStr) throws URISyntaxException {
+		getActionDeck(gameStr).draw();
 		// After drawing, redirect the user to GET the top card on the discard (i.e. the card drawn)
-		return Response.seeOther(new URI(REL_ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
+		return Response.seeOther(new URI(gameStr + ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
 	}
 
 	// Specifies that the method processes HTTP POST requests
 	@POST
 	@Path(RESET_PATH)
 	@Produces(MediaType.TEXT_HTML)
-	public Response resetActionCardsHtml() throws URISyntaxException {
-		FitGWebApplication.game.actionDeck().reset();
+	public Response resetActionCardsHtml(@PathParam("gameStr") String gameStr) throws URISyntaxException {
+		getActionDeck(gameStr).reset();
 		// After reseting, redirect the user to GET the top card on the discard (i.e. the card drawn)
-		return Response.seeOther(new URI(REL_ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
+		return Response.seeOther(new URI(gameStr + ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
 	}
 
 	// Specifies that the method processes HTTP POST requests
 	@POST
 	@Path(DRAW_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response drawActionCardJson() throws URISyntaxException {
-		FitGWebApplication.game.actionDeck().draw();
+	public Response drawActionCardJson(@PathParam("gameStr") String gameStr) throws URISyntaxException {
+		getActionDeck(gameStr).draw();
 		// After drawing, redirect the user to GET the top card on the discard (i.e. the card drawn)
-		return Response.seeOther(new URI(REL_ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
+		return Response.seeOther(new URI(gameStr + ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
 	}
 
 	// Specifies that the method processes HTTP POST requests
 	@POST
 	@Path(RESET_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response resetActionCardsJson() throws URISyntaxException {
-		FitGWebApplication.game.actionDeck().reset();
+	public Response resetActionCardsJson(@PathParam("gameStr") String gameStr) throws URISyntaxException {
+		getActionDeck(gameStr).reset();
 		// After reseting, redirect the user to GET the top card on the discard (i.e. the card drawn)
-		return Response.seeOther(new URI(REL_ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
+		return Response.seeOther(new URI(gameStr + ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
+	}
+
+	private ActionDeck getActionDeck(String gameStr) {
+		Optional<Game> game = FitGWebApplication.game(gameStr);
+		System.out.println("Getting Game '" + gameStr + "', exists=" + game.isPresent() + "'.");
+		return game.orElseThrow(()->new NotFoundException("Unable to find game '" + gameStr + "'.")).actionDeck();
 	}
 
 	// Ping Test
 	@GET
 	@Path(FitGWebApplication.PING_PATH)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String ping() {
+	public String ping(@PathParam("gameStr") String gameStr) {
 		System.out.println("ActionDeck Ping");
 		return FitGWebApplication.PING_RESPONSE;
 	}

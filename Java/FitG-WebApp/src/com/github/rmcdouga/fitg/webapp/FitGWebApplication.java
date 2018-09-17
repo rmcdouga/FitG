@@ -2,6 +2,9 @@ package com.github.rmcdouga.fitg.webapp;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.GET;
@@ -24,6 +27,7 @@ import com.rogers.rmcdouga.fitg.basegame.Game;
 @Path("")
 public class FitGWebApplication extends ResourceConfig {
 
+	public static final String DEFAULT_GAME_NAME = "default";
 	public static final String APPLICATION_TOP_LEVEL = "/";
 	public static final String PING_PATH = "/ping";
 	public static final String PING_RESPONSE = "Ping!";
@@ -41,17 +45,26 @@ public class FitGWebApplication extends ResourceConfig {
         property(ServerProperties.TRACING_THRESHOLD, "VERBOSE");
         property("com.sun.jersey.config.feature.Debug", "true");
 
+       
 	}
 
-
-	public static final Game game = new Game();
+	private static final Map<String, Game> games = createGameMap();
+	private static Map<String, Game> createGameMap() {
+		LinkedHashMap<String, Game> map = new LinkedHashMap<String, Game>();
+		map.put(DEFAULT_GAME_NAME, new Game());
+		return map;
+	}
+	
+	public static Optional<Game> game(String name) {
+		return Optional.ofNullable(games.get(name));
+	}
 
 	// Specifies that the method processes HTTP POST requests
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public Response resetActionCards() throws URISyntaxException {
 		System.out.println("Main Page redirect");
-		return Response.seeOther(new URI(ActionDeckResources.REL_ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/0")).build();
+		return Response.seeOther(new URI(DEFAULT_GAME_NAME + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/0")).build();
 	}
 
 	// Ping Test

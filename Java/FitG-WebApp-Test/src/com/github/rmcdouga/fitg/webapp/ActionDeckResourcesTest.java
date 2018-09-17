@@ -47,6 +47,8 @@ import com.github.rmcdouga.fitg.webapp.resources.ActionDeckResources;
 
 class ActionDeckResourcesTest {
 	
+	private static final String TEST_GAME_NAME = FitGWebApplication.DEFAULT_GAME_NAME;
+	
 	@RegisterExtension
 	JerseyExtension jerseyExtension = new JerseyExtension(this::configureJersey, this::configureJerseyClient);
 
@@ -132,7 +134,7 @@ class ActionDeckResourcesTest {
 	}
 
 	private int getDiscardCard(WebTarget target, int discardCardLocation, boolean expectCard, boolean expectPrevCard, boolean expectNextCard) throws IOException {
-		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/" + Integer.toString(discardCardLocation);
+		String targetPath = TestUtils.APPLICATION_PREFIX + TEST_GAME_NAME + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/" + Integer.toString(discardCardLocation);
 		Response result = TestUtils.trace(target.path(targetPath).request())
 				 .accept(MediaType.TEXT_HTML_TYPE)
 				 .buildGet()
@@ -153,7 +155,7 @@ class ActionDeckResourcesTest {
 	}
 
 	private void getDiscardCardExpectNotFound(WebTarget target, int discardCardLocation) throws IOException {
-		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/" + Integer.toString(discardCardLocation);
+		String targetPath = TestUtils.APPLICATION_PREFIX + TEST_GAME_NAME + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/" + Integer.toString(discardCardLocation);
 		Response result = TestUtils.trace(target.path(targetPath).request())
 				 .accept(MediaType.TEXT_HTML_TYPE)
 				 .buildGet()
@@ -168,7 +170,7 @@ class ActionDeckResourcesTest {
 	private int drawCard(WebTarget target, boolean expectNextCard) throws IOException {
 		Form form = new Form();
 	
-		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DRAW_PATH;
+		String targetPath = TestUtils.APPLICATION_PREFIX + TEST_GAME_NAME + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DRAW_PATH;
 		System.out.println("TargetPath='" + targetPath + "'.");
 		WebTarget path = target.path(targetPath);
 		System.out.println("DrawCard WebTarget='" + path.toString() + "'.");
@@ -225,7 +227,7 @@ class ActionDeckResourcesTest {
 	private void resetDeck(WebTarget target) throws IOException {
 		Form form = new Form();
 		
-		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.RESET_PATH;
+		String targetPath = TestUtils.APPLICATION_PREFIX + TEST_GAME_NAME + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.RESET_PATH;
 		System.out.println("TargetPath='" + targetPath + "'.");
 		WebTarget path = target.path(targetPath);
 		System.out.println("DrawCard WebTarget='" + path.toString() + "'.");
@@ -249,7 +251,7 @@ class ActionDeckResourcesTest {
 	@Disabled
 	void testPing_ThisLevel(WebTarget target) throws IOException {
 		System.out.println("Ping WebTarget='" + target.toString() + "'.");
-		String testPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + FitGWebApplication.PING_PATH;
+		String testPath = TestUtils.APPLICATION_PREFIX + TEST_GAME_NAME + ActionDeckResources.ACTION_DECK_PATH + FitGWebApplication.PING_PATH;
 		Response result = target.path(testPath).request().buildGet().invoke();
 		
 		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), "Response should be OK.  Path='" + testPath + "'.");
@@ -259,7 +261,7 @@ class ActionDeckResourcesTest {
 	}
 
 	private int getDiscardCardJson(WebTarget target, int discardCardLocation, boolean expectCard, boolean expectPrevCard, boolean expectNextCard) throws IOException {
-		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/" + Integer.toString(discardCardLocation);
+		String targetPath = TestUtils.APPLICATION_PREFIX + TEST_GAME_NAME + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/" + Integer.toString(discardCardLocation);
 		Response result = TestUtils.trace(target.path(targetPath).request())
 				.accept(MediaType.APPLICATION_JSON)
 				.buildGet().invoke();
@@ -284,7 +286,7 @@ class ActionDeckResourcesTest {
 	private int drawCardJson(WebTarget target, boolean expectNextCard) throws IOException {
 		Form form = new Form();
 	
-		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DRAW_PATH;
+		String targetPath = TestUtils.APPLICATION_PREFIX + TEST_GAME_NAME + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DRAW_PATH;
 		System.out.println("TargetPath='" + targetPath + "'.");
 		WebTarget path = target.path(targetPath);
 		System.out.println("DrawCard WebTarget='" + path.toString() + "'.");
@@ -351,7 +353,7 @@ class ActionDeckResourcesTest {
 	private void resetDeckJson(WebTarget target) throws IOException {
 		Form form = new Form();
 		
-		String targetPath = TestUtils.APPLICATION_PREFIX + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.RESET_PATH;
+		String targetPath = TestUtils.APPLICATION_PREFIX + TEST_GAME_NAME + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.RESET_PATH;
 		System.out.println("TargetPath='" + targetPath + "'.");
 		WebTarget path = target.path(targetPath);
 		System.out.println("DrawCard WebTarget='" + path.toString() + "'.");
