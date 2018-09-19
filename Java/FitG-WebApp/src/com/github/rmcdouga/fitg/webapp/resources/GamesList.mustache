@@ -9,7 +9,7 @@
   <ol>
   	<li>
   		{{#gamesList}}
-  		<span class="gameName">{{gameName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="Delete?game={{gameName}}">Delete Game</a>
+  		<a href="{{gameName}}/ActionDeck/Discard/0"><span class="gameName">{{gameName}}</span></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="Delete?game={{gameName}}">Delete Game</a>
   		{{/gamesList}}
   		{{^gamesList}}
   		<strong id="noGames">No Games were found.</strong>

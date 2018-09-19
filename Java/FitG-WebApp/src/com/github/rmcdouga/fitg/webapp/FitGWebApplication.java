@@ -48,7 +48,13 @@ public class FitGWebApplication extends ResourceConfig {
 	@Produces(MediaType.TEXT_HTML)
 	public Response resetActionCards() throws URISyntaxException {
 		System.out.println("Main Page redirect");
-		return Response.seeOther(new URI(GameResources.DEFAULT_GAME_NAME + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/0")).build();
+		URI redirectUri;
+		if (GameResources.games().isEmpty()) {
+			redirectUri = new URI(GameResources.REL_GAMES_PATH + GameResources.CREATE_PATH);
+		} else {
+			redirectUri = new URI(GameResources.GAMES_PATH);
+		}
+		return Response.seeOther(redirectUri).build();
 	}
 
 	// Ping Test

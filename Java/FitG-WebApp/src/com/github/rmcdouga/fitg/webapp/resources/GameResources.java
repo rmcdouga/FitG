@@ -3,6 +3,8 @@ package com.github.rmcdouga.fitg.webapp.resources;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +53,10 @@ public class GameResources {
 		return Optional.ofNullable(games.get(name));
 	}
 
+	public static Collection<Game> games() {
+		return games.values();
+	}
+
 	// Lists Games
 	@GET
 	@Path("/")
@@ -94,5 +100,11 @@ public class GameResources {
 		return Response.seeOther(new URI(gameName + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/0")).build();
 	}
 
-	
+	@GET
+	@Path(CREATE_PATH)
+	@Produces(MediaType.TEXT_HTML)
+	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/CreateGame.mustache")
+	public Map<String, Object> createGameHtml() {
+		return Collections.emptyMap();
+	}
 }
