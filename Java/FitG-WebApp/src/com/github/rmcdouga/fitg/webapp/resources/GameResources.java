@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.json.JsonObject;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
@@ -28,14 +29,17 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.collections4.map.SingletonMap;
 import org.glassfish.jersey.server.mvc.Template;
 
+import com.github.rmcdouga.fitg.webapp.util.JsonUtil;
 import com.rogers.rmcdouga.fitg.basegame.Game;
 
 @Path(GameResources.GAMES_PATH)
 public class GameResources {
 	public static final int MAX_GAME_NAME_SIZE = 30;
 	public static final String GAME_NAME_PARAM = "name";
-	private static final String GAME_NAME_LABEL = "gameName";
-	private static final String GAMES_LIST_LABEL = "gamesList";
+	public static final String GAME_NAME_LABEL = "gameName";
+	public static final String GAMES_LIST_LABEL = "gamesList";
+	public static final String GAMES_CREATED_LABEL = "gamesCreated";
+	public static final String CREATE_GAME_LABEL = "createGame";
 	public static final String DEFAULT_GAME_NAME = "default";
 	public static final String REL_GAMES_PATH = "Games";
 	public static final String GAMES_PATH = "/" + REL_GAMES_PATH;
@@ -75,6 +79,15 @@ public class GameResources {
 	@Produces(MediaType.TEXT_HTML)
 	public Response createGameHtml(@QueryParam(GAME_NAME_PARAM) String queryName, @FormParam(GAME_NAME_PARAM) String formName) throws URISyntaxException, NotFoundException {
 		// Accept the game name from either the query parameter of the form name.
+		String gameName = determineGameName(queryName, formName);
+		if (games.putIfAbsent(gameName, new Game()) != null) {
+			// Seems we already have a game there with this name.
+			throw new ClientErrorException("Game '" + gameName + "' already exists.", Status.CONFLICT.getStatusCode());
+		}
+		return Response.seeOther(new URI(gameName + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/0")).build();
+	}
+
+	private String determineGameName(String queryName, String formName) {
 		String gameName; 
 		if (queryName != null) {
 			gameName = queryName;
@@ -93,11 +106,7 @@ public class GameResources {
 		if (!gameName.codePoints().allMatch(Character::isJavaIdentifierPart)) {
 			throw new BadRequestException("Game names must follow Java Identifier rules.");
 		}
-		if (games.putIfAbsent(gameName, new Game()) != null) {
-			// Seems we already have a game there with this name.
-			throw new ClientErrorException("Game '" + gameName + "' already exists.", Status.CONFLICT.getStatusCode());
-		}
-		return Response.seeOther(new URI(gameName + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/0")).build();
+		return gameName;
 	}
 
 	@GET
@@ -107,4 +116,37 @@ public class GameResources {
 	public Map<String, Object> createGameHtml() {
 		return Collections.emptyMap();
 	}
+
+	/*
+	 * JSON Methods
+	 */
+	
+	// Lists Games
+	@GET
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JsonObject listGamesJson() {
+		List<Object> gamesList = new ArrayList<>(games.size());
+		games.forEach((name,game)->gamesList.add(new SingletonMap<>(GAME_NAME_LABEL, name)));
+		return JsonUtil.MapToJson(gamesList, GAMES_LIST_LABEL);
+	}
+	
+	// Creates games
+	@POST
+	@Path(CREATE_PATH)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public JsonObject createGameJson(@QueryParam(GAME_NAME_PARAM) String queryName, JsonObject createGameJson) throws URISyntaxException, NotFoundException {
+		String bodyName = createGameJson.isEmpty() ? null : createGameJson.getString(CREATE_GAME_LABEL);
+		// Accept the game name from either the query parameter or from the JSON body.
+		String gameName = determineGameName(queryName, bodyName);
+		if (games.putIfAbsent(gameName, new Game()) != null) {
+			// Seems we already have a game there with this name.
+			throw new ClientErrorException("Game '" + gameName + "' already exists.", Status.CONFLICT.getStatusCode());
+		}
+		List<Object> gamesList = new ArrayList<>(1);
+		gamesList.add(new SingletonMap<>(GAME_NAME_LABEL, gameName));
+		return JsonUtil.MapToJson(gamesList, GAMES_CREATED_LABEL);
+	}
+
 }

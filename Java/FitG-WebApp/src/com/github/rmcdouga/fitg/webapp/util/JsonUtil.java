@@ -110,6 +110,12 @@ public class JsonUtil {
 		return objectBuilder.build();
 	}
 
+	public static JsonObject MapToJson(List<Object> map, String rootElement) throws JsonException {
+		JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+		objectBuilder.add(rootElement, toJson(map));
+		return objectBuilder.build();
+	}
+	
 	private static JsonObjectBuilder toJson(Map<String, Object> map) {
 		JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
 		for (Entry<String, Object> entry: map.entrySet()) {

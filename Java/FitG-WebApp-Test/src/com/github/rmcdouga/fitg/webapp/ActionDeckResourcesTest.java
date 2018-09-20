@@ -313,7 +313,7 @@ class ActionDeckResourcesTest {
 	private int getCardDrawnNumJson(byte[] result, boolean expectPrevCard, boolean expectNextCard) throws IOException {
 		JsonReader reader = Json.createReader(new ByteArrayInputStream(result));
 		JsonStructure jsonStructure = reader.read();
-		assertEquals(JsonValue.ValueType.OBJECT, jsonStructure.getValueType(), "Expected top level structure to be an object.");
+		assertEquals(JsonValue.ValueType.OBJECT, jsonStructure.getValueType(), "Expected top level structure to be an object but was '" + jsonStructure.getValueType().toString() + "'.");
 		
 		JsonObject jsonObject = jsonStructure.asJsonObject();
 		JsonObject actioCardDiscardObject = jsonObject.getJsonObject(ActionDeckResources.ACTION_CARD_DISCARD_LABEL);
@@ -342,7 +342,7 @@ class ActionDeckResourcesTest {
 	private void testForResetDeckJson(byte[] result) throws IOException {
 		JsonReader reader = Json.createReader(new ByteArrayInputStream(result));
 		JsonStructure jsonStructure = reader.read();
-		assertEquals(JsonValue.ValueType.OBJECT, jsonStructure.getValueType(), "Expected top level structure to be an object.");
+		assertEquals(JsonValue.ValueType.OBJECT, jsonStructure.getValueType(), "Expected top level structure to be an object but was '" + jsonStructure.getValueType().toString() + "'.");
 		
 		JsonObject jsonObject = jsonStructure.asJsonObject();
 		JsonObject actioCardDiscardObject = jsonObject.getJsonObject(ActionDeckResources.ACTION_CARD_DISCARD_LABEL);

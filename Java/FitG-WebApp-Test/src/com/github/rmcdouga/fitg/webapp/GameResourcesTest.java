@@ -8,9 +8,17 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonPointer;
+import javax.json.JsonReader;
+import javax.json.JsonStructure;
+import javax.json.JsonValue;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Application;
@@ -18,6 +26,7 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.collections4.map.SingletonMap;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
@@ -76,6 +85,15 @@ public class GameResourcesTest {
 		assertEquals(2, gameNamesAfterCreationGet.size(), "Expected that there would be two game after second creation, but found '" + gameNamesAfterCreationGet.toString() + "'.");
 		
 		System.out.println("Game Names:" + gameNamesInitial.toString());
+		
+		createGameJson(target, "TestGame3", false);
+		List<String> gameNamesAfterCreationPostJson = listGamesJson(target);
+		assertEquals(3, gameNamesAfterCreationPostJson.size(), "Expected that there would be three games after Json creation, but found '" + gameNamesAfterCreationPost.toString() + "'.");
+
+		createGameJson(target, "TestGame4", true);
+		List<String> gameNamesAfterCreationGetJson = listGamesJson(target);
+		assertEquals(4, gameNamesAfterCreationGetJson.size(), "Expected that there would be four game after second Json creation, but found '" + gameNamesAfterCreationGet.toString() + "'.");
+
 	}
 
 	private static List<String> listGamesHtml(WebTarget target) throws IOException {
@@ -131,5 +149,58 @@ public class GameResourcesTest {
 		
 	}
 
+
+	private static List<String> listGamesJson(WebTarget target) throws IOException {
+		Response result = TestUtils.trace(target.path(GamesPath).request())
+				 .accept(MediaType.APPLICATION_JSON_TYPE)
+				 .buildGet()
+				 .invoke();
+	
+		if (Response.Status.OK.getStatusCode() != result.getStatus()) {
+			TestUtils.printTrace(result);
+		}
+		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + GamesPath + "' should be OK");
+		assertTrue(result.hasEntity(), "Expected response to have body.");
+		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
+		System.out.println("----- JSON -----");
+		IOUtils.write(entity, System.out);
+		System.out.println("----------------");
+		JsonReader reader = Json.createReader(new ByteArrayInputStream(entity));
+		JsonStructure jsonStructure = reader.read();
+		assertEquals(JsonValue.ValueType.OBJECT, jsonStructure.getValueType(), "Expected top level structure to be an object but was '" + jsonStructure.getValueType().toString() + "'.");
+		JsonValue gameNames = jsonStructure.getValue("/" + GameResources.GAMES_LIST_LABEL);
+		assertNotNull(gameNames, "Couldn't find any game names.");
+		assertEquals(JsonValue.ValueType.ARRAY, gameNames.getValueType(), "Expected gameNames structure to be an array but was '" + jsonStructure.getValueType().toString() + "'.");
+		JsonArray gameNamesArray = gameNames.asJsonArray();
+		
+		List<String> gamesList = gameNamesArray.stream().map(JsonValue::asJsonObject).map(o->o.getString(GameResources.GAME_NAME_LABEL)).collect(Collectors.toList());
+		return gamesList;
+	}
+	
+	public static void createGameJson(WebTarget target, String testGameName, boolean useQueryParm) throws IOException {
+		JsonObject json;
+		WebTarget target2 = target.path(GamesPath + GameResources.CREATE_PATH);
+		// Use a query parameter or a form parameter to provide the name. 
+		if (useQueryParm) {
+			target2 = target2.queryParam(GameResources.GAME_NAME_PARAM, testGameName);
+			json = Json.createObjectBuilder().build();
+		} else {
+			json = Json.createObjectBuilder(new SingletonMap<String, Object>(GameResources.CREATE_GAME_LABEL, testGameName)).build();
+		}
+		Response result = TestUtils.trace(target2.request())
+				 .accept(MediaType.APPLICATION_JSON_TYPE)
+				 .buildPost(Entity.entity(json, MediaType.APPLICATION_JSON_TYPE))
+				 .invoke();
+	
+		if (Response.Status.OK.getStatusCode() != result.getStatus()) {
+			TestUtils.printTrace(result);
+		}
+		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + (GamesPath + GameResources.CREATE_PATH) + "' should be OK");
+		assertTrue(result.hasEntity(), "Expected response to have body.");
+		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
+		System.out.println("----- JSON -----");
+		IOUtils.write(entity, System.out);
+		System.out.println("----------------");
+	}
 
 }

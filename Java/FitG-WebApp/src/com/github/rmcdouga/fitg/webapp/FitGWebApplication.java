@@ -2,7 +2,12 @@ package com.github.rmcdouga.fitg.webapp;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
+import java.util.Set;
 
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -15,6 +20,8 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.mvc.MvcFeature;
 import org.glassfish.jersey.server.mvc.mustache.MustacheMvcFeature;
+import org.glassfish.jersey.server.spi.Container;
+import org.glassfish.jersey.server.spi.ContainerLifecycleListener;
 
 import com.github.rmcdouga.fitg.webapp.resources.ActionDeckResources;
 import com.github.rmcdouga.fitg.webapp.resources.GameResources;
@@ -40,7 +47,8 @@ public class FitGWebApplication extends ResourceConfig {
         property(ServerProperties.TRACING_THRESHOLD, "VERBOSE");
         property("com.sun.jersey.config.feature.Debug", "true");
 
-       
+        Reloader reloader = new Reloader();
+        Optional.ofNullable(getSingletons()).ifPresent(s->s.add(reloader));
 	}
 
 	// Specifies that the method processes HTTP POST requests
@@ -64,4 +72,56 @@ public class FitGWebApplication extends ResourceConfig {
 	public String ping() {
 		return FitGWebApplication.PING_RESPONSE;
 	}
+	
+	// Handle Application startup and shutdown
+	// https://stackoverflow.com/questions/39821157/init-method-in-jersey-jax-rs-web-service
+	@WebListener
+	public class StartupListener implements ServletContextListener {
+
+	    @Override
+	    public void contextInitialized(ServletContextEvent event) {
+	        // Perform action during application's startup
+	    	// TODO: Load Games from file in local storage
+	    	System.out.println("StartupListener - Servlet Startup");
+	    }
+
+	    @Override
+	    public void contextDestroyed(ServletContextEvent event) {
+	        // Perform action during application's shutdown
+	    	// TODO: Save Games from file in local storage
+	    	System.out.println("StartupListener - Servlet Shutdown");
+	    }
+	}
+	
+	public class Reloader implements ContainerLifecycleListener {
+
+		Container container;
+
+		public void reload(ResourceConfig newConfig) {
+			container.reload(newConfig);
+		}
+
+		public void reload() {
+			container.reload();
+		}
+
+		@Override
+		public void onStartup(Container container) {
+			this.container = container;
+	    	System.out.println("Reloader - Server Startup");
+		}
+
+		@Override
+		public void onReload(Container container) {
+			// ignore or do whatever you want after reload has been done
+	    	System.out.println("Reloader - Server Reload");
+		}
+
+		@Override
+		public void onShutdown(Container container) {
+			// ignore or do something after the container has been shutdown
+	    	System.out.println("Reloader - Server Shutdown");
+		}
+	}
+	
 }
