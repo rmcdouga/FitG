@@ -1,5 +1,6 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ public interface Action extends Card {
 	public static interface ActionFactory {
 		public Set<Action> allActions();
 		public int numberOfActions();
+		public Optional<Action> getAction(int cardNo);
 	}
 	
 	public static ActionFactory defaultFactory() {

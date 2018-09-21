@@ -3,8 +3,11 @@ package com.rogers.rmcdouga.fitg.basegame;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.rogers.rmcdouga.fitg.basegame.utils.MarkdownString;
 
@@ -202,6 +205,18 @@ public enum ActionEnum implements Action {
 		@Override
 		public int numberOfActions() {
 			return ALL_ACTIONS.size();
+		}
+
+		@Override
+		public Optional<Action> getAction(int cardNo) {
+			List<Action> actions = ALL_ACTIONS.stream().filter(a->a.cardNumber() == cardNo).collect(Collectors.toList());
+			if (actions.isEmpty()) {
+				return Optional.empty();
+			} else if (actions.size() == 1) {
+				return Optional.of(actions.get(0));
+			} else {
+				throw new IllegalStateException("Found more than one action with cards #" + cardNo + ".");
+			}
 		}
 		
 	}

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -27,7 +28,7 @@ class ActionEnumTest {
 	}
 
 	@Test
-	void testActoinCardNumbers() {
+	void testActionCardNumbers() {
 		assertEquals(EXPECTED_NUM_OF_ACTIONS, ActionEnum.ALL_ACTIONS.size(), "Expected there to be " + EXPECTED_NUM_OF_ACTIONS + " unique actions.");
 	}
 
@@ -62,6 +63,19 @@ class ActionEnumTest {
 		Action action = ActionEnum.CARD_68;
 		String missionLetters = action.getMissionLetters(Action.EnvironType.URBAN, "|");
 		assertEquals("H|R", missionLetters, "Expected mission letters to be 'R|H'.");
+	}
+
+	@Test
+	void testActionFactory_GetAction() {
+		Optional<Action> action = ActionEnum.actionfactory().getAction(74);
+		assertTrue(action.isPresent(), "Expected to find card 74.");
+		assertEquals(ActionEnum.CARD_74, action.get(), "Expected to retrieve CARD_74");
+	}
+	
+	@Test
+	void testActionFactory_GetAction_InvalidCard() {
+		Optional<Action> action = ActionEnum.actionfactory().getAction(1);
+		assertFalse(action.isPresent(), "Expected not to find card 1.");
 	}
 
 }

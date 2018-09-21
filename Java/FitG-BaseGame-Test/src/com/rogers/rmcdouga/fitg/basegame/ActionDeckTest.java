@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -157,4 +158,27 @@ class ActionDeckTest {
 		assertEquals(startingDiscardSize + numDraws, actionDeck.numberOfCardsInDiscard(), "Expected the number of draws in the discardpile to be the number of cards drawn.");
 	}
 
+	@Test
+	void testGameState() {
+		final int numDraws = 2;
+
+		ActionDeck actionDeck = new ActionDeck();
+		checkDraw(numDraws, actionDeck);
+		assertEquals(2, actionDeck.numberOfCardsInDiscard(), "Expected 2 cards to be in actionDeck discard initially");
+
+		Map<String, Object> state = actionDeck.getState();
+
+		ActionDeck actionDeck2 = new ActionDeck();
+		assertEquals(0, actionDeck2.numberOfCardsInDiscard(), "Expected no cards to be in actionDeck2 discard initially");
+		actionDeck2.setState(state);
+		
+		// Compare actionDeck and actionDeck2 - they should be the same.
+		assertEquals(actionDeck.numberOfCardsInDrawPile(), actionDeck2.numberOfCardsInDrawPile(), "Expected drawPiles to have the same number of cards."); 
+		assertEquals(actionDeck.numberOfCardsInDiscard(), actionDeck2.numberOfCardsInDiscard(), "Expected discardPiles to have the same number of cards.");
+		
+		assertEquals(actionDeck.peekDiscard(), actionDeck2.peekDiscard(), "Expected the to decks should be equal after state save/load.");
+		while (actionDeck.numberOfCardsInDrawPile() > 0) {
+			assertEquals(actionDeck.draw(), actionDeck2.draw(), "Expected the to decks should be equal after state save/load.");
+		}
+	}
 }

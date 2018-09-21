@@ -4,18 +4,23 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.rogers.rmcdouga.fitg.basegame.Action.ActionFactory;
 
-public class ActionDeck {
+public class ActionDeck implements GameState {
 	
+	private static final String DISCARD_PILE_CARDS_LABEL = "discardPileCards";
+	private static final String DRAW_PILE_CARDS_LABEL = "drawPileCards";
 	private final ActionFactory actionFactory = Action.defaultFactory();
 	private final Deque<Action> drawPile = new ArrayDeque<>(actionFactory.allActions());
 	private final Deque<Action> discardPile = new ArrayDeque<>(actionFactory.numberOfActions());
-
+	
 	protected ActionDeck() {
 		this.reset();
 	}
@@ -77,6 +82,33 @@ public class ActionDeck {
 	
 	public int numberOfCardsInDiscard() {
 		return discardPile.size();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.rogers.rmcdouga.fitg.basegame.GameState#getState()
+	 */
+	@Override
+	public Map<String, Object> getState() {
+		Map<String, Object> state = new HashMap<>();
+		List<Integer> drawPileCards = drawPile.stream().map(Card::cardNumber).collect(Collectors.toList());
+		state.put(DRAW_PILE_CARDS_LABEL, drawPileCards);
+		List<Integer> discardPileCards = discardPile.stream().map(Card::cardNumber).collect(Collectors.toList());
+		state.put(DISCARD_PILE_CARDS_LABEL, discardPileCards);
+		return state;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.rogers.rmcdouga.fitg.basegame.GameState#setState(java.util.Map)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setState(Map<String, Object> state) {
+		List<Integer> drawPileList = (List<Integer>)state.get(DRAW_PILE_CARDS_LABEL);
+		List<Integer> discardPileList = (List<Integer>)state.get(DISCARD_PILE_CARDS_LABEL);
+		drawPile.clear();
+		discardPile.clear();
+		drawPileList.stream().map(actionFactory::getAction).map(Optional::get).forEach(drawPile::add);
+		discardPileList.stream().map(actionFactory::getAction).map(Optional::get).forEach(discardPile::add);
 	}
 
 }
