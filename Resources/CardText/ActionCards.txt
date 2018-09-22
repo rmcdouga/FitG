@@ -26,7 +26,7 @@ Wild: D H The Imperial Player may commit an Atrocity on this planet (see Section
 73
 Urban: D Would-be rebels chicken out.  Start Rebellion mission aborted.  Characters detected..
 Special: G I Weather disturbances hamper Enemy operations.  The non-Phasing Player may conduct no searches in this Environ this Mission Phase.
-Wild: R S Wrong soldier contacted.  If a Subvert Troops mission is being performed, it is aborted.  Mis-sion Group found by Enemy squand.  If an Enemy leader is stacked with the Enemy military units, the entire Mission Group is captured.
+Wild: R S Wrong soldier contacted.  If a Subvert Troops mission is being performed, it is aborted.  Mission Group found by Enemy squand.  If an Enemy leader is stacked with the Enemy military units, the entire Mission Group is captured.
 
 74
 Urban: P Enemy Agent reveals mission.  The non-Phasing Player randomly chooses one mission that the Phasing Player is currently performing in the Environ; that mission is aborted.  Characters detected.
@@ -64,7 +64,7 @@ Special: F P Confusing local protocol aborts a Diplomacy mission. If one is bein
 Wild: C S One Mission Group stumbles on Enemy squad.  If the Enemy Player controls the planet and has military units in the environ, character combat is in-itiated using the Squad Table to determine the Enemy's strength.
 
 81
-Urban: F I Wrong soldier contacted.  If a Subvert Troops mission is being performed, it is aborted.  Mis-sion Group found by Enemy squad.  If an Enemy leader is stacked with the Enemy military units, the entire Mission Group is captured.
+Urban: F I Wrong soldier contacted.  If a Subvert Troops mission is being performed, it is aborted.  Mission Group found by Enemy squad.  If an Enemy leader is stacked with the Enemy military units, the entire Mission Group is captured.
 Special: C T Accidents will happen, especially in an unfamiliar Environ. Any one character performing a mission in the Environ must recieve a wound.
 Wild: E Controversial political matters argued.  If a Diplomacy mission is being performed, and no character in the Mission Group has a Diplomacy rating of two or more, the mission is aborted.
 
@@ -130,8 +130,7 @@ Wild: S C Confusing local protocol aborts a Diplomacy mission. If one is being p
 
 94
 Urban: D Q Coup mission aborted; Characters detected.  Roll the die. 1-3, shift Loyalty marker one space in Non-Phasing Player's favor; 4-6, shift Loyalty marker and Mission Group found by Enemy squad or characters (Non-Phasing Player's choice).
-Special: F G Disagreeable food substance hampers 
-characters.  No bonus draws may be taken in this En-viron this Mission Phase.
+Special: F G Disagreeable food substance hampers characters.  No bonus draws may be taken in this Environ this Mission Phase.
 Wild: B E Populace goes wild! If the planet is placed into rebellion during this Mission Phase, the Rebel Player receives double the resource value in this En-viron (see Case 15.46).
 
 95
@@ -141,8 +140,8 @@ Wild: B Creature attacks one Mission Group.  If a creature is named in the Envir
 
 96
 Urban: A T Characters detected. Enemy Player may conduct search for one Mission Group in Environ.
-Special: D E Wrong soldier contacted.  If a Subvert Troops mission is being performed, it is aborted.  Mis-sion Group found by Enemy squad.  If an Enemy leader is stacked with the Enemy military units, entire Mission Group is captured.
-Wild: P Disagreeable food substance hampers characters.  No bonus draws may be taken in this En-viron this Mission Phase.
+Special: D E Wrong soldier contacted.  If a Subvert Troops mission is being performed, it is aborted.  Mission Group found by Enemy squad.  If an Enemy leader is stacked with the Enemy military units, entire Mission Group is captured.
+Wild: P Disagreeable food substance hampers characters.  No bonus draws may be taken in this Environ this Mission Phase.
 
 97
 Urban: F Populace goes wild! If the planet is placed into rebellion during this Mission Phase, the Rebel Player receives double the resource value in this En-viron (see Case 15.46).
