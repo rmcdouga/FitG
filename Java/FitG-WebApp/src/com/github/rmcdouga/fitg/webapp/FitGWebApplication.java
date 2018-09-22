@@ -1,9 +1,17 @@
 package com.github.rmcdouga.fitg.webapp;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -23,13 +31,14 @@ import org.glassfish.jersey.server.mvc.mustache.MustacheMvcFeature;
 import org.glassfish.jersey.server.spi.Container;
 import org.glassfish.jersey.server.spi.ContainerLifecycleListener;
 
-import com.github.rmcdouga.fitg.webapp.resources.ActionDeckResources;
 import com.github.rmcdouga.fitg.webapp.resources.GameResources;
 
 @ApplicationPath(FitGWebApplication.APPLICATION_TOP_LEVEL)
 @Path("")
 public class FitGWebApplication extends ResourceConfig {
 
+	private static final String SAVED_GAMES_FILENAME = "FitGSavedGames.json";
+	private static final String SAVED_GAMES_DIR = "FitG";
 	public static final String APPLICATION_TOP_LEVEL = "/";
 	public static final String PING_PATH = "/ping";
 	public static final String PING_RESPONSE = "Ping!";
@@ -47,9 +56,36 @@ public class FitGWebApplication extends ResourceConfig {
         property(ServerProperties.TRACING_THRESHOLD, "VERBOSE");
         property("com.sun.jersey.config.feature.Debug", "true");
 
-        Reloader reloader = new Reloader();
-        Optional.ofNullable(getSingletons()).ifPresent(s->s.add(reloader));
+        register(new Reloader());
 	}
+	
+	private boolean isRunningOnAzure() {
+		String username = System.getProperty("user.name").toLowerCase();
+		return !(username.startsWith("rob") && username.endsWith("mcdougall"));
+	}
+	
+	private java.nio.file.Path saveDirectory() throws IOException {
+		java.nio.file.Path rootLocation = Paths.get("D:", "home", "data");
+		if (!Files.exists(rootLocation)) {
+			throw new FileNotFoundException("Unable to find the root data directory. (" + rootLocation.toString() + ").");
+		}
+		java.nio.file.Path saveDirectory = rootLocation.resolve(SAVED_GAMES_DIR);
+		if (!Files.exists(saveDirectory)) {
+			Files.createDirectory(saveDirectory);
+		}
+		return saveDirectory;
+	}
+	
+	private Optional<java.nio.file.Path> saveFile() {
+		java.nio.file.Path saveFile = null;
+		try {
+			saveFile = saveDirectory().resolve(SAVED_GAMES_FILENAME);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Optional.ofNullable(saveFile);
+	}
+	
 
 	// Specifies that the method processes HTTP POST requests
 	@GET
@@ -57,10 +93,10 @@ public class FitGWebApplication extends ResourceConfig {
 	public Response resetActionCards() throws URISyntaxException {
 		System.out.println("Main Page redirect");
 		URI redirectUri;
-		if (GameResources.games().isEmpty()) {
+		if (GameResources.numGames() == 0) {
 			redirectUri = new URI(GameResources.REL_GAMES_PATH + GameResources.CREATE_PATH);
 		} else {
-			redirectUri = new URI(GameResources.GAMES_PATH);
+			redirectUri = new URI(GameResources.REL_GAMES_PATH);
 		}
 		return Response.seeOther(redirectUri).build();
 	}
@@ -69,16 +105,27 @@ public class FitGWebApplication extends ResourceConfig {
 	@GET
 	@Path(FitGWebApplication.PING_PATH)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String ping() {
-		return FitGWebApplication.PING_RESPONSE;
+	public String ping() throws IOException {
+//		return FitGWebApplication.PING_RESPONSE + " User='" + System.getProperty("user.name") + "', System name='" + InetAddress.getLocalHost().getHostName() + "'.";
+		try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw)) {
+			pw.println(FitGWebApplication.PING_RESPONSE + " Running on Azure = " + Boolean.toString(isRunningOnAzure()));
+			try (Stream<java.nio.file.Path> pathStream = Files.walk(saveDirectory())) {
+				pathStream.forEach(p->pw.println(p.toString()));
+			}
+			return sw.toString();
+		}		
 	}
 	
 	// Handle Application startup and shutdown
 	// https://stackoverflow.com/questions/39821157/init-method-in-jersey-jax-rs-web-service
 	@WebListener
-	public class StartupListener implements ServletContextListener {
+	public static class StartupListener implements ServletContextListener {
 
-	    @Override
+	    public StartupListener() {
+			super();
+		}
+
+		@Override
 	    public void contextInitialized(ServletContextEvent event) {
 	        // Perform action during application's startup
 	    	// TODO: Load Games from file in local storage
@@ -105,22 +152,58 @@ public class FitGWebApplication extends ResourceConfig {
 			container.reload();
 		}
 
+		private void loadSaveFile() {
+			Optional<java.nio.file.Path> saveFileOptional = saveFile();
+	    	if (saveFileOptional.isPresent() && Files.exists(saveFileOptional.get())) {
+				java.nio.file.Path saveFile = saveFileOptional.get();
+				try (Reader r = Files.newBufferedReader(saveFile)) {
+					GameResources.loadGames(r);
+				} catch (IOException e) {
+					// We can't throw exceptions, so just write out and carry on.
+					e.printStackTrace();
+				}
+	    	}
+		}
+
+		private void writeSaveFile() {
+			Optional<java.nio.file.Path> saveFileOptional = saveFile();
+	    	if (saveFileOptional.isPresent()) {
+	    		try {
+					java.nio.file.Path saveFile = saveFileOptional.get();
+					if (GameResources.numGames() > 0) {
+						try (Writer w = Files.newBufferedWriter(saveFile)) {
+							GameResources.saveGames(w);
+						}
+					} else if (Files.exists(saveFile)) {
+						// No games are present, so we'll remove the file.
+						Files.delete(saveFile);
+					}
+				} catch (IOException e) {
+					// We can't throw exceptions, so just write out and carry on.
+					e.printStackTrace();
+				}
+	    	}
+		}
+
 		@Override
 		public void onStartup(Container container) {
 			this.container = container;
 	    	System.out.println("Reloader - Server Startup");
+	    	loadSaveFile();
 		}
 
 		@Override
 		public void onReload(Container container) {
 			// ignore or do whatever you want after reload has been done
 	    	System.out.println("Reloader - Server Reload");
+	    	loadSaveFile();
 		}
 
 		@Override
 		public void onShutdown(Container container) {
 			// ignore or do something after the container has been shutdown
 	    	System.out.println("Reloader - Server Shutdown");
+	    	writeSaveFile();
 		}
 	}
 	

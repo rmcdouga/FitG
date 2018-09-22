@@ -7,15 +7,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.json.JsonPointer;
 import javax.json.JsonReader;
 import javax.json.JsonStructure;
 import javax.json.JsonValue;
@@ -43,7 +43,6 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import com.github.hanleyt.JerseyExtension;
-import com.github.rmcdouga.fitg.webapp.resources.ActionDeckResources;
 import com.github.rmcdouga.fitg.webapp.resources.GameResources;
 
 public class GameResourcesTest {
@@ -90,10 +89,24 @@ public class GameResourcesTest {
 		List<String> gameNamesAfterCreationPostJson = listGamesJson(target);
 		assertEquals(3, gameNamesAfterCreationPostJson.size(), "Expected that there would be three games after Json creation, but found '" + gameNamesAfterCreationPost.toString() + "'.");
 
+		// Save the current state
+		StringWriter sw = new StringWriter();
+		GameResources.saveGames(sw);
+		
+		System.out.println("---- Save File JSON ----");
+		System.out.println(sw.toString());
+		System.out.println("------------------------");
+
 		createGameJson(target, "TestGame4", true);
 		List<String> gameNamesAfterCreationGetJson = listGamesJson(target);
 		assertEquals(4, gameNamesAfterCreationGetJson.size(), "Expected that there would be four game after second Json creation, but found '" + gameNamesAfterCreationGet.toString() + "'.");
 
+		// Load the state, make sure things are reset
+		StringReader sr = new StringReader(sw.toString());
+		GameResources.loadGames(sr);
+
+		List<String> gameNamesAfterCreationPostSaveLoad = listGamesJson(target);
+		assertEquals(3, gameNamesAfterCreationPostSaveLoad.size(), "Expected that there would be three games after games Reload, but found '" + gameNamesAfterCreationPost.toString() + "'.");
 	}
 
 	private static List<String> listGamesHtml(WebTarget target) throws IOException {
