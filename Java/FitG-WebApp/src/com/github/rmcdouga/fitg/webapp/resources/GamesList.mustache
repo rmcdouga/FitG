@@ -7,14 +7,16 @@
 <body>
   <h2>List of Currently Running Games</h2>
   <ol>
-  	<li>
   		{{#gamesList}}
+  	<li>
   		<a href="{{gameName}}/ActionDeck/Discard/0"><span class="gameName">{{gameName}}</span></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="Games/{{gameName}}/Delete">Delete Game</a>
+  	</li>
   		{{/gamesList}}
   		{{^gamesList}}
+  	<li>
   		<strong id="noGames">No Games were found.</strong> Click <a href="Games/Create">here</a> to create a game.
-  		{{/gamesList}}
   	</li>
+  		{{/gamesList}}
   </ol>
 </body>
 </html>

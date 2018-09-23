@@ -114,7 +114,8 @@ public class GameResources {
 		String gameName = determineGameName(queryName, formName);
 		if (games.putIfAbsent(gameName, new WebAppGame()) != null) {
 			// Seems we already have a game there with this name.
-			throw new ClientErrorException("Game '" + gameName + "' already exists.", Status.CONFLICT.getStatusCode());
+			String msg = "Game '" + gameName + "' already exists.";
+			throw new ClientErrorException(msg, Response.status(Status.CONFLICT.getStatusCode(), msg).build());
 		}
 		return Response.seeOther(new URI(gameName + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/0")).build();
 	}
@@ -126,17 +127,25 @@ public class GameResources {
 		} else if (formName != null) {
 			gameName = formName;
 		} else {
-			throw new NotFoundException("No name supplied for the game being created!");
+			String msg = "No name supplied for the game being created!";
+			throw new NotFoundException(msg, Response.status(Status.NOT_FOUND.getStatusCode(), msg).build());
+		}
+		if (gameName.trim().isEmpty()) {
+			String msg = "Empty Game name.";
+			throw new BadRequestException(msg, Response.status(Status.BAD_REQUEST.getStatusCode(), msg).build());
 		}
 		if (gameName.length() > MAX_GAME_NAME_SIZE) {
-			throw new BadRequestException("Game name supplied exceeds the maximum of " + Integer.toString(MAX_GAME_NAME_SIZE) + " characters.");
+			String msg = "Game name supplied exceeds the maximum of " + Integer.toString(MAX_GAME_NAME_SIZE) + " characters.";
+			throw new BadRequestException(msg, Response.status(Status.BAD_REQUEST.getStatusCode(), msg).build());
 		}
 		// Gamename must follow the same rules as a Java Identifier.
 		if (!Character.isJavaIdentifierStart(gameName.codePointAt(0))) {
-			throw new BadRequestException("Game names must follow Java Identifier rules. Invalid starting character.");
+			String msg = "Game names must follow Java Identifier rules. Invalid starting character.";
+			throw new BadRequestException(msg, Response.status(Status.BAD_REQUEST.getStatusCode(), msg).build());
 		}
 		if (!gameName.codePoints().allMatch(Character::isJavaIdentifierPart)) {
-			throw new BadRequestException("Game names must follow Java Identifier rules.");
+			String msg = "Game names must follow Java Identifier rules.";
+			throw new BadRequestException(msg, Response.status(Status.BAD_REQUEST.getStatusCode(), msg).build());
 		}
 		return gameName;
 	}
@@ -167,7 +176,8 @@ public class GameResources {
 		// Accept the game name from either the query parameter of the form name.
 		if (games.remove(gameStr) == null) {
 			// Seems we couldn't find a game with this name.
-			throw new NotFoundException("Game '" + gameStr + "' does not exist.");
+			String msg = "Game '" + gameStr + "' does not exist.";
+			throw new NotFoundException(msg, Response.status(Status.NOT_FOUND.getStatusCode(), msg).build());
 		}
 		return Response.seeOther(new URI(REL_GAMES_PATH)).build();
 	}
@@ -197,7 +207,8 @@ public class GameResources {
 		String gameName = determineGameName(queryName, bodyName);
 		if (games.putIfAbsent(gameName, new WebAppGame()) != null) {
 			// Seems we already have a game there with this name.
-			throw new ClientErrorException("Game '" + gameName + "' already exists.", Status.CONFLICT.getStatusCode());
+			String msg = "Game '" + gameName + "' already exists.";
+			throw new ClientErrorException(msg, Response.status(Status.CONFLICT.getStatusCode(), msg).build());
 		}
 		List<Object> gamesList = new ArrayList<>(1);
 		gamesList.add(new SingletonMap<>(GAME_NAME_LABEL, gameName));
@@ -213,7 +224,8 @@ public class GameResources {
 		// Accept the game name from either the query parameter of the form name.
 		if (games.remove(gameStr) != null) {
 			// Seems we couldn't find a game with this name.
-			throw new NotFoundException("Game '" + gameStr + "' does not exist.");
+			String msg = "Game '" + gameStr + "' does not exist.";
+			throw new NotFoundException(msg, Response.status(Status.NOT_FOUND.getStatusCode(), msg).build());
 		}
 		List<Object> gamesList = new ArrayList<>(1);
 		gamesList.add(new SingletonMap<>(GAME_NAME_LABEL, gameStr));
