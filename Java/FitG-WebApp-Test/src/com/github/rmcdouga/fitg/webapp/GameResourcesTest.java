@@ -107,6 +107,19 @@ public class GameResourcesTest {
 
 		List<String> gameNamesAfterCreationPostSaveLoad = listGamesJson(target);
 		assertEquals(3, gameNamesAfterCreationPostSaveLoad.size(), "Expected that there would be three games after games Reload, but found '" + gameNamesAfterCreationPost.toString() + "'.");
+
+		deleteGameGetHtml(target, "TestGame3");
+		List<String> gameNamesAfterDeletionGetHtml = listGamesHtml(target);
+		assertEquals(3, gameNamesAfterDeletionGetHtml.size(), "Expected that there would still be three games after games Delete page get, but found '" + gameNamesAfterDeletionGetHtml.toString() + "'.");
+		
+		deleteGamePostHtml(target, "TestGame3");
+		List<String> gameNamesAfterDeletionPostHtml = listGamesHtml(target);
+		assertEquals(2, gameNamesAfterDeletionPostHtml.size(), "Expected that there would be two games after games HTML Deletion, but found '" + gameNamesAfterDeletionPostHtml.toString() + "'.");
+
+		deleteGamePostHtml(target, "TestGame2");
+		List<String> gameNamesAfterDeletionPostJson = listGamesHtml(target);
+		assertEquals(1, gameNamesAfterDeletionPostJson.size(), "Expected that there would be only one game after games JSON Deletion, but found '" + gameNamesAfterDeletionPostJson.toString() + "'.");
+
 	}
 
 	private static List<String> listGamesHtml(WebTarget target) throws IOException {
@@ -162,6 +175,53 @@ public class GameResourcesTest {
 		
 	}
 
+	private static List<String> deleteGameGetHtml(WebTarget target, String testGameName) throws IOException {
+		String targetPath = GamesPath + "/" + testGameName + "/Delete";
+		
+		Response result = TestUtils.trace(target.path(targetPath).request())
+				 .accept(MediaType.TEXT_HTML_TYPE)
+				 .buildGet()
+				 .invoke();
+	
+		if (Response.Status.OK.getStatusCode() != result.getStatus()) {
+			TestUtils.printTrace(result);
+		}
+		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + targetPath + "' should be OK");
+		assertTrue(result.hasEntity(), "Expected response to have body.");
+		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
+		System.out.println("----- HTML -----");
+		IOUtils.write(entity, System.out);
+		System.out.println("----------------");
+		Document html = Jsoup.parse(new ByteArrayInputStream(entity), StandardCharsets.UTF_8.name(), "/");
+		Elements gameNames = html.getElementsByClass("gameName");
+		assertNotNull(gameNames, "Couldn't find any game names.");
+		List<String> gamesList = gameNames.stream().map(Element::text).collect(Collectors.toList());
+		assertEquals(1, gamesList.size(), "Expected there to be exactly one game in game delete page.");
+		assertEquals(testGameName, gamesList.get(0), "Expected game name to be the one we asked to be deleted.");
+		return gamesList;
+	}
+	
+	public static void deleteGamePostHtml(WebTarget target, String testGameName) throws IOException {
+		String targetPath = GamesPath + "/" + testGameName + "/Delete";
+		Form form = new Form();
+		WebTarget target2 = target.path(targetPath);
+		Response result = TestUtils.trace(target2.request())
+				 .accept(MediaType.TEXT_HTML_TYPE)
+				 .buildPost(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE))
+				 .invoke();
+	
+		if (Response.Status.OK.getStatusCode() != result.getStatus()) {
+			TestUtils.printTrace(result);
+		}
+		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + targetPath + "' should be OK");
+		assertTrue(result.hasEntity(), "Expected response to have body.");
+		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
+		System.out.println("----- HTML -----");
+		IOUtils.write(entity, System.out);
+		System.out.println("----------------");
+	}
+
+
 
 	private static List<String> listGamesJson(WebTarget target) throws IOException {
 		Response result = TestUtils.trace(target.path(GamesPath).request())
@@ -216,4 +276,25 @@ public class GameResourcesTest {
 		System.out.println("----------------");
 	}
 
+	public static void deleteGamePostJson(WebTarget target, String testGameName) throws IOException {
+		JsonObject json = Json.createObjectBuilder().build();
+		String targetPath = GamesPath + "/" + testGameName + "/Delete";
+		WebTarget target2 = target.path(targetPath);
+		Response result = TestUtils.trace(target2.request())
+				 .accept(MediaType.APPLICATION_JSON_TYPE)
+				 .buildPost(Entity.entity(json, MediaType.APPLICATION_JSON_TYPE))
+				 .invoke();
+	
+		if (Response.Status.OK.getStatusCode() != result.getStatus()) {
+			TestUtils.printTrace(result);
+		}
+		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + targetPath + "' should be OK");
+		assertTrue(result.hasEntity(), "Expected response to have body.");
+		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
+		System.out.println("----- JSON -----");
+		IOUtils.write(entity, System.out);
+		System.out.println("----------------");
+	}
+
+	
 }

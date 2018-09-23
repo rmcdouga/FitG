@@ -25,6 +25,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -45,12 +46,13 @@ public class GameResources {
 	public static final String GAME_NAME_LABEL = "gameName";
 	public static final String GAMES_LIST_LABEL = "gamesList";
 	public static final String GAMES_CREATED_LABEL = "gamesCreated";
+	public static final String GAMES_DELETED_LABEL = "gamesDeleted";
 	public static final String CREATE_GAME_LABEL = "createGame";
 	public static final String DEFAULT_GAME_NAME = "default";
 	public static final String REL_GAMES_PATH = "Games";
 	public static final String GAMES_PATH = "/" + REL_GAMES_PATH;
 	public static final String CREATE_PATH = "/Create";
-	public static final String DELETE_PATH = "/Delete";
+	public static final String DELETE_PATH = "/{gameStr}/Delete";
 
 	private static final Map<String, WebAppGame> games = createGamesMap();
 	private static Map<String, WebAppGame> createGamesMap() {
@@ -147,6 +149,29 @@ public class GameResources {
 		return Collections.emptyMap();
 	}
 
+	// Returns delete game page
+	@GET
+	@Path(DELETE_PATH)
+	@Produces(MediaType.TEXT_HTML)
+	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/DeleteGame.mustache")
+	public Map<String, Object> deleteGameGetHtml(@PathParam("gameStr") String gameStr) {
+		return new SingletonMap(GAME_NAME_LABEL, gameStr);
+	}
+
+	// Deletes a game
+	@POST
+	@Path(DELETE_PATH)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.TEXT_HTML)
+	public Response deleteGameHtml(@PathParam("gameStr") String gameStr) throws URISyntaxException {
+		// Accept the game name from either the query parameter of the form name.
+		if (games.remove(gameStr) == null) {
+			// Seems we couldn't find a game with this name.
+			throw new NotFoundException("Game '" + gameStr + "' does not exist.");
+		}
+		return Response.seeOther(new URI(REL_GAMES_PATH)).build();
+	}
+
 	/*
 	 * JSON Methods
 	 */
@@ -179,6 +204,24 @@ public class GameResources {
 		return JsonUtil.MapToJson(gamesList, GAMES_CREATED_LABEL);
 	}
 
+	// Deletes a game
+	@POST
+	@Path(DELETE_PATH)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public JsonObject deleteGameJson(@PathParam("gameStr") String gameStr) throws URISyntaxException {
+		// Accept the game name from either the query parameter of the form name.
+		if (games.remove(gameStr) != null) {
+			// Seems we couldn't find a game with this name.
+			throw new NotFoundException("Game '" + gameStr + "' does not exist.");
+		}
+		List<Object> gamesList = new ArrayList<>(1);
+		gamesList.add(new SingletonMap<>(GAME_NAME_LABEL, gameStr));
+		return JsonUtil.MapToJson(gamesList, GAMES_DELETED_LABEL);
+	}
+
+	
+	
 	private static class WebAppGame extends Game {
 		private static final String LAST_ACCESS_DATE_TIME_LABEL = "lastAccessDateTime";
 		private static final String CREATION_DATE_TIME_LABEL = "creationDateTime";
