@@ -43,7 +43,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import com.github.hanleyt.JerseyExtension;
-import com.github.rmcdouga.fitg.webapp.resources.GameResources;
+import com.github.rmcdouga.fitg.webapp.resources.GamesResources;
 
 public class GameResourcesTest {
 	@RegisterExtension
@@ -67,7 +67,7 @@ public class GameResourcesTest {
 		return clientConfig;
 	}
 	
-	private final static String GamesPath = TestUtils.APPLICATION_PREFIX + GameResources.GAMES_PATH;
+	private final static String GamesPath = TestUtils.APPLICATION_PREFIX + GamesResources.GAMES_PATH;
 	
 	@Test
 	void testCreateAndDeleteGames(WebTarget target) throws IOException {
@@ -91,7 +91,7 @@ public class GameResourcesTest {
 
 		// Save the current state
 		StringWriter sw = new StringWriter();
-		GameResources.saveGames(sw);
+		GamesResources.saveGames(sw);
 		
 		System.out.println("---- Save File JSON ----");
 		System.out.println(sw.toString());
@@ -103,7 +103,7 @@ public class GameResourcesTest {
 
 		// Load the state, make sure things are reset
 		StringReader sr = new StringReader(sw.toString());
-		GameResources.loadGames(sr);
+		GamesResources.loadGames(sr);
 
 		List<String> gameNamesAfterCreationPostSaveLoad = listGamesJson(target);
 		assertEquals(3, gameNamesAfterCreationPostSaveLoad.size(), "Expected that there would be three games after games Reload, but found '" + gameNamesAfterCreationPost.toString() + "'.");
@@ -151,12 +151,12 @@ public class GameResourcesTest {
 	
 	public static void createGameHtml(WebTarget target, String testGameName, boolean useQueryParm) throws IOException {
 		Form form = new Form();
-		WebTarget target2 = target.path(GamesPath + GameResources.CREATE_PATH);
+		WebTarget target2 = target.path(GamesPath + GamesResources.CREATE_PATH);
 		// Use a query parameter or a form parameter to provide the name. 
 		if (useQueryParm) {
-			target2 = target2.queryParam(GameResources.GAME_NAME_PARAM, testGameName);
+			target2 = target2.queryParam(GamesResources.GAME_NAME_PARAM, testGameName);
 		} else {
-			form.param(GameResources.GAME_NAME_PARAM, testGameName);
+			form.param(GamesResources.GAME_NAME_PARAM, testGameName);
 		}
 		Response result = TestUtils.trace(target2.request())
 				 .accept(MediaType.TEXT_HTML_TYPE)
@@ -166,7 +166,7 @@ public class GameResourcesTest {
 		if (Response.Status.OK.getStatusCode() != result.getStatus()) {
 			TestUtils.printTrace(result);
 		}
-		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + (GamesPath + GameResources.CREATE_PATH) + "' should be OK");
+		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + (GamesPath + GamesResources.CREATE_PATH) + "' should be OK");
 		assertTrue(result.hasEntity(), "Expected response to have body.");
 		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
 		System.out.println("----- HTML -----");
@@ -241,24 +241,24 @@ public class GameResourcesTest {
 		JsonReader reader = Json.createReader(new ByteArrayInputStream(entity));
 		JsonStructure jsonStructure = reader.read();
 		assertEquals(JsonValue.ValueType.OBJECT, jsonStructure.getValueType(), "Expected top level structure to be an object but was '" + jsonStructure.getValueType().toString() + "'.");
-		JsonValue gameNames = jsonStructure.getValue("/" + GameResources.GAMES_LIST_LABEL);
+		JsonValue gameNames = jsonStructure.getValue("/" + GamesResources.GAMES_LIST_LABEL);
 		assertNotNull(gameNames, "Couldn't find any game names.");
 		assertEquals(JsonValue.ValueType.ARRAY, gameNames.getValueType(), "Expected gameNames structure to be an array but was '" + jsonStructure.getValueType().toString() + "'.");
 		JsonArray gameNamesArray = gameNames.asJsonArray();
 		
-		List<String> gamesList = gameNamesArray.stream().map(JsonValue::asJsonObject).map(o->o.getString(GameResources.GAME_NAME_LABEL)).collect(Collectors.toList());
+		List<String> gamesList = gameNamesArray.stream().map(JsonValue::asJsonObject).map(o->o.getString(GamesResources.GAME_NAME_LABEL)).collect(Collectors.toList());
 		return gamesList;
 	}
 	
 	public static void createGameJson(WebTarget target, String testGameName, boolean useQueryParm) throws IOException {
 		JsonObject json;
-		WebTarget target2 = target.path(GamesPath + GameResources.CREATE_PATH);
+		WebTarget target2 = target.path(GamesPath + GamesResources.CREATE_PATH);
 		// Use a query parameter or a form parameter to provide the name. 
 		if (useQueryParm) {
-			target2 = target2.queryParam(GameResources.GAME_NAME_PARAM, testGameName);
+			target2 = target2.queryParam(GamesResources.GAME_NAME_PARAM, testGameName);
 			json = Json.createObjectBuilder().build();
 		} else {
-			json = Json.createObjectBuilder(new SingletonMap<String, Object>(GameResources.CREATE_GAME_LABEL, testGameName)).build();
+			json = Json.createObjectBuilder(new SingletonMap<String, Object>(GamesResources.CREATE_GAME_LABEL, testGameName)).build();
 		}
 		Response result = TestUtils.trace(target2.request())
 				 .accept(MediaType.APPLICATION_JSON_TYPE)
@@ -268,7 +268,7 @@ public class GameResourcesTest {
 		if (Response.Status.OK.getStatusCode() != result.getStatus()) {
 			TestUtils.printTrace(result);
 		}
-		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + (GamesPath + GameResources.CREATE_PATH) + "' should be OK");
+		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + (GamesPath + GamesResources.CREATE_PATH) + "' should be OK");
 		assertTrue(result.hasEntity(), "Expected response to have body.");
 		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
 		System.out.println("----- JSON -----");

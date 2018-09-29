@@ -43,11 +43,11 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import com.github.hanleyt.JerseyExtension;
 import com.github.rmcdouga.fitg.webapp.resources.ActionDeckResources;
-import com.github.rmcdouga.fitg.webapp.resources.GameResources;
+import com.github.rmcdouga.fitg.webapp.resources.GamesResources;
 
 class ActionDeckResourcesTest {
 	
-	private static final String TEST_GAME_NAME = GameResources.DEFAULT_GAME_NAME;
+	private static final String TEST_GAME_NAME = GamesResources.DEFAULT_GAME_NAME;
 
 	@RegisterExtension
 	JerseyExtension jerseyExtension = new JerseyExtension(this::configureJersey, this::configureJerseyClient);

@@ -179,7 +179,7 @@ public class ActionDeckResources {
 	}
 
 	private ActionDeck getActionDeck(String gameStr) {
-		Optional<Game> game = GameResources.game(gameStr);
+		Optional<Game> game = GamesResources.game(gameStr);
 		System.out.println("Getting Game '" + gameStr + "', exists=" + game.isPresent() + "'.");
 		return game.orElseThrow(()->new NotFoundException("Unable to find game '" + gameStr + "'.")).actionDeck();
 	}

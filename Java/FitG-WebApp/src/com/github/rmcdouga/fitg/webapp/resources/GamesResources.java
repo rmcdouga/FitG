@@ -38,8 +38,8 @@ import org.glassfish.jersey.server.mvc.Template;
 import com.github.rmcdouga.fitg.webapp.util.JsonUtil;
 import com.rogers.rmcdouga.fitg.basegame.Game;
 
-@Path(GameResources.GAMES_PATH)
-public class GameResources {
+@Path(GamesResources.GAMES_PATH)
+public class GamesResources {
 	private static final String FITG_GAMES_LABEL = "FitG_Games";
 	public static final int MAX_GAME_NAME_SIZE = 30;
 	public static final String GAME_NAME_PARAM = "name";

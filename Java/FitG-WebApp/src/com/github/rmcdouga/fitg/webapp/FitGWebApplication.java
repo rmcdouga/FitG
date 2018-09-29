@@ -36,7 +36,7 @@ import org.glassfish.jersey.server.mvc.mustache.MustacheMvcFeature;
 import org.glassfish.jersey.server.spi.Container;
 import org.glassfish.jersey.server.spi.ContainerLifecycleListener;
 
-import com.github.rmcdouga.fitg.webapp.resources.GameResources;
+import com.github.rmcdouga.fitg.webapp.resources.GamesResources;
 
 @ApplicationPath(FitGWebApplication.APPLICATION_TOP_LEVEL)
 @Path("")
@@ -99,10 +99,10 @@ public class FitGWebApplication extends ResourceConfig {
 	public Response resetActionCards() throws URISyntaxException {
 		System.out.println("Main Page redirect");
 		URI redirectUri;
-		if (GameResources.numGames() == 0) {
-			redirectUri = new URI(GameResources.REL_GAMES_PATH + GameResources.CREATE_PATH);
+		if (GamesResources.numGames() == 0) {
+			redirectUri = new URI(GamesResources.REL_GAMES_PATH + GamesResources.CREATE_PATH);
 		} else {
-			redirectUri = new URI(GameResources.REL_GAMES_PATH);
+			redirectUri = new URI(GamesResources.REL_GAMES_PATH);
 		}
 		return Response.seeOther(redirectUri).build();
 	}
@@ -163,7 +163,7 @@ public class FitGWebApplication extends ResourceConfig {
 	    	if (saveFileOptional.isPresent() && Files.exists(saveFileOptional.get())) {
 				java.nio.file.Path saveFile = saveFileOptional.get();
 				try (Reader r = Files.newBufferedReader(saveFile)) {
-					GameResources.loadGames(r);
+					GamesResources.loadGames(r);
 				} catch (IOException e) {
 					// We can't throw exceptions, so just write out and carry on.
 					e.printStackTrace();
@@ -176,9 +176,9 @@ public class FitGWebApplication extends ResourceConfig {
 	    	if (saveFileOptional.isPresent()) {
 	    		try {
 					java.nio.file.Path saveFile = saveFileOptional.get();
-					if (GameResources.numGames() > 0) {
+					if (GamesResources.numGames() > 0) {
 						try (Writer w = Files.newBufferedWriter(saveFile)) {
-							GameResources.saveGames(w);
+							GamesResources.saveGames(w);
 						}
 					} else if (Files.exists(saveFile)) {
 						// No games are present, so we'll remove the file.
