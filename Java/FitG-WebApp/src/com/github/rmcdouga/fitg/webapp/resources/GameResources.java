@@ -52,7 +52,8 @@ public class GameResources {
 	public static final String REL_GAMES_PATH = "Games";
 	public static final String GAMES_PATH = "/" + REL_GAMES_PATH;
 	public static final String CREATE_PATH = "/Create";
-	public static final String DELETE_PATH = "/{gameStr}/Delete";
+	public static final String GAME_PATH = "/{" + GAME_NAME_PARAM + "}";
+	public static final String DELETE_PATH = GAME_PATH + "/Delete";
 
 	private static final Map<String, WebAppGame> games = createGamesMap();
 	private static Map<String, WebAppGame> createGamesMap() {
@@ -93,6 +94,15 @@ public class GameResources {
 		setState((Map<String, Object>)(JsonUtil.JsonToMap(Json.createReader(r).readObject()).get(FITG_GAMES_LABEL)));
 	}
 	
+	// Default Game Page
+	@GET
+	@Path(GAME_PATH)
+	@Produces(MediaType.TEXT_HTML)
+	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/GamesList.mustache")
+	public Response defaultGameHtml(@PathParam(GAME_NAME_PARAM) String gameName) throws URISyntaxException {
+		return Response.seeOther(new URI(gameName + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/0")).build();
+	}
+	
 	// Lists Games
 	@GET
 	@Path("/")
@@ -114,8 +124,7 @@ public class GameResources {
 		String gameName = determineGameName(queryName, formName);
 		if (games.putIfAbsent(gameName, new WebAppGame()) != null) {
 			// Seems we already have a game there with this name.
-			String msg = "Game '" + gameName + "' already exists.";
-			throw new ClientErrorException(msg, Response.status(Status.CONFLICT.getStatusCode(), msg).build());
+			throw new ClientErrorException("Game '" + gameName + "' already exists.", Status.CONFLICT.getStatusCode());
 		}
 		return Response.seeOther(new URI(gameName + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/0")).build();
 	}
@@ -127,25 +136,17 @@ public class GameResources {
 		} else if (formName != null) {
 			gameName = formName;
 		} else {
-			String msg = "No name supplied for the game being created!";
-			throw new NotFoundException(msg, Response.status(Status.NOT_FOUND.getStatusCode(), msg).build());
-		}
-		if (gameName.trim().isEmpty()) {
-			String msg = "Empty Game name.";
-			throw new BadRequestException(msg, Response.status(Status.BAD_REQUEST.getStatusCode(), msg).build());
+			throw new NotFoundException("No name supplied for the game being created!");
 		}
 		if (gameName.length() > MAX_GAME_NAME_SIZE) {
-			String msg = "Game name supplied exceeds the maximum of " + Integer.toString(MAX_GAME_NAME_SIZE) + " characters.";
-			throw new BadRequestException(msg, Response.status(Status.BAD_REQUEST.getStatusCode(), msg).build());
+			throw new BadRequestException("Game name supplied exceeds the maximum of " + Integer.toString(MAX_GAME_NAME_SIZE) + " characters.");
 		}
 		// Gamename must follow the same rules as a Java Identifier.
 		if (!Character.isJavaIdentifierStart(gameName.codePointAt(0))) {
-			String msg = "Game names must follow Java Identifier rules. Invalid starting character.";
-			throw new BadRequestException(msg, Response.status(Status.BAD_REQUEST.getStatusCode(), msg).build());
+			throw new BadRequestException("Game names must follow Java Identifier rules. Invalid starting character.");
 		}
 		if (!gameName.codePoints().allMatch(Character::isJavaIdentifierPart)) {
-			String msg = "Game names must follow Java Identifier rules.";
-			throw new BadRequestException(msg, Response.status(Status.BAD_REQUEST.getStatusCode(), msg).build());
+			throw new BadRequestException("Game names must follow Java Identifier rules.");
 		}
 		return gameName;
 	}
@@ -163,7 +164,7 @@ public class GameResources {
 	@Path(DELETE_PATH)
 	@Produces(MediaType.TEXT_HTML)
 	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/DeleteGame.mustache")
-	public Map<String, Object> deleteGameGetHtml(@PathParam("gameStr") String gameStr) {
+	public Map<String, Object> deleteGameGetHtml(@PathParam(GAME_NAME_PARAM) String gameStr) {
 		return new SingletonMap(GAME_NAME_LABEL, gameStr);
 	}
 
@@ -172,12 +173,11 @@ public class GameResources {
 	@Path(DELETE_PATH)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_HTML)
-	public Response deleteGameHtml(@PathParam("gameStr") String gameStr) throws URISyntaxException {
+	public Response deleteGameHtml(@PathParam(GAME_NAME_PARAM) String gameStr) throws URISyntaxException {
 		// Accept the game name from either the query parameter of the form name.
 		if (games.remove(gameStr) == null) {
 			// Seems we couldn't find a game with this name.
-			String msg = "Game '" + gameStr + "' does not exist.";
-			throw new NotFoundException(msg, Response.status(Status.NOT_FOUND.getStatusCode(), msg).build());
+			throw new NotFoundException("Game '" + gameStr + "' does not exist.");
 		}
 		return Response.seeOther(new URI(REL_GAMES_PATH)).build();
 	}
@@ -185,6 +185,15 @@ public class GameResources {
 	/*
 	 * JSON Methods
 	 */
+	
+	// Default Game Page
+	@GET
+	@Path(GAME_PATH)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/GamesList.mustache")
+	public Response defaultGameJson(@PathParam(GAME_NAME_PARAM) String gameName) throws URISyntaxException {
+		return Response.seeOther(new URI(gameName + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/0")).build();
+	}
 	
 	// Lists Games
 	@GET
@@ -207,8 +216,7 @@ public class GameResources {
 		String gameName = determineGameName(queryName, bodyName);
 		if (games.putIfAbsent(gameName, new WebAppGame()) != null) {
 			// Seems we already have a game there with this name.
-			String msg = "Game '" + gameName + "' already exists.";
-			throw new ClientErrorException(msg, Response.status(Status.CONFLICT.getStatusCode(), msg).build());
+			throw new ClientErrorException("Game '" + gameName + "' already exists.", Status.CONFLICT.getStatusCode());
 		}
 		List<Object> gamesList = new ArrayList<>(1);
 		gamesList.add(new SingletonMap<>(GAME_NAME_LABEL, gameName));
@@ -220,12 +228,11 @@ public class GameResources {
 	@Path(DELETE_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public JsonObject deleteGameJson(@PathParam("gameStr") String gameStr) throws URISyntaxException {
+	public JsonObject deleteGameJson(@PathParam(GAME_NAME_PARAM) String gameStr) throws URISyntaxException {
 		// Accept the game name from either the query parameter of the form name.
 		if (games.remove(gameStr) != null) {
 			// Seems we couldn't find a game with this name.
-			String msg = "Game '" + gameStr + "' does not exist.";
-			throw new NotFoundException(msg, Response.status(Status.NOT_FOUND.getStatusCode(), msg).build());
+			throw new NotFoundException("Game '" + gameStr + "' does not exist.");
 		}
 		List<Object> gamesList = new ArrayList<>(1);
 		gamesList.add(new SingletonMap<>(GAME_NAME_LABEL, gameStr));

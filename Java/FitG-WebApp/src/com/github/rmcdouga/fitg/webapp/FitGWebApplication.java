@@ -20,13 +20,18 @@ import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
+import org.apache.commons.collections4.map.SingletonMap;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.mvc.MvcFeature;
+import org.glassfish.jersey.server.mvc.Viewable;
 import org.glassfish.jersey.server.mvc.mustache.MustacheMvcFeature;
 import org.glassfish.jersey.server.spi.Container;
 import org.glassfish.jersey.server.spi.ContainerLifecycleListener;
@@ -49,6 +54,7 @@ public class FitGWebApplication extends ResourceConfig {
 		register(MvcFeature.class);
 		register(MustacheMvcFeature.class);
         register(LoggingFeature.class);
+        register(FitGDefaultExceptionMapper.class);
         
         property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, "ALL");
         property(LoggingFeature.LOGGING_FEATURE_VERBOSITY_SERVER, "PAYLOAD_ANY");
@@ -207,4 +213,13 @@ public class FitGWebApplication extends ResourceConfig {
 		}
 	}
 	
+	@Provider
+	public static class FitGDefaultExceptionMapper implements ExceptionMapper<WebApplicationException> {
+	  public Response toResponse(WebApplicationException ex) {
+	    return Response.fromResponse(ex.getResponse()).
+	      entity(new Viewable("/com/github/rmcdouga/fitg/webapp/Exception.mustache", new SingletonMap<String, Object>("message", ex.getResponse().getStatusInfo().getReasonPhrase() + ": " + ex.getMessage()))).
+	      type(MediaType.TEXT_HTML_TYPE).
+	      build();
+	  }
+	}
 }
