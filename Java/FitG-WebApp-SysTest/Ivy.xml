@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ivy-module xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+	<info status="integration" module="CoE-HRFormsTest" organisation="ca.edmonton.hrforms.test"> </info>
+	<dependencies>
+		<dependency org="org.seleniumhq.selenium" name="selenium-java" rev="3.14.0" />
+		<dependency org="org.seleniumhq.selenium" name="htmlunit-driver" rev="2.32.1" />
+	</dependencies>
+</ivy-module>

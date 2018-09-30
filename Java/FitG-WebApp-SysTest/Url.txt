@@ -1,0 +1,6 @@
+http://localhost:8080/FitG-WebApp/ActionDeck/Discard/0
+
+
+** Selenium JavaDocs
+
+https://seleniumhq.github.io/selenium/docs/api/java/index.html
