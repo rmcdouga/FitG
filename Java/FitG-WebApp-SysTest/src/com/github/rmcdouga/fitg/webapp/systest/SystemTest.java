@@ -87,8 +87,10 @@ class SystemTest {
 		
 		// Now if we go back to the main page, it should take us to the ListGames Page
 		driver.get(BASE_URL);
-		assertTrue(ListGamesPageTests.isGamesListPage(driver), ()->"Now that there is an existing game, the default shoudl direct to the Games List page but was '" + driver.getTitle() + "' page instead.");
+		assertTrue(ListGamesPageTests.isGamesListPage(driver), ()->"Now that there is an existing game, the default should direct to the Games List page but was '" + driver.getTitle() + "' page instead.");
 		
+		// Clean up after outselves
+		ListGamesPageTests.create(driver).deleteAllGames();
 	}
 
 	private static String gameName(int gameNo) {
