@@ -74,7 +74,7 @@ class ActionDeckResourcesTest {
 	void testDrawAndDiscard(WebTarget target) throws IOException {
 		System.out.println("DrawAndDiscard WebTarget='" + target.toString() + "'.");
 		
-		GameResourcesTest.createGameHtml(target, TEST_GAME_NAME, false);
+		GamesResourcesTest.createGameHtml(target, TEST_GAME_NAME, false);
 
 		{
 		// Test that we start with an empty discard.

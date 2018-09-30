@@ -45,7 +45,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import com.github.hanleyt.JerseyExtension;
 import com.github.rmcdouga.fitg.webapp.resources.GamesResources;
 
-public class GameResourcesTest {
+public class GamesResourcesTest {
 	@RegisterExtension
 	JerseyExtension jerseyExtension = new JerseyExtension(this::configureJersey, this::configureJerseyClient);
 
