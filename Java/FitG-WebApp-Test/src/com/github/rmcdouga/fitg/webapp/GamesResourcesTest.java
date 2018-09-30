@@ -75,11 +75,11 @@ public class GamesResourcesTest {
 		List<String> gameNamesInitial = listGamesHtml(target);
 		assertEquals(0, gameNamesInitial.size(), "Expected that there would be no games to start with, but found '" + gameNamesInitial.toString() + "'.");
 
-		createGameHtml(target, "TestGame1", false);
+		createGameHtml(target, "TestGame1", false, Response.Status.OK.getStatusCode());
 		List<String> gameNamesAfterCreationPost = listGamesHtml(target);
 		assertEquals(1, gameNamesAfterCreationPost.size(), "Expected that there would be one game after creation, but found '" + gameNamesAfterCreationPost.toString() + "'.");
 		
-		createGameHtml(target, "TestGame2", true);
+		createGameHtml(target, "TestGame2", true, Response.Status.OK.getStatusCode());
 		List<String> gameNamesAfterCreationGet = listGamesHtml(target);
 		assertEquals(2, gameNamesAfterCreationGet.size(), "Expected that there would be two game after second creation, but found '" + gameNamesAfterCreationGet.toString() + "'.");
 		
@@ -120,6 +120,14 @@ public class GamesResourcesTest {
 		List<String> gameNamesAfterDeletionPostJson = listGamesHtml(target);
 		assertEquals(1, gameNamesAfterDeletionPostJson.size(), "Expected that there would be only one game after games JSON Deletion, but found '" + gameNamesAfterDeletionPostJson.toString() + "'.");
 
+		// Try some limits
+		// TODO: Add cases where Game name is = MAX_GAME_NAME_SIZE
+		
+		// Try some error cases.
+		createGameHtml(target, "", false, Response.Status.BAD_REQUEST.getStatusCode());	// Empty Game Name in form
+		createGameHtml(target, "", true, Response.Status.BAD_REQUEST.getStatusCode());	// Empty Game Name in query parameter
+		// TODO: Add cases where Game name is > MAX_GAME_NAME_SIZE
+
 	}
 
 	private static List<String> listGamesHtml(WebTarget target) throws IOException {
@@ -149,7 +157,7 @@ public class GamesResourcesTest {
 		return gamesList;
 	}
 	
-	public static void createGameHtml(WebTarget target, String testGameName, boolean useQueryParm) throws IOException {
+	public static void createGameHtml(WebTarget target, String testGameName, boolean useQueryParm, int expectedStatusCode) throws IOException {
 		Form form = new Form();
 		WebTarget target2 = target.path(GamesPath + GamesResources.CREATE_PATH);
 		// Use a query parameter or a form parameter to provide the name. 
@@ -163,10 +171,10 @@ public class GamesResourcesTest {
 				 .buildPost(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE))
 				 .invoke();
 	
-		if (Response.Status.OK.getStatusCode() != result.getStatus()) {
+		if (expectedStatusCode != result.getStatus()) {
 			TestUtils.printTrace(result);
 		}
-		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + (GamesPath + GamesResources.CREATE_PATH) + "' should be OK");
+		assertEquals(expectedStatusCode, result.getStatus(), ()->"Response from '" + (GamesPath + GamesResources.CREATE_PATH) + "' should be OK");
 		assertTrue(result.hasEntity(), "Expected response to have body.");
 		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
 		System.out.println("----- HTML -----");

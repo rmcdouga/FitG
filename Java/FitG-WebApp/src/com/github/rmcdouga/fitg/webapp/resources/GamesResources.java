@@ -42,6 +42,7 @@ import com.rogers.rmcdouga.fitg.basegame.Game;
 public class GamesResources {
 	private static final String FITG_GAMES_LABEL = "FitG_Games";
 	public static final int MAX_GAME_NAME_SIZE = 30;
+	public static final String MAX_GAME_NAME_SIZE_LABEL = "maxGameNameSize";
 	public static final String GAME_NAME_PARAM = "name";
 	public static final String GAME_NAME_LABEL = "gameName";
 	public static final String GAMES_LIST_LABEL = "gamesList";
@@ -131,12 +132,12 @@ public class GamesResources {
 
 	private String determineGameName(String queryName, String formName) {
 		String gameName; 
-		if (queryName != null) {
-			gameName = queryName;
-		} else if (formName != null) {
-			gameName = formName;
+		if (queryName != null && !queryName.trim().isEmpty()) {
+			gameName = queryName.trim();
+		} else if (formName != null && !formName.trim().isEmpty()) {
+			gameName = formName.trim();
 		} else {
-			throw new NotFoundException("No name supplied for the game being created!");
+			throw new BadRequestException("No name supplied for the game being created!");
 		}
 		if (gameName.length() > MAX_GAME_NAME_SIZE) {
 			throw new BadRequestException("Game name supplied exceeds the maximum of " + Integer.toString(MAX_GAME_NAME_SIZE) + " characters.");
@@ -156,7 +157,7 @@ public class GamesResources {
 	@Produces(MediaType.TEXT_HTML)
 	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/CreateGame.mustache")
 	public Map<String, Object> createGameGetHtml() {
-		return Collections.emptyMap();
+		return new SingletonMap<String, Object>(MAX_GAME_NAME_SIZE_LABEL, MAX_GAME_NAME_SIZE);
 	}
 
 	// Returns delete game page
@@ -165,7 +166,7 @@ public class GamesResources {
 	@Produces(MediaType.TEXT_HTML)
 	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/DeleteGame.mustache")
 	public Map<String, Object> deleteGameGetHtml(@PathParam(GAME_NAME_PARAM) String gameStr) {
-		return new SingletonMap(GAME_NAME_LABEL, gameStr);
+		return new SingletonMap<String, Object>(GAME_NAME_LABEL, gameStr);
 	}
 
 	// Deletes a game
