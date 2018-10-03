@@ -50,6 +50,24 @@ public class ActionDeckResources {
 	
 	// Specifies that the method processes HTTP GET requests
 	@GET
+	@Path("/")
+	@Produces(MediaType.TEXT_HTML)
+	public Response actionDeckHtml(@PathParam("gameStr") String gameStr) throws URISyntaxException {
+		return Response.seeOther(new URI(gameStr + ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
+	}
+
+	// Specifies that the method processes HTTP GET requests
+	@GET
+	@Path(DISCARD_PATH)
+	@Produces(MediaType.TEXT_HTML)
+	public Response actionDeckDiscardHtml(@PathParam("gameStr") String gameStr) throws URISyntaxException {
+		return Response.seeOther(new URI(gameStr + ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
+	}
+
+
+	
+	// Specifies that the method processes HTTP GET requests
+	@GET
 	@Path(DISCARD_PATH_CARD_NO)
 	@Produces(MediaType.TEXT_HTML)
 	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/ActionCard.mustache")
