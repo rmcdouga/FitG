@@ -36,6 +36,7 @@ import org.glassfish.jersey.server.mvc.mustache.MustacheMvcFeature;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -133,6 +134,11 @@ class ActionDeckResourcesTest {
 		firstCardDrawnNumJson = drawCardJson(target, false);
 		getDiscardCardExpectNotFound(target, 10);
 		}
+
+		// The following two lines hang for some reason...
+//		checkForRedirectToActionDeck(target, ActionDeckPath + ActionDeckResources.DISCARD_PATH);
+//		checkForRedirectToActionDeck(target, ActionDeckPath);
+
 	}
 
 	private int getDiscardCard(WebTarget target, int discardCardLocation, boolean expectCard, boolean expectPrevCard, boolean expectNextCard) throws IOException {
@@ -375,6 +381,28 @@ class ActionDeckResourcesTest {
 	
 
 	private static final String ActionDeckPath = TestUtils.APPLICATION_PREFIX + TEST_GAME_NAME + ActionDeckResources.ACTION_DECK_PATH;
+
+	private void checkForRedirectToActionDeck(WebTarget target, String targetPath) throws IOException {
+		System.out.println("Checking for redirect on page " + targetPath);
+		Response result = TestUtils.trace(target.path(targetPath).request())
+				 .accept(MediaType.TEXT_HTML_TYPE)
+				 .buildGet()
+				 .invoke();
+
+		System.out.println("got response from page " + targetPath);
+	
+		if (Response.Status.OK.getStatusCode() != result.getStatus()) {
+			TestUtils.printTrace(result);
+		}
+		assertEquals(Response.Status.OK.getStatusCode(), result.getStatus(), ()->"Response from '" + targetPath + "' should be OK");
+		assertTrue(result.hasEntity(), "Expected response to have body.");
+		byte[] entity = IOUtils.toByteArray((InputStream)result.getEntity());
+		Document html = Jsoup.parse(new ByteArrayInputStream(entity), StandardCharsets.UTF_8.name(), "/");
+		Elements titleTag = html.getElementsByTag("title");
+		assertNotNull(titleTag, "Expect there to be a title the in the page.");
+		assertEquals("Action Deck", titleTag.text(), ()->"Expected Page to be redirected to Action Deck page when hitting " + targetPath +  ".");
+	}
+	
 
 
 }

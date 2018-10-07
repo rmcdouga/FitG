@@ -53,6 +53,7 @@ public class ActionDeckResources {
 	@Path("/")
 	@Produces(MediaType.TEXT_HTML)
 	public Response actionDeckHtml(@PathParam("gameStr") String gameStr) throws URISyntaxException {
+		System.out.println("ActionDeck requested, redirecting to discard 0");
 		return Response.seeOther(new URI(gameStr + ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
 	}
 
@@ -61,6 +62,7 @@ public class ActionDeckResources {
 	@Path(DISCARD_PATH)
 	@Produces(MediaType.TEXT_HTML)
 	public Response actionDeckDiscardHtml(@PathParam("gameStr") String gameStr) throws URISyntaxException {
+		System.out.println("ActionDeck Discard requested, redirecting to discard 0");
 		return Response.seeOther(new URI(gameStr + ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
 	}
 

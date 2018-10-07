@@ -1,6 +1,8 @@
 package com.github.rmcdouga.fitg.webapp.systest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -89,10 +91,57 @@ class SystemTest {
 		driver.get(BASE_URL);
 		assertTrue(ListGamesPageTests.isGamesListPage(driver), ()->"Now that there is an existing game, the default should direct to the Games List page but was '" + driver.getTitle() + "' page instead.");
 		
-		// Clean up after outselves
+		// Clean up after ourselves
 		ListGamesPageTests.create(driver).deleteAllGames();
 	}
 
+	@Test
+	public void testActionDeckPage() {
+		driver.get(BASE_URL);
+		final String gameName = "SeleniumActionDeckTestGame";
+		
+		if (ListGamesPageTests.isGamesListPage(driver)) {
+			// There are some games already, make sure we don't have the one we're going to use.
+			ListGamesPageTests listGamesPage = ListGamesPageTests.create(driver);
+			if (listGamesPage.hasGame(gameName)) {
+				listGamesPage.deleteGame(gameName);
+			}
+			// go to the Create Game Page explicitly
+			driver.get(BASE_URL + "Games/Create");
+		}
+		if (CreatePageTests.isCreatePage(driver)) {
+			CreatePageTests.create(driver)
+						   .createGame(gameName);
+		} else {
+			fail("Landed on unexpected initial page.");
+		}
+		String url = BASE_URL + gameName + "/ActionDeck/Discard/0";
+		driver.get(url);
+		System.out.println("url=" + url);
+		ActionDeckPageTests actionDeckPage = ActionDeckPageTests.create(driver)
+																.isEmpty((b)->assertTrue(b, "Expected Deck to be empty initially."));
+		
+		// Draw a couple of cards
+		int firstCardDrawn = actionDeckPage.drawCard()
+				.numDiscardCards((i)->assertEquals(1, i.intValue(), "Expected one card in discard after first draw"))
+				.cardNo();
+		
+		int secondCardDrawn = actionDeckPage.drawCard()
+				.numDiscardCards((i)->assertEquals(2, i.intValue(), "Expected two cards in discard after second draw"))
+				.cardNo();
+
+		// Test previous card/next card links
+		actionDeckPage.nextCard().cardNo((i)->assertEquals(firstCardDrawn, i.intValue(), "Expected next card to be the first card drawn."))
+					  .prevCard().cardNo((i)->assertEquals(secondCardDrawn, i.intValue(), "Expected previous card to be the second card drawn."));
+
+		// Test additional draw and reset.
+		actionDeckPage.drawCard()
+				.numDiscardCards((i)->assertEquals(3, i.intValue(), "Expected three cards in discard after third draw"))
+				.resetDeck().isEmpty((b)->assertTrue(b, "Expected Deck to be empty after reset."))
+				.drawCard().numDiscardCards((i)->assertEquals(1, i.intValue(), "Expected one card in discard after first draw after reset."));
+		
+	}
+	
 	private static String gameName(int gameNo) {
 		return GAME_NAME_PREFIX + Integer.toString(gameNo);
 	}
