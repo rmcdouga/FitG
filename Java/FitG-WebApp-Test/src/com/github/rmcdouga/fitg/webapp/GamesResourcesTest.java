@@ -52,7 +52,7 @@ public class GamesResourcesTest {
 	private Application configureJersey(ExtensionContext extensionContext) {
 		ResourceConfig resourceConfig = new ResourceConfig(FitGWebApplication.class);
 
-		resourceConfig.packages(this.getClass().getPackage().getName());
+		resourceConfig.packages(FitGWebApplication.class.getPackage().getName());
 		resourceConfig.register(MvcFeature.class);
 		resourceConfig.register(MustacheMvcFeature.class);
 		resourceConfig.property(ServerProperties.TRACING, "ALL");

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Authentication</title>
+</head>
+<body>
+	<h2>Please log in:</h2>
+	<form action="Authenticate?redirectUrl={{redirectUrl}}" method="post">
+	Email: <input name="emailAddress" type="text" required maxLength="{{maxEmailSize}}"/>
+	<input type="submit" value="Log In" />
+	</form>
+</body>
+</html>
