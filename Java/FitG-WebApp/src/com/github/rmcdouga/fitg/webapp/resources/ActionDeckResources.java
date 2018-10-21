@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.server.mvc.Template;
 
 import com.github.rmcdouga.fitg.webapp.FitGWebApplication;
+import com.github.rmcdouga.fitg.webapp.authentication.RequiresSignIn;
 import com.github.rmcdouga.fitg.webapp.util.JsonUtil;
 import com.rogers.rmcdouga.fitg.basegame.Action;
 import com.rogers.rmcdouga.fitg.basegame.Action.EnvironType;
@@ -208,6 +209,7 @@ public class ActionDeckResources {
 	@GET
 	@Path(FitGWebApplication.PING_PATH)
 	@Produces(MediaType.TEXT_PLAIN)
+	@RequiresSignIn
 	public String ping(@PathParam("gameStr") String gameStr) {
 		System.out.println("ActionDeck Ping");
 		return FitGWebApplication.PING_RESPONSE;

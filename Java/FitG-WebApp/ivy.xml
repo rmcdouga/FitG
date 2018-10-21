@@ -40,5 +40,11 @@
 		<!-- FitG Basegame Dependencies	-->
 		<dependency org="com.atlassian.commonmark" name="commonmark" rev="0.11.0" />
 		
+		<!-- JWT Dependencies	-->
+		<dependency org="io.jsonwebtoken" name="jjwt-api" rev="0.10.5" />
+		<dependency org="io.jsonwebtoken" name="jjwt-impl" rev="0.10.5" />
+		<dependency org="io.jsonwebtoken" name="jjwt-jackson" rev="0.10.5" />
+		<!-- dependency org="org.bouncycastle" name="bcprov-jdk15on" rev="1.60" / -->
+				
 	</dependencies>
 </ivy-module>
