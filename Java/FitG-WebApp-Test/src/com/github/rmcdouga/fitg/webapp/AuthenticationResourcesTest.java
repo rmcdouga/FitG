@@ -69,7 +69,7 @@ class AuthenticationResourcesTest {
 	}
 
 	private void testAuthenticateGetHtml(WebTarget target) throws IOException {
-		Response result = TestUtils.trace(target.path(AuthenticationPath).request())
+		Response result = TestUtils.trace(target.path(AuthenticationPath).queryParam(AuthenticationResources.REDIRECT_URL_PARAM, "/").request())
 				 .accept(MediaType.TEXT_HTML_TYPE)
 				 .buildGet()
 				 .invoke();
