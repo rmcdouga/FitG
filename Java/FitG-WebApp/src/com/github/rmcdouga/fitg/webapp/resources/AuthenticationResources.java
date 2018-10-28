@@ -3,7 +3,7 @@ package com.github.rmcdouga.fitg.webapp.resources;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.InvalidParameterException;
-import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -22,7 +22,8 @@ import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.mvc.Template;
 
-import com.github.rmcdouga.fitg.webapp.authentication.AuthenticationStatus;
+import com.github.rmcdouga.fitg.webapp.authentication.AuthenticationTokenService;
+import com.github.rmcdouga.fitg.webapp.authentication.Authority;
 
 @Path(AuthenticationResources.AUTHENTICATION_PATH)
 public class AuthenticationResources {
@@ -57,7 +58,7 @@ public class AuthenticationResources {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_HTML)
 	public Response authenticatePostHtml(@FormParam(EMAIL_PARAM) String email, @FormParam(PASSWORD_PARAM) String password, @QueryParam(REDIRECT_URL_PARAM) String redirectUrl) throws URISyntaxException, NotFoundException {
-		return Response.seeOther(new URI(validateRedirectUrl(redirectUrl))).cookie(new NewCookie(COOKIE_NAME, AuthenticationStatus.LOGGED_IN.toString(), null, null, null, NewCookie.DEFAULT_MAX_AGE, true)).build();
+		return Response.seeOther(new URI(validateRedirectUrl(redirectUrl))).cookie(new NewCookie(COOKIE_NAME, AuthenticationTokenService.getInstance().issueToken(email, EnumSet.of(Authority.USER)), null, null, null, NewCookie.DEFAULT_MAX_AGE, true)).build();
 	}
 
 	private String validateRedirectUrl(String redirectUrl) {
