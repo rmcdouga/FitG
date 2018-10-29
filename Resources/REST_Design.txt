@@ -1,0 +1,40 @@
+FitG/{Game}/Action/Draw
+ - Accept a POST (any content).  Causes a new card to be drawn and redirects to /FitG/Action/Discard
+
+FitG/{Game}/Action/Discard
+FitG/{Game}/Action/Discard/0
+ - Accept GET, returns the an HTML page with the top card of the discard pile (i.e. the most recently drawn card)
+
+FitG/{Game}/Action/Discard/n
+ - Accept GET, returns the an HTML page with the nth card of the discard pile.
+
+FitG/{Game}/Action/Reset
+ - Accept a POST (any content).  Causes the deck to be reset and redirects to /FitG/Action/Discard
+
+ FitG/Authenticate
+  - goes to this page to authenticate.  Once authenticated, they get a token (cookie?) that we can use to look up their
+    identity on each request. 
+    
+    https://stackoverflow.com/questions/26777083/best-practice-for-rest-token-based-authentication-with-jax-rs-and-jersey
+    https://dennis-xlc.gitbooks.io/restful-java-with-jax-rs-2-0-2rd-edition/en/part1/chapter15/oauth_2_0.html
+    https://antoniogoncalves.org/2016/10/03/securing-jax-rs-endpoints-with-jwt/
+    https://github.com/cassiomolin
+    
+    Apache Shiro
+    https://github.com/silb/shiro-jersey
+    
+    Cookies:
+    https://stackoverflow.com/questions/28004298/how-to-set-and-check-cookies-wih-jax-rs
+    
+    Creates a token that ties back to their identity.  Their identity is tied to email address.
+    Initially this page will just allow you to enter an email address.  Later it will use OAUTH2 to verify email address.
+    
+    Create Game page will allow the game creator to enter a list of players.  The creator is always among the list of players.
+    
+    Generate KeyPair
+    https://docs.oracle.com/javase/tutorial/security/apisign/step2.html
+    https://stackoverflow.com/questions/1709441/generate-rsa-key-pair-and-encode-private-as-string
+    
+    Password hashing
+    http://www.mindrot.org/projects/jBCrypt/
+    
