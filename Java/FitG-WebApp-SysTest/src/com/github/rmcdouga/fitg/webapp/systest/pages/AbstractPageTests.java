@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 public abstract class AbstractPageTests {
 
 	protected final WebDriver driver;
+	private final boolean isHtmlPage;
 
 	protected static boolean isCorrectPage(WebDriver driver, String pageTitle) {
 		Objects.nonNull(driver);
@@ -16,6 +17,14 @@ public abstract class AbstractPageTests {
 
 	protected AbstractPageTests(WebDriver driver) {
 		this.driver = driver;
+		this.isHtmlPage = driver.getTitle() == null;
 	}
 
+	/**
+	 * @return the isHtmlPage
+	 */
+	public boolean isHtmlPage() {
+		return isHtmlPage;
+	}
+	
 }

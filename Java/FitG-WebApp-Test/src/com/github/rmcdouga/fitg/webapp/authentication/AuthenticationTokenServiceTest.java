@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class AuthenticationTokenServiceTest {
 
 	@Test
-	void testIssueToken() throws InterruptedException {
+	void testIssueToken() throws InterruptedException, InvalidAuthenticationTokenException {
 		String username = "username";
 		EnumSet<Authority> authoritySet = EnumSet.of(Authority.USER);
 

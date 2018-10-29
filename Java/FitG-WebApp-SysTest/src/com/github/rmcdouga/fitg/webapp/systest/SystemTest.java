@@ -21,8 +21,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.github.rmcdouga.fitg.webapp.systest.pages.ActionDeckPageTests;
+import com.github.rmcdouga.fitg.webapp.systest.pages.ActionDeckPingPageTests;
 import com.github.rmcdouga.fitg.webapp.systest.pages.CreatePageTests;
 import com.github.rmcdouga.fitg.webapp.systest.pages.ListGamesPageTests;
+import com.github.rmcdouga.fitg.webapp.systest.pages.LoginPageTests;
 
 class SystemTest {
 
@@ -73,6 +75,7 @@ class SystemTest {
 	@Test
 	public void testDefaultPage() {
 		driver.get(BASE_URL);
+		loginIfRequired(driver);
 	
 		// If there are pre-exisitng games, then we get rid of them.
 		if (ListGamesPageTests.isGamesListPage(driver)) {
@@ -98,6 +101,7 @@ class SystemTest {
 	@Test
 	public void testActionDeckPage() {
 		driver.get(BASE_URL);
+		loginIfRequired(driver);
 		final String gameName = "SeleniumActionDeckTestGame";
 		
 		if (ListGamesPageTests.isGamesListPage(driver)) {
@@ -139,13 +143,54 @@ class SystemTest {
 				.numDiscardCards((i)->assertEquals(3, i.intValue(), "Expected three cards in discard after third draw"))
 				.resetDeck().isEmpty((b)->assertTrue(b, "Expected Deck to be empty after reset."))
 				.drawCard().numDiscardCards((i)->assertEquals(1, i.intValue(), "Expected one card in discard after first draw after reset."));
-		
+
 	}
+	
+	@Test
+	public void testActionDeckPingPage() {
+		driver.get(BASE_URL);
+		loginIfRequired(driver);
+		final String gameName = "SeleniumActionDeckTestGame";
+		
+		if (ListGamesPageTests.isGamesListPage(driver)) {
+			// There are some games already, make sure we don't have the one we're going to use.
+			ListGamesPageTests listGamesPage = ListGamesPageTests.create(driver);
+			if (listGamesPage.hasGame(gameName)) {
+				listGamesPage.deleteGame(gameName);
+			}
+			// go to the Create Game Page explicitly
+			driver.get(BASE_URL + "Games/Create");
+		}
+		if (CreatePageTests.isCreatePage(driver)) {
+			CreatePageTests.create(driver)
+						   .createGame(gameName);
+		} else {
+			fail("Landed on unexpected initial page.");
+		}
+
+		// Test Ping
+		String url = BASE_URL + gameName + "/ActionDeck/ping";
+		driver.get(url);
+		System.out.println("url=" + url);
+		loginIfRequired(driver);
+		ActionDeckPingPageTests pingPage = ActionDeckPingPageTests.create(driver);
+	}
+
+	private static void loginIfRequired(WebDriver driver) {
+		if (LoginPageTests.isLoginPage(driver)) {
+			System.out.println("Found login page");
+			// must be log in page.
+			LoginPageTests loginPage = LoginPageTests.create(driver);
+			loginPage.setLoginParms("Rob.McDougall@4Point.com", "password")
+			         .submit();
+		}
+	}	
+	
 	
 	private static String gameName(int gameNo) {
 		return GAME_NAME_PREFIX + Integer.toString(gameNo);
 	}
-	
+
 	@Disabled
 	public void test_coe() {
 		driver.get(BASE_URL + "/" + PAGE_LOCATION);

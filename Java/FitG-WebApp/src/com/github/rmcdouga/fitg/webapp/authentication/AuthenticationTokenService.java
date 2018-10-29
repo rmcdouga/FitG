@@ -81,8 +81,9 @@ public class AuthenticationTokenService {
      *
      * @param token
      * @return
+     * @throws InvalidAuthenticationTokenException 
      */
-    public AuthenticationTokenDetails parseToken(String token) {
+    public AuthenticationTokenDetails parseToken(String token) throws InvalidAuthenticationTokenException {
         try {
 
             Claims claims = Jwts.parser()

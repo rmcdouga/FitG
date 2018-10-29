@@ -53,6 +53,7 @@ public class ActionDeckResources {
 	@GET
 	@Path("/")
 	@Produces(MediaType.TEXT_HTML)
+	@RequiresSignIn
 	public Response actionDeckHtml(@PathParam("gameStr") String gameStr) throws URISyntaxException {
 		System.out.println("ActionDeck requested, redirecting to discard 0");
 		return Response.seeOther(new URI(gameStr + ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
@@ -62,6 +63,7 @@ public class ActionDeckResources {
 	@GET
 	@Path(DISCARD_PATH)
 	@Produces(MediaType.TEXT_HTML)
+	@RequiresSignIn
 	public Response actionDeckDiscardHtml(@PathParam("gameStr") String gameStr) throws URISyntaxException {
 		System.out.println("ActionDeck Discard requested, redirecting to discard 0");
 		return Response.seeOther(new URI(gameStr + ACTION_DECK_PATH + DISCARD_PATH + "/0")).build();
@@ -74,6 +76,7 @@ public class ActionDeckResources {
 	@Path(DISCARD_PATH_CARD_NO)
 	@Produces(MediaType.TEXT_HTML)
 	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/ActionCard.mustache")
+	@RequiresSignIn
 	public Map<String, Object> actionCardDiscardHtml(@PathParam("gameStr") String gameStr, @PathParam("cardNo") int cardNo) {
 		return actionCardDiscard(getActionDeck(gameStr), cardNo, true);
 	}
@@ -82,6 +85,7 @@ public class ActionDeckResources {
 	@GET
 	@Path(DISCARD_PATH_CARD_NO)
 	@Produces(MediaType.APPLICATION_JSON)
+	@RequiresSignIn
 	public JsonObject actionCardDiscardJson(@PathParam("gameStr") String gameStr, @PathParam("cardNo") int cardNo) {
 		return JsonUtil.MapToJson(actionCardDiscard(getActionDeck(gameStr), cardNo, false), ACTION_CARD_DISCARD_LABEL);
 	}
@@ -163,6 +167,7 @@ public class ActionDeckResources {
 	@POST
 	@Path(DRAW_PATH)
 	@Produces(MediaType.TEXT_HTML)
+	@RequiresSignIn
 	public Response drawActionCardHtml(@PathParam("gameStr") String gameStr) throws URISyntaxException {
 		getActionDeck(gameStr).draw();
 		// After drawing, redirect the user to GET the top card on the discard (i.e. the card drawn)
@@ -173,6 +178,7 @@ public class ActionDeckResources {
 	@POST
 	@Path(RESET_PATH)
 	@Produces(MediaType.TEXT_HTML)
+	@RequiresSignIn
 	public Response resetActionCardsHtml(@PathParam("gameStr") String gameStr) throws URISyntaxException {
 		getActionDeck(gameStr).reset();
 		// After reseting, redirect the user to GET the top card on the discard (i.e. the card drawn)
@@ -183,6 +189,7 @@ public class ActionDeckResources {
 	@POST
 	@Path(DRAW_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
+	@RequiresSignIn
 	public Response drawActionCardJson(@PathParam("gameStr") String gameStr) throws URISyntaxException {
 		getActionDeck(gameStr).draw();
 		// After drawing, redirect the user to GET the top card on the discard (i.e. the card drawn)
@@ -193,6 +200,7 @@ public class ActionDeckResources {
 	@POST
 	@Path(RESET_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
+	@RequiresSignIn
 	public Response resetActionCardsJson(@PathParam("gameStr") String gameStr) throws URISyntaxException {
 		getActionDeck(gameStr).reset();
 		// After reseting, redirect the user to GET the top card on the discard (i.e. the card drawn)

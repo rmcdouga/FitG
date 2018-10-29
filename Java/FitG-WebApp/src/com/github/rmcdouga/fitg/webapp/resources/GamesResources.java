@@ -35,6 +35,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.collections4.map.SingletonMap;
 import org.glassfish.jersey.server.mvc.Template;
 
+import com.github.rmcdouga.fitg.webapp.authentication.RequiresSignIn;
 import com.github.rmcdouga.fitg.webapp.util.JsonUtil;
 import com.rogers.rmcdouga.fitg.basegame.Game;
 
@@ -100,6 +101,7 @@ public class GamesResources {
 	@Path(GAME_PATH)
 	@Produces(MediaType.TEXT_HTML)
 	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/GamesList.mustache")
+	@RequiresSignIn
 	public Response defaultGameHtml(@PathParam(GAME_NAME_PARAM) String gameName) throws URISyntaxException {
 		return Response.seeOther(new URI(gameName + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/0")).build();
 	}
@@ -109,6 +111,7 @@ public class GamesResources {
 	@Path("/")
 	@Produces(MediaType.TEXT_HTML)
 	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/GamesList.mustache")
+	@RequiresSignIn
 	public Map<String, Object> listGamesHtml() {
 		List<Map<String, Object>> gamesList = new ArrayList<>(games.size());
 		games.forEach((name,game)->gamesList.add(new SingletonMap<>(GAME_NAME_LABEL, name)));
@@ -120,6 +123,7 @@ public class GamesResources {
 	@Path(CREATE_PATH)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_HTML)
+	@RequiresSignIn
 	public Response createGameHtml(@QueryParam(GAME_NAME_PARAM) String queryName, @FormParam(GAME_NAME_PARAM) String formName) throws URISyntaxException, NotFoundException {
 		// Accept the game name from either the query parameter of the form name.
 		String gameName = determineGameName(queryName, formName);
@@ -156,6 +160,7 @@ public class GamesResources {
 	@Path(CREATE_PATH)
 	@Produces(MediaType.TEXT_HTML)
 	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/CreateGame.mustache")
+	@RequiresSignIn
 	public Map<String, Object> createGameGetHtml() {
 		return new SingletonMap<String, Object>(MAX_GAME_NAME_SIZE_LABEL, MAX_GAME_NAME_SIZE);
 	}
@@ -165,6 +170,7 @@ public class GamesResources {
 	@Path(DELETE_PATH)
 	@Produces(MediaType.TEXT_HTML)
 	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/DeleteGame.mustache")
+	@RequiresSignIn
 	public Map<String, Object> deleteGameGetHtml(@PathParam(GAME_NAME_PARAM) String gameStr) {
 		return new SingletonMap<String, Object>(GAME_NAME_LABEL, gameStr);
 	}
@@ -174,6 +180,7 @@ public class GamesResources {
 	@Path(DELETE_PATH)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_HTML)
+	@RequiresSignIn
 	public Response deleteGameHtml(@PathParam(GAME_NAME_PARAM) String gameStr) throws URISyntaxException {
 		// Accept the game name from either the query parameter of the form name.
 		if (games.remove(gameStr) == null) {
@@ -192,6 +199,7 @@ public class GamesResources {
 	@Path(GAME_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Template(name = "/com/github/rmcdouga/fitg/webapp/resources/GamesList.mustache")
+	@RequiresSignIn
 	public Response defaultGameJson(@PathParam(GAME_NAME_PARAM) String gameName) throws URISyntaxException {
 		return Response.seeOther(new URI(gameName + ActionDeckResources.ACTION_DECK_PATH + ActionDeckResources.DISCARD_PATH + "/0")).build();
 	}
@@ -200,6 +208,7 @@ public class GamesResources {
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
+	@RequiresSignIn
 	public JsonObject listGamesJson() {
 		List<Object> gamesList = new ArrayList<>(games.size());
 		games.forEach((name,game)->gamesList.add(new SingletonMap<>(GAME_NAME_LABEL, name)));
@@ -211,6 +220,7 @@ public class GamesResources {
 	@Path(CREATE_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@RequiresSignIn
 	public JsonObject createGameJson(@QueryParam(GAME_NAME_PARAM) String queryName, JsonObject createGameJson) throws URISyntaxException, NotFoundException {
 		String bodyName = createGameJson.isEmpty() ? null : createGameJson.getString(CREATE_GAME_LABEL);
 		// Accept the game name from either the query parameter or from the JSON body.
@@ -229,6 +239,7 @@ public class GamesResources {
 	@Path(DELETE_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@RequiresSignIn
 	public JsonObject deleteGameJson(@PathParam(GAME_NAME_PARAM) String gameStr) throws URISyntaxException {
 		// Accept the game name from either the query parameter of the form name.
 		if (games.remove(gameStr) != null) {

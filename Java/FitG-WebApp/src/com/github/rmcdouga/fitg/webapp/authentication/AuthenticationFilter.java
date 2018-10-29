@@ -28,6 +28,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 	   
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
+		// TODO:  Handle JSON sign-in by accepting bearer authorization and figure out way to sign in with JSON.
+		
 	    // Get the Authorization header from the request
         String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
         
@@ -40,7 +42,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         	AuthenticationTokenDetails parsedToken;
 			try {
 				parsedToken = authService.parseToken(cookie.getValue());
-			} catch (JwtException e) {
+			} catch (JwtException | InvalidAuthenticationTokenException e) {
         		System.out.println("Invalid Cookie Value");
         		e.printStackTrace(System.out);
 	            abortWithRedirectToLogin(requestContext, "Invalid Token: (" + e.getMessage() + ").");
