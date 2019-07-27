@@ -1,7 +1,7 @@
 package com.rogers.rmcdouga.fitg.basegame.map;
 
 public enum LoyaltyType {
-	Patriotic, Loyal, Neutral, Dissent, Unrest, RebelControled, InRebellion;
+	Patriotic, Loyal, Neutral, Dissent, Unrest;
 	
 	public LoyaltyType shiftLeft() {
 		int ordinal = this.ordinal();
@@ -10,6 +10,6 @@ public enum LoyaltyType {
 
 	public LoyaltyType shiftRight() {
 		int ordinal = this.ordinal();
-		return ordinal < RebelControled.ordinal() ? values()[ordinal + 1] : this;
+		return ordinal < Unrest.ordinal() ? values()[ordinal + 1] : this;
 	}
 }
