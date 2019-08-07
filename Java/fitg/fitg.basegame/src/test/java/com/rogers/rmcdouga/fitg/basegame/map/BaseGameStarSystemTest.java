@@ -53,8 +53,8 @@ class BaseGameStarSystemTest {
 	
 			()->assertEquals(21, BaseGameStarSystem.Phisaria.getId()),
 			()->assertEquals(22, BaseGameStarSystem.Egrix.getId()),
-			()->assertEquals(33, BaseGameStarSystem.Ancore.getId()),
-			()->assertEquals(44, BaseGameStarSystem.Gellas.getId()),
+			()->assertEquals(23, BaseGameStarSystem.Ancore.getId()),
+			()->assertEquals(24, BaseGameStarSystem.Gellas.getId()),
 	
 			()->assertEquals(31, BaseGameStarSystem.Pycius.getId()),
 			()->assertEquals(32, BaseGameStarSystem.Ribex.getId()),

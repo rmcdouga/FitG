@@ -2,7 +2,9 @@ package com.rogers.rmcdouga.fitg.basegame.map;
 
 import java.util.List;
 
+import com.rogers.rmcdouga.fitg.basegame.BaseGameCreature;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameRaceType;
+import com.rogers.rmcdouga.fitg.basegame.BaseGameSovereign;
 import com.rogers.rmcdouga.fitg.basegame.RaceType;
 
 public class BaseGameEnviron implements Environ {
@@ -12,9 +14,11 @@ public class BaseGameEnviron implements Environ {
 	private final boolean starResources;
 	private final int coupRating;
 	private final List<RaceType> races;
+	private final BaseGameCreature creature;
+	private final BaseGameSovereign sovereign;
 	
 	private BaseGameEnviron(EnvironType type, int size, int resources, boolean starResources, int coupRating,
-			List<BaseGameRaceType> races) {
+			List<BaseGameRaceType> races, BaseGameCreature creature, BaseGameSovereign sovereign) {
 		super();
 		this.type = type;
 		this.size = size;
@@ -22,6 +26,8 @@ public class BaseGameEnviron implements Environ {
 		this.starResources = starResources;
 		this.coupRating = coupRating;
 		this.races = List.copyOf(races);
+		this.creature = creature;
+		this.sovereign = sovereign;
 	}
 
 	/**
@@ -72,7 +78,17 @@ public class BaseGameEnviron implements Environ {
 		return races;
 	}
 	
-	public static Environ of(EnvironType type, int size, int resources, boolean starResources, int coupRating, List<BaseGameRaceType> races) {
-		return new BaseGameEnviron(type, size, resources, starResources, coupRating, races);
+	@Override
+	public BaseGameCreature getCreature() {
+		return creature;
+	}
+
+	@Override
+	public BaseGameSovereign getSovereign() {
+		return sovereign;
+	}
+
+	public static Environ of(EnvironType type, int size, int resources, boolean starResources, int coupRating, List<BaseGameRaceType> races, BaseGameCreature creature, BaseGameSovereign sovereign) {
+		return new BaseGameEnviron(type, size, resources, starResources, coupRating, races, creature, sovereign);
 	}
 }
