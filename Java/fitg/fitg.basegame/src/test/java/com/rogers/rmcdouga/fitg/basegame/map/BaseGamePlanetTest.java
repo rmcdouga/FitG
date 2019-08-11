@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import com.rogers.rmcdouga.fitg.basegame.BaseGameCreature;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameSovereign;
 
 class BaseGamePlanetTest {
@@ -22,7 +23,7 @@ class BaseGamePlanetTest {
 	}
 
 	@Test
-	void testGetSovereign() {
+	void testHasAllSovereigns() {
 		Set<BaseGameSovereign> allSovereigns = EnumSet.allOf(BaseGameSovereign.class);
 		Set<BaseGameSovereign> planetSovereigns = EnumSet.noneOf(BaseGameSovereign.class);
 		for(BaseGamePlanet planet : BaseGamePlanet.values()) {
@@ -35,6 +36,22 @@ class BaseGamePlanetTest {
 			}
 		}
 		assertTrue(planetSovereigns.containsAll(allSovereigns), "Should contain all sovereigns.");
+	}
+
+	@Test
+	void testHasAllCreatures() {
+		Set<BaseGameCreature> allCreatures = EnumSet.allOf(BaseGameCreature.class);
+		Set<BaseGameCreature> planetCreatures = EnumSet.noneOf(BaseGameCreature.class);
+		for(BaseGamePlanet planet : BaseGamePlanet.values()) {
+			for(Environ environ : planet.getEnvirons()) {
+				BaseGameCreature creature = environ.getCreature();
+				if (creature != null) {
+					assertFalse(planetCreatures.contains(creature), "Should be no duplicates.");
+					planetCreatures.add(creature);
+				}
+			}
+		}
+		assertTrue(planetCreatures.containsAll(allCreatures), "Should contain all creatures.");
 	}
 
 }
