@@ -10,14 +10,21 @@
 	<description>Freedom In The Galaxy implementation (old SPI board game)</description>
 
 	<properties>
-		<maven.compiler.release>11</maven.compiler.release>
+		<java.version>16</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+
+		<junit.version>5.7.1</junit.version>
+		<commmons.lang.version>3.9</commmons.lang.version>
+		<commons.io.version>2.7</commons.io.version>
+		<commonmark.version>0.13.0</commonmark.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.5.1</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -27,31 +34,20 @@
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
-				<version>3.9</version>
+				<version>${commmons.lang.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
-				<version>2.7</version>
+				<version>${commons.io.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.atlassian.commonmark</groupId>
 				<artifactId>commonmark</artifactId>
-				<version>0.13.0</version>
+				<version>${commonmark.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.8.1</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
 
 	<modules>
 		<module>fitg.basegame</module>

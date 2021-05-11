@@ -1,6 +1,8 @@
 package com.rogers.rmcdouga.fitg.basegame.map;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 import com.rogers.rmcdouga.fitg.basegame.BaseGameCreature;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameRaceType;
@@ -10,14 +12,14 @@ import com.rogers.rmcdouga.fitg.basegame.RaceType;
 public class BaseGameEnviron implements Environ {
 	private final EnvironType type;
 	private final int size;
-	private final int resources;
+	private final OptionalInt resources;
 	private final boolean starResources;
-	private final int coupRating;
+	private final OptionalInt coupRating;
 	private final List<RaceType> races;
-	private final BaseGameCreature creature;
-	private final BaseGameSovereign sovereign;
+	private final Optional<BaseGameCreature> creature;
+	private final Optional<BaseGameSovereign> sovereign;
 	
-	private BaseGameEnviron(EnvironType type, int size, int resources, boolean starResources, int coupRating,
+	private BaseGameEnviron(EnvironType type, int size, OptionalInt resources, boolean starResources, OptionalInt coupRating,
 			List<BaseGameRaceType> races, BaseGameCreature creature, BaseGameSovereign sovereign) {
 		super();
 		this.type = type;
@@ -26,8 +28,8 @@ public class BaseGameEnviron implements Environ {
 		this.starResources = starResources;
 		this.coupRating = coupRating;
 		this.races = List.copyOf(races);
-		this.creature = creature;
-		this.sovereign = sovereign;
+		this.creature = Optional.ofNullable(creature);
+		this.sovereign = Optional.ofNullable(sovereign);
 	}
 
 	/**
@@ -50,7 +52,7 @@ public class BaseGameEnviron implements Environ {
 	 * @return the resources
 	 */
 	@Override
-	public int getResources() {
+	public OptionalInt getResources() {
 		return resources;
 	}
 
@@ -66,7 +68,7 @@ public class BaseGameEnviron implements Environ {
 	 * @return the coupRating
 	 */
 	@Override
-	public int getCoupRating() {
+	public OptionalInt getCoupRating() {
 		return coupRating;
 	}
 
@@ -79,16 +81,90 @@ public class BaseGameEnviron implements Environ {
 	}
 	
 	@Override
-	public BaseGameCreature getCreature() {
+	public Optional<BaseGameCreature> getCreature() {
 		return creature;
 	}
 
 	@Override
-	public BaseGameSovereign getSovereign() {
+	public Optional<BaseGameSovereign> getSovereign() {
 		return sovereign;
 	}
 
-	public static Environ of(EnvironType type, int size, int resources, boolean starResources, int coupRating, List<BaseGameRaceType> races, BaseGameCreature creature, BaseGameSovereign sovereign) {
+	private static Environ of(EnvironType type, int size, OptionalInt resources, boolean starResources, OptionalInt coupRating, List<BaseGameRaceType> races, BaseGameCreature creature, BaseGameSovereign sovereign) {
 		return new BaseGameEnviron(type, size, resources, starResources, coupRating, races, creature, sovereign);
+	}
+	
+	public static Builder urban(int size) {
+		return new Builder(BaseGameEnvironType.Urban, size);
+	}
+	
+	public static Builder wild(int size) {
+		return new Builder(BaseGameEnvironType.Wild, size);
+	}
+	
+	public static Builder air(int size) {
+		return new Builder(BaseGameEnvironType.Air, size);
+	}
+	
+	public static Builder fire(int size) {
+		return new Builder(BaseGameEnvironType.Fire, size);
+	}
+	
+	public static Builder liquid(int size) {
+		return new Builder(BaseGameEnvironType.Liquid, size);
+	}
+	
+	public static Builder subterranian(int size) {
+		return new Builder(BaseGameEnvironType.Subterranian, size);
+	}
+	
+	public static class Builder {
+		private EnvironType type;
+		private int size;
+		private OptionalInt resources = OptionalInt.empty();
+		private boolean starResources = false;
+		private OptionalInt coupRating = OptionalInt.empty();
+		private List<BaseGameRaceType> races = List.of();
+		private BaseGameCreature creature = null;
+		private BaseGameSovereign sovereign = null;
+
+		
+		private Builder(EnvironType type, int size) {
+			super();
+			this.type = type;
+			this.size = size;
+		}
+		
+		public Builder resources(int resources) {
+			if (resources < 1) {
+				throw new IllegalArgumentException("Environ resources value must be > 0.");
+			}
+			this.resources = OptionalInt.of(resources);
+			return this;
+		}
+		public Builder starResources() {
+			this.starResources = true;
+			return this;
+		}
+		public Builder coupRating(int coupRating) {
+			this.coupRating = coupRating == 0 ? OptionalInt.empty() : OptionalInt.of(coupRating);
+			return this;
+		}
+		public Builder races(BaseGameRaceType... races) {
+			this.races = List.of(races);
+			return this;
+		}
+		public Builder creature(BaseGameCreature creature) {
+			this.creature = creature;
+			return this;
+		}
+		public Builder sovereign(BaseGameSovereign sovereign) {
+			this.sovereign = sovereign;
+			return this;
+		}
+		public Environ build() {
+			return BaseGameEnviron.of(type, size, resources, starResources, coupRating, races, creature, sovereign);
+		}
+		
 	}
 }

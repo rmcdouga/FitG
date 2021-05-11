@@ -3,6 +3,7 @@ package com.rogers.rmcdouga.fitg.basegame.map;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.EnumSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -28,10 +29,10 @@ class BaseGamePlanetTest {
 		Set<BaseGameSovereign> planetSovereigns = EnumSet.noneOf(BaseGameSovereign.class);
 		for(BaseGamePlanet planet : BaseGamePlanet.values()) {
 			for(Environ environ : planet.getEnvirons()) {
-				BaseGameSovereign sovereign = environ.getSovereign();
-				if (sovereign != null) {
-					assertFalse(planetSovereigns.contains(sovereign), "Should be no duplicates.");
-					planetSovereigns.add(sovereign);
+				Optional<BaseGameSovereign> sovereign = environ.getSovereign();
+				if (sovereign.isPresent()) {
+					assertFalse(planetSovereigns.contains(sovereign.get()), "Should be no duplicates.");
+					planetSovereigns.add(sovereign.get());
 				}
 			}
 		}
@@ -44,10 +45,10 @@ class BaseGamePlanetTest {
 		Set<BaseGameCreature> planetCreatures = EnumSet.noneOf(BaseGameCreature.class);
 		for(BaseGamePlanet planet : BaseGamePlanet.values()) {
 			for(Environ environ : planet.getEnvirons()) {
-				BaseGameCreature creature = environ.getCreature();
-				if (creature != null) {
-					assertFalse(planetCreatures.contains(creature), "Should be no duplicates.");
-					planetCreatures.add(creature);
+				Optional<BaseGameCreature> creature = environ.getCreature();
+				if (creature.isPresent()) {
+					assertFalse(planetCreatures.contains(creature.get()), "Should be no duplicates.");
+					planetCreatures.add(creature.get());
 				}
 			}
 		}

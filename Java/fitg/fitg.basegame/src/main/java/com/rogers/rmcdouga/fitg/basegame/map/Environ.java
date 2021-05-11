@@ -1,6 +1,8 @@
 package com.rogers.rmcdouga.fitg.basegame.map;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 import com.rogers.rmcdouga.fitg.basegame.BaseGameCreature;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameSovereign;
@@ -21,7 +23,7 @@ public interface Environ {
 	/**
 	 * @return the resources
 	 */
-	int getResources();
+	OptionalInt getResources();
 
 	/**
 	 * @return the starResources
@@ -31,7 +33,7 @@ public interface Environ {
 	/**
 	 * @return the coupRating
 	 */
-	int getCoupRating();
+	OptionalInt getCoupRating();
 
 	/**
 	 * @return the races
@@ -41,11 +43,11 @@ public interface Environ {
 	/**
 	 * @return creature
 	 */
-	BaseGameCreature getCreature();
+	Optional<BaseGameCreature> getCreature();
 
 	/**
 	 * @return sovereign
 	 */
-	BaseGameSovereign getSovereign();
+	Optional<BaseGameSovereign> getSovereign();
 
 }
