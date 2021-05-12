@@ -21,39 +21,83 @@ public enum BaseGamePlanet {
 						   .races(BaseGameRaceType.Kayn)
 						   .creature(BaseGameCreature.Prox)
 						   .build()),
-	Magro(BaseGameStarSystem.Tardyn, BaseGameCapitalType.None, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
-	Fliad(BaseGameStarSystem.Tardyn, BaseGameCapitalType.None, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
 	//	Mimulus,111,Kayans,2,0,,,
 	//		Wild,4,4,TRUE,,Kayns,Prox,,,,,,,,,,,,,,,,
+	Magro(BaseGameStarSystem.Tardyn, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
+			BaseGameEnviron.urban(3)
+			   .resources(6)
+			   .starResources()
+			   .races(BaseGameRaceType.Rhone)
+			   .build(),
+			   BaseGameEnviron.air(5)
+			   .resources(7)
+			   .starResources()
+			   .races(BaseGameRaceType.Yester)
+			   .creature(BaseGameCreature.Glane)
+			   .build()),
 	//	Magro,112,,2,1,,,
 	// 		Urban,3,,,6,Rhones,,,
 	//		Air,5,,,7,,Glane,,,,,,,,
+	Fliad(BaseGameStarSystem.Tardyn, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Neutral, BaseGamePlanetaryControlType.ImperialControlled, true,
+			BaseGameEnviron.liquid(4)
+			   .resources(4)
+			   .starResources()
+			   .races(BaseGameRaceType.Suvan)
+			   .creature(BaseGameCreature.Dindin)
+			   .coupRating(3)
+			   .build(),
+			   BaseGameEnviron.wild(4)
+			   // .races(BaseGameRaceType.Urgaks) // Not a star-faring race.
+			   .resources(4)
+			   .build()),
 	//	Fliad,113,,2,1,,,
 	//		Water,4,,,4,,,,
 	//		Wild,4,,,4,,,,,,,,,,
+
+	// Environ of(EnvironType type, int size, int resources, boolean starResources, int coupRating, List<BaseGameRaceType> races, BaseGameCreature creature, BaseGameSovereign sovereign)
+
+	// Uracas,12
+	Kalgar(BaseGameStarSystem.Uracas, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
+			BaseGameEnviron.subterranian(6)
+			   .resources(7)
+			   .starResources()
+			   .races(BaseGameRaceType.Kayn, BaseGameRaceType.Saurian)
+			   .creature(BaseGameCreature.Crunge)
+			   .build()),
+	Bajukai(BaseGameStarSystem.Uracas, BaseGameCapitalType.None, BaseGameRaceType.Segunden, 
+			BaseGameLoyaltyType.Loyal, BaseGameLoyaltyType.Neutral, BaseGamePlanetaryControlType.ImperialControlled,
+			BaseGameEnviron.urban(3)
+			   .resources(8)
+			   .starResources()
+			   .races(BaseGameRaceType.Segunden)
+			   .build(),
+			   BaseGameEnviron.subterranian(3)
+			   .resources(7)
+			   .starResources()
+			   .races(BaseGameRaceType.Segunden)
+			   .build(),
+			   BaseGameEnviron.subterranian(4)
+			   .resources(6)
+//			   .races(BaseGameRaceType.Bork)	// Not a star faring race
+			   .creature(BaseGameCreature.Ym$Barror)
+			   .build()),
+	
+	// Kalgar,121,,2,1,,,
+	//		Subterranian,6,7,TRUE,,"Kayns, Saurians",Crunge,,,,,,,,,,,,,,,,
+	// Bajukai,122,,1,0,,,
+	//   Urban,3,8,TRUE,,Segundians ,,,
+	//   Water,3,7,TRUE,,Segundians,,,
+	//   Wild,4,6,,,Borks,Ymbarrors
 
 	//	Name,Id,Home Race,S,A,Capital,Secret,
 	//     Environ1,Size,Resources,StarResources,Coup Rating,Races,Creature,Sovereign,
 	//     Environ2,Size,Resources,StarResources,Coup Rating,Race,Creature,Sovereign,
 	//     Environ3,Size,Resources,StarResources,Coup Rating,Race,Creature
 	
-	// Environ of(EnvironType type, int size, int resources, boolean starResources, int coupRating, List<BaseGameRaceType> races, BaseGameCreature creature, BaseGameSovereign sovereign)
 
-	// Uracas,12
-	Kalgar(BaseGameStarSystem.Uracas, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
-	Bajukai(BaseGameStarSystem.Uracas, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
-	
-	// Kalgar,121,,2,1,,,Subterranian,6,7,TRUE,,"Kayns, Saurians",Crunge,,,,,,,,,,,,,,,,
-	// Bajukai,122,,1,0,,,Urban,3,8,TRUE,,Segundians ,,,Water,3,7,TRUE,,Segundians,,,Wild,4,6,,,Borks,Ymbarrors
-	
 	// Zamorax,13
 	Tiglyf(BaseGameStarSystem.Zamorax, BaseGameCapitalType.None, null, 
 			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
