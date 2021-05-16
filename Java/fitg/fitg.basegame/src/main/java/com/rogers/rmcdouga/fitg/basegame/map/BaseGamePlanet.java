@@ -131,7 +131,6 @@ public enum BaseGamePlanet {
 			   .resources(7)
 			   .starResources()
 			   .races(BaseGameRaceType.Rhone)
-			   .creature(BaseGameCreature.Ym$Barror)
 			   .build()),
 	Mitrith(BaseGameStarSystem.Atriard, BaseGameCapitalType.None,
 			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Dissent, BaseGamePlanetaryControlType.ImperialControlled, true,
@@ -162,7 +161,7 @@ public enum BaseGamePlanet {
 			   .starResources()
 			   .races(BaseGameRaceType.Saurian, BaseGameRaceType.Rhone)
 			   .build(),
-		   BaseGameEnviron.liquid(3)
+		   BaseGameEnviron.air(3)
 			   .resources(1)
 //			   .races(BaseGameRaceType.Anon)	// Not a star-faring race
 			   .build()),
@@ -182,16 +181,16 @@ public enum BaseGamePlanet {
 	// Diomas,152,,2,2,Province,,Urban,5,7,TRUE,,Rhones,Muggers,,Wild,3,4,,,Rhones,Chlorofix,,,,,,,,
 
 	// Osirius,16
-	Liomax(BaseGameStarSystem.Osirius, BaseGameCapitalType.None, BaseGameRaceType.Kayn, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
+	Liomax(BaseGameStarSystem.Osirius, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Neutral, BaseGamePlanetaryControlType.ImperialControlled,
 			BaseGameEnviron.wild(6)
 			   .resources(8)
 			   .starResources()
 			   .races(BaseGameRaceType.Rhone)
 			   .creature(BaseGameCreature.Lomrels)
 			   .build()),
-	Orlog(BaseGameStarSystem.Osirius, BaseGameCapitalType.Throne, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
+	Orlog(BaseGameStarSystem.Osirius, BaseGameCapitalType.Throne, 
+			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Patriotic, BaseGamePlanetaryControlType.ImperialControlled,
 			BaseGameEnviron.urban(6)
 			   .resources(7)
 			   .starResources()
@@ -205,7 +204,7 @@ public enum BaseGamePlanet {
 			   .resources(3)
 			   .races(BaseGameRaceType.Rhone)
 			   .build()),
-	Icid(BaseGameStarSystem.Osirius, BaseGameCapitalType.None, null, 
+	Icid(BaseGameStarSystem.Osirius, BaseGameCapitalType.None,
 			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
 			BaseGameEnviron.wild(5)
 			   .resources(7)
@@ -220,7 +219,7 @@ public enum BaseGamePlanet {
 	// Phisaria,21
 	Cieson(BaseGameStarSystem.Phisaria, BaseGameCapitalType.None, BaseGameRaceType.Yester, 
 			BaseGameLoyaltyType.Loyal, BaseGameLoyaltyType.Neutral, BaseGamePlanetaryControlType.ImperialControlled,
-			BaseGameEnviron.liquid(3)
+			BaseGameEnviron.air(3)
 			   .resources(5)
 			   .starResources()
 			   .races(BaseGameRaceType.Yester)
@@ -250,8 +249,8 @@ public enum BaseGamePlanet {
 			   .races(BaseGameRaceType.Saurian)
 			   .creature(BaseGameCreature.Snow_Giants)
 			   .build()),
-	Angoff(BaseGameStarSystem.Egrix, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Neutral, BaseGameLoyaltyType.Unrest, BaseGamePlanetaryControlType.RebelControlled,
+	Angoff(BaseGameStarSystem.Egrix, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Neutral, BaseGameLoyaltyType.Unrest, BaseGamePlanetaryControlType.RebelControlled, true,
 			BaseGameEnviron.urban(6)
 			   .resources(9)
 			   .starResources()
@@ -259,9 +258,9 @@ public enum BaseGamePlanet {
 			   .creature(BaseGameCreature.Laboroid)
 			   .coupRating(3)
 			   .build()),
-	Charkhan(BaseGameStarSystem.Egrix, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			BaseGameEnviron.liquid(3)
+	Charkhan(BaseGameStarSystem.Egrix, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Dissent, BaseGamePlanetaryControlType.ImperialControlled,
+			BaseGameEnviron.air(3)
 			   .resources(7)
 			   .starResources()
 			   .races(BaseGameRaceType.Yester)
@@ -287,7 +286,7 @@ public enum BaseGamePlanet {
 			   .creature(BaseGameCreature.Propang)
 			   .sovereign(BaseGameSovereign.Ascaill)
 			   .build(),
-		   BaseGameEnviron.liquid(3)
+		   BaseGameEnviron.air(3)
 			   .resources(5)
 			   .starResources()
 			   .races(BaseGameRaceType.Yester)
@@ -399,125 +398,294 @@ public enum BaseGamePlanet {
 	//	Tsipa,323,,2,1,,,Urban,5,8,TRUE,,Rhones,,,Wild,4,6,TRUE,,Rhones,Queemers,,,,,,,,
 
 	//	Rorth,33
-	Squanot(BaseGameStarSystem.Rorth, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
+	Squanot(BaseGameStarSystem.Rorth, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Neutral, BaseGameLoyaltyType.Unrest, BaseGamePlanetaryControlType.RebelControlled, true,
+			BaseGameEnviron.urban(4)
+			   .resources(7)
+			   .starResources()
+			   .races(BaseGameRaceType.Saurian)
+			   .coupRating(3)
+			   .build()),
 	//	Squanot,331,,0,-3,,TRUE,Urban,4,7,TRUE,3,Saurians,,,,,,,,,,,,,,,,,
 
 	//	Aziza,34
-	Midest(BaseGameStarSystem.Aziza, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
-	Akubera(BaseGameStarSystem.Aziza, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
+	Midest(BaseGameStarSystem.Aziza, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Dissent, BaseGamePlanetaryControlType.ImperialControlled, true,
+			BaseGameEnviron.liquid(3)
+			   .resources(3)
+			   .races(BaseGameRaceType.Suvan)
+			   .creature(BaseGameCreature.Morna)
+			   .coupRating(2)
+			   .build(),
+			BaseGameEnviron.wild(4)
+			   .resources(2)
+//			   .races(BaseGameRaceType.Deaxins) // Non-starfaring race
+			   .creature(BaseGameCreature.Vrialta)
+			   .build()),
+	Akubera(BaseGameStarSystem.Aziza, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Neutral, BaseGamePlanetaryControlType.ImperialControlled,
+			BaseGameEnviron.urban(2)
+			   .resources(4)
+			   .races(BaseGameRaceType.Suvan,BaseGameRaceType.Rhone)
+			   .creature(BaseGameCreature.Synestins)
+			   .build(),
+			BaseGameEnviron.liquid(3)
+			   .resources(3)
+			   .races(BaseGameRaceType.Suvan)
+			   .build(),
+			BaseGameEnviron.subterranian(4)
+			   .resources(6)
+//			   .races(BaseGameRaceType.Rylians) // Non-starfaring race
+			   .creature(BaseGameCreature.Elilad)
+			   .build()),
 	//	Midest,341,,2,1,,TRUE,Water,3,3,,2,Suvans,Morna,,Wild,4,2,,,Deaxins,Vrialta,,,,,,,,
 	//	Akubera,342,,2,0,,,Urban,2,4,,,"Suvans, Rhones",Synestins,,Water,3,3,,,Suvans,,,Subterranian,4,6,,,Rylians,Elilad
 
 	//	Luine,35
-	Mrane(BaseGameStarSystem.Luine, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
-	Kelta(BaseGameStarSystem.Luine, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
-	//	Mrane,351,Suvans,1,0,,,Water,3,3,,,Suvans,Gyrogs,Bulgar (n),,,,,,,,,,,,,,,
+	Mrane(BaseGameStarSystem.Luine, BaseGameCapitalType.None, BaseGameRaceType.Suvan, 
+			BaseGameLoyaltyType.Loyal, BaseGameLoyaltyType.Neutral, BaseGamePlanetaryControlType.ImperialControlled,
+			BaseGameEnviron.liquid(3)
+			   .resources(3)
+			   .races(BaseGameRaceType.Suvan)
+			   .creature(BaseGameCreature.Gyrogos)
+			   .sovereign(BaseGameSovereign.Balgar)
+			   .build()),
+	Kelta(BaseGameStarSystem.Luine, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Loyal, BaseGameLoyaltyType.Dissent, BaseGamePlanetaryControlType.ImperialControlled, true,
+			BaseGameEnviron.wild(2)
+			   .resources(4)
+			   .races(BaseGameRaceType.Saurian)
+			   .creature(BaseGameCreature.Leonus)
+			   .build()),
+	//	Mrane,351,Suvans,1,0,,,Water,3,3,,,Suvans,Gyrogos,Balgar (n),,,,,,,,,,,,,,,
 	//	Kelta,352,,1,-1,,TRUE,Wild,2,4,,,Suarians,Leonus,,,,,,,,,,,,,,,,
 
 	//	Erwind,41
-	Troliso(BaseGameStarSystem.Erwind, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
-	Heliax(BaseGameStarSystem.Erwind, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
+	Troliso(BaseGameStarSystem.Erwind, BaseGameCapitalType.Provincial, 
+			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Patriotic, BaseGamePlanetaryControlType.ImperialControlled,
+			BaseGameEnviron.urban(6)
+			   .resources(8)
+			   .starResources()
+			   .races(BaseGameRaceType.Rhone)
+			   .creature(BaseGameCreature.Sekekers)
+			   .build()),
+	Heliax(BaseGameStarSystem.Erwind, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Neutral, BaseGamePlanetaryControlType.ImperialControlled,
+			BaseGameEnviron.liquid(5)
+			   .resources(7)
+			   .starResources()
+//			   .races(BaseGameRaceType.Phans)	// Non-starfaring race
+			   .creature(BaseGameCreature.Virus)
+			   .build(),
+			BaseGameEnviron.wild(5)
+			   .resources(7)
+//			   .races(BaseGameRaceType.Leonids)	// Non-starfaring race
+			   .sovereign(BaseGameSovereign.Odel_Hobar)
+			   .build()),
 	//	Troliso,411,,2,2,Province,,Urban,6,8,TRUE,,Rhones,Sekekers,,,,,,,,,,,,,,,,
-	//	Heliax,412,,2,0,,,Water,5,7,TRUE,,Phans,Virus,,Wild,5,7,,,Leonids,,Oden Hobar (i),,,,,,,
+	//	Heliax,412,,2,0,,,Water,5,7,TRUE,,Phans,Virus,,Wild,5,7,,,Leonus,,Oden Hobar (i),,,,,,,
 
 	//	Wex,42
-	Lonica(BaseGameStarSystem.Wex, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
+	Lonica(BaseGameStarSystem.Wex, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Loyal, BaseGameLoyaltyType.Neutral, BaseGamePlanetaryControlType.ImperialControlled,
+			BaseGameEnviron.urban(3)
+			   .resources(8)
+			   .starResources()
+			   .races(BaseGameRaceType.Segunden, BaseGameRaceType.Rhone)
+			   .coupRating(1)
+			   .build(),
+			BaseGameEnviron.wild(4)
+			   .resources(6)
+			   .starResources()
+			   .races(BaseGameRaceType.Rhone)
+			   .creature(BaseGameCreature.Frost_Mist)
+			   .build()),
 	//	Lonica,421,,1,0,,,Urban,3,8,TRUE,1,"Segundians, Rhones",,,Wild,4,6,TRUE,,Rhones,Frost Mist,,,,,,,,
 
 	//	Varu,43
-	Horon(BaseGameStarSystem.Varu, BaseGameCapitalType.None, BaseGameRaceType.Kayn, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
-	Solvia(BaseGameStarSystem.Varu, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
-	Cercis(BaseGameStarSystem.Varu, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
+	Horon(BaseGameStarSystem.Varu, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Neutral, BaseGamePlanetaryControlType.ImperialControlled,
+			BaseGameEnviron.liquid(6)
+			   .resources(10)
+			   .starResources()
+//			   .races(BaseGameRaceType.Henones)	// Non-starfaring race
+			   .creature(BaseGameCreature.Snorkas)
+			   .build()),
+	Solvia(BaseGameStarSystem.Varu, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Loyal, BaseGameLoyaltyType.Dissent, BaseGamePlanetaryControlType.ImperialControlled,
+			BaseGameEnviron.urban(4)
+			   .resources(7)
+//			   .races(BaseGameRaceType.Susperans) // Non-starfaring race
+			   .creature(BaseGameCreature.Telebots)
+			   .coupRating(2)
+			   .build(),
+			BaseGameEnviron.subterranian(3)
+			   .resources(3)
+			   .races(BaseGameRaceType.Piorad)
+			   .build(),
+			BaseGameEnviron.wild(5)
+			   .resources(3)
+//			   .races(BaseGameRaceType.Thoks)	// Non-starfaring race
+			   .creature(BaseGameCreature.Gadhars)
+			   .build()),
+	Cercis(BaseGameStarSystem.Varu, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Neutral, BaseGameLoyaltyType.Unrest, BaseGamePlanetaryControlType.RebelControlled,
+			BaseGameEnviron.subterranian(4)
+			   .resources(4)
+			   .races(BaseGameRaceType.Piorad)
+			   .creature(BaseGameCreature.Kinsog)
+			   .build(),
+			BaseGameEnviron.wild(3)
+			   .resources(5)
+			   .starResources()
+//			   .races(BaseGameRaceType.Illeas)	// Non-starfaring race
+			   .build()),
 	//	Horon,431,,2,0,,,Water,6,10,TRUE,,Henones,Snorkas ,,,,,,,,,,,,,,,,
 	//	Solvia,432,,1,1,,,Urban,4,7,,2,Susperans ,Telebots,,Subterranian ,3,3,,,Piorads,,,Wild,5,3,,,Thoks,Gadhars
-	//	Cercis,433,,0,-3,,,Subterranian ,4,4,,,Piorads,Kinsols,,Wild,3,5,TRUE,,Illeas,,,,,,,,,
+	//	Cercis,433,,0,-3,,,Subterranian ,4,4,,,Piorads,Kinsogs,,Wild,3,5,TRUE,,Illeas,,,,,,,,,
 
 	//	Deblon,44
-	Rhexia(BaseGameStarSystem.Deblon, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
-	Tartio(BaseGameStarSystem.Deblon, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
+	Rhexia(BaseGameStarSystem.Deblon, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Dissent, BaseGameLoyaltyType.Unrest, BaseGamePlanetaryControlType.RebelControlled,
+			BaseGameEnviron.wild(3)
+			   .resources(7)
+			   .starResources()
+//			   .races(BaseGameRaceType.Thesnians)	// Non-starfaring race
+			   .creature(BaseGameCreature.Thunk)
+			   .sovereign(BaseGameSovereign.Yaldor)
+			   .build()),
+	Tartio(BaseGameStarSystem.Deblon, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Loyal, BaseGameLoyaltyType.Dissent, BaseGamePlanetaryControlType.ImperialControlled, true,
+			BaseGameEnviron.urban(3)
+			   .resources(4)
+			   .races(BaseGameRaceType.Piorad)
+			   .build(),
+			BaseGameEnviron.subterranian(4)
+			   .resources(4)
+			   .races(BaseGameRaceType.Piorad)
+			   .creature(BaseGameCreature.Gamels)
+			   .build()),
 	//	Rhexia,441,,-1,-3,,,Wild,3,7,TRUE,,Thesnians,Thunks ,Zaldor (r),,,,,,,,,,,,,,,
 	//	Tartio,442,,1,-1,,TRUE,Urban,3,4,,,Piorads,,,Subterranian ,4,4,,,Piorads,Gamels ,,,,,,,,
 
 	//	Martigna,45
-	Ayod(BaseGameStarSystem.Martigna, BaseGameCapitalType.None, BaseGameRaceType.Kayn, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
+	Ayod(BaseGameStarSystem.Martigna, BaseGameCapitalType.None, BaseGameRaceType.Piorad, 
+			BaseGameLoyaltyType.Loyal, BaseGameLoyaltyType.Neutral, BaseGamePlanetaryControlType.ImperialControlled,
+			BaseGameEnviron.subterranian(4)
+			   .resources(4)
+			   .races(BaseGameRaceType.Piorad)
+			   .creature(BaseGameCreature.Spithid)
+			   .build()),
 	//	Ayod,451,Piorads,1,0,,,Subterranian ,4,4,,,Piorads,Spithids,,,,,,,,,,,,,,,,
 
 	//	Zakir,51
-	Barak(BaseGameStarSystem.Zakir, BaseGameCapitalType.None, BaseGameRaceType.Kayn, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
-	Liatris(BaseGameStarSystem.Zakir, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
-	Xan(BaseGameStarSystem.Zakir, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
+	Barak(BaseGameStarSystem.Zakir, BaseGameCapitalType.None,  
+			BaseGameLoyaltyType.Neutral, BaseGameLoyaltyType.Unrest, BaseGamePlanetaryControlType.RebelControlled,
+			BaseGameEnviron.urban(5)
+			   .resources(10)
+//			   .races(BaseGameRaceType.Jopers)	// Non-starfaring race
+			   .creature(BaseGameCreature.Hysnatons)
+			   .sovereign(BaseGameSovereign.Inzenzia_III)
+			   .build()),
+	Liatris(BaseGameStarSystem.Zakir, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Neutral, BaseGamePlanetaryControlType.ImperialControlled, true,
+			BaseGameEnviron.wild(5)
+			   .resources(7)
+//			   .races(BaseGameRaceType.Ardorats)	// Non-starfaring race
+			   .creature(BaseGameCreature.Garb)
+			   .coupRating(1)
+			   .build()),
+	Xan(BaseGameStarSystem.Zakir, BaseGameCapitalType.None, BaseGameRaceType.Xanthon,
+			BaseGameLoyaltyType.Loyal, BaseGameLoyaltyType.Dissent, BaseGamePlanetaryControlType.ImperialControlled,
+			BaseGameEnviron.urban(3)
+			   .resources(6)
+//			   .races(BaseGameRaceType.Orthotins)	// Non-starfaring race
+			   .build(),
+			BaseGameEnviron.fire(5)
+			   .resources(4)
+			   .races(BaseGameRaceType.Xanthon)
+			   .creature(BaseGameCreature.Mish)
+			   .build()),
 	//	Barak,511,,0,-3,,,Urban,5,10,,,Jopers,Hysnatons,Inzenzia III (r),,,,,,,,,,,,,,,
 	//	Liatris,512,,2,0,,TRUE,Wild,5,7,,1,Ardorats ,Gachs,,,,,,,,,,,,,,,,
 	//	Xan,513,Xanathons,1,-1,,,Urban,3,6,,,Orthontins,,,Fire,5,4,,,Xanthons,Mish,,,,,,,,
 
 	//	Eudox,52
-	Aras(BaseGameStarSystem.Eudox, BaseGameCapitalType.None, BaseGameRaceType.Kayn, 
+	Aras(BaseGameStarSystem.Eudox, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Loyal, BaseGameLoyaltyType.Neutral, BaseGamePlanetaryControlType.ImperialControlled, true,
+			BaseGameEnviron.urban(4)
+			   .resources(9)
+			   .starResources()
+			   .races(BaseGameRaceType.Segunden)
+			   .creature(BaseGameCreature.Chardireeds)
+			   .sovereign(BaseGameSovereign.Tensok_Phi)
+			   .build()),
+	Capilax(BaseGameStarSystem.Eudox, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Loyal, BaseGameLoyaltyType.Dissent, BaseGamePlanetaryControlType.ImperialControlled, true,
+			BaseGameEnviron.fire(4)
+			   .resources(3)
+			   .races(BaseGameRaceType.Xanthon)
+			   .creature(BaseGameCreature.Onflam)
+			   .build()),
+	Adrax(BaseGameStarSystem.Eudox, BaseGameCapitalType.None, 
 			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
-	Capilax(BaseGameStarSystem.Eudox, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
-	Adrax(BaseGameStarSystem.Eudox, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
+			BaseGameEnviron.subterranian(2)
+			   .resources(4)
+			   .races(BaseGameRaceType.Rhone)
+			   .coupRating(2)
+			   .build(),
+			BaseGameEnviron.wild(3)
+			   .resources(5)
+			   .starResources()
+			   .races(BaseGameRaceType.Rhone)
+			   .creature(BaseGameCreature.Thinagig)
+			   .build()),
 	//	Aras,521,,1,0,,TRUE,Urban,4,9,TRUE,,Segundians ,Chardireeds,Tensok-Phi (n),,,,,,,,,,,,,,,
 	//	Capilax,522,,1,-1,,TRUE,Fire,4,3,,,Xanthons,Onflams,,,,,,,,,,,,,,,,
 	//	Adrax,523,,2,1,,,Subterranian ,2,4,,2,Rhones,,,Wild,3,5,TRUE,,Rhones,Thinagigs,,,,,,,,
 
 	//	Corusa,53
-	Scythia(BaseGameStarSystem.Corusa, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
+	Scythia(BaseGameStarSystem.Corusa, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Loyal, BaseGameLoyaltyType.Unrest, BaseGamePlanetaryControlType.RebelControlled, true,
+			BaseGameEnviron.fire(4)
+			   .resources(3)
+			   .races(BaseGameRaceType.Xanthon)
+			   .build()),
 	//	Scythia,531,,1,-3,,TRUE,Fire,4,3,,,Xanthons,,,,,,,,,,,,,,,,,
 
 	//	Irajeba,54
-	Annell(BaseGameStarSystem.Irajeba, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
-	Trov(BaseGameStarSystem.Irajeba, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
+	Annell(BaseGameStarSystem.Irajeba, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Neutral, BaseGameLoyaltyType.Unrest, BaseGamePlanetaryControlType.ImperialControlled, true,
+			BaseGameEnviron.air(4)
+			   .resources(8)
+			   .starResources()
+//			   .races(BaseGameRaceType.Cavalkus)	// Non-starfaring race
+			   .creature(BaseGameCreature.Fog)
+			   .sovereign(BaseGameSovereign.Darb_Selesh)
+			   .build()),
+	Trov(BaseGameStarSystem.Irajeba, BaseGameCapitalType.Provincial, 
+			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Patriotic, BaseGamePlanetaryControlType.ImperialControlled,
+			BaseGameEnviron.urban(4)
+			   .resources(6)
+			   .starResources()
+			   .races(BaseGameRaceType.Rhone)
+			   .creature(BaseGameCreature.Valaterix)
+			   .build(),
+			BaseGameEnviron.wild(3)
+			   .resources(4)
+			   .races(BaseGameRaceType.Rhone)
+			   .build()),
 	//	Annell,541,,0,-2,,TRUE,Air,4,8,,,Cavalkus,Fog,Darn Salesh (n),,,,,,,,,,,,,,,
 	//	Trov,542,,2,2,Provincial,,Urban,4,6,TRUE,,Rhones,Valaterix,,Wild,3,4,,,Rhones,,,,,,,,,
 
 	//	Moda,55
-	Niconi(BaseGameStarSystem.Moda, BaseGameCapitalType.None, null, 
-			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
-			new Environ[0]),
+	Niconi(BaseGameStarSystem.Moda, BaseGameCapitalType.None, 
+			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Neutral, BaseGamePlanetaryControlType.ImperialControlled,
+			BaseGameEnviron.wild(4)
+			   .resources(5)
+			   .races(BaseGameRaceType.Kayn)
+			   .creature(BaseGameCreature.Wyths)
+			   .build()),
 	//	Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 
 	;
@@ -630,23 +798,23 @@ Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 	
 	private final BaseGameStarSystem starSystem;
 	private final BaseGameCapitalType capitalType;
-	private final List<Environ> environs;
-	private final Optional<RaceType> homeworld;
+	private final List<BaseGameEnviron> environs;
+	private final Optional<BaseGameRaceType> homeworld;
 	private final LoyaltyType startingLoyaltyS;
 	private final LoyaltyType startingLoyaltyA;
 	private final BaseGamePlanetaryControlType controlA;
+	private final boolean hasSecret;
 
 	private LoyaltyType currentLoyalty;
 	private BaseGamePlanetaryControlType currentControl;
 	
-	private final boolean hasSecret;
 
 	/*
 	Home Race,S,A,Capital,Secret,Environ1,Size,Resources,StarResources,Coup Rating,Races,Creature,Sovereign,Environ2,Size,Resources,StarResources,Coup Rating,Race,Creature,Sovereign,Environ3,Size,Resources,StarResources,Coup Rating,Race,Creature
 	 */
 	private BaseGamePlanet(BaseGameStarSystem starSystem, BaseGameCapitalType capitalType, BaseGameRaceType homeworld,
 			BaseGameLoyaltyType startingLoyaltyS, BaseGameLoyaltyType startingLoyaltyA, BaseGamePlanetaryControlType controlA,
-			Environ... environs) {
+			BaseGameEnviron... environs) {
 		this.starSystem = starSystem;
 		this.capitalType = capitalType;
 		this.homeworld = Optional.of(homeworld);
@@ -659,7 +827,7 @@ Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 
 	private BaseGamePlanet(BaseGameStarSystem starSystem, BaseGameCapitalType capitalType,
 			BaseGameLoyaltyType startingLoyaltyS, BaseGameLoyaltyType startingLoyaltyA, BaseGamePlanetaryControlType controlA,
-			Environ... environs) {
+			BaseGameEnviron... environs) {
 		this.starSystem = starSystem;
 		this.capitalType = capitalType;
 		this.homeworld = Optional.empty();
@@ -672,7 +840,7 @@ Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 
 	private BaseGamePlanet(BaseGameStarSystem starSystem, BaseGameCapitalType capitalType, BaseGameRaceType homeworld,
 			BaseGameLoyaltyType startingLoyaltyS, BaseGameLoyaltyType startingLoyaltyA, BaseGamePlanetaryControlType controlA,
-			boolean hasSecret, Environ... environs) {
+			boolean hasSecret, BaseGameEnviron... environs) {
 		this.starSystem = starSystem;
 		this.capitalType = capitalType;
 		this.homeworld = Optional.of(homeworld);
@@ -685,7 +853,7 @@ Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 
 	private BaseGamePlanet(BaseGameStarSystem starSystem, BaseGameCapitalType capitalType,
 			BaseGameLoyaltyType startingLoyaltyS, BaseGameLoyaltyType startingLoyaltyA, BaseGamePlanetaryControlType controlA,
-			boolean hasSecret, Environ... environs) {
+			boolean hasSecret, BaseGameEnviron... environs) {
 		this.starSystem = starSystem;
 		this.capitalType = capitalType;
 		this.homeworld = Optional.empty();
@@ -728,11 +896,11 @@ Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 		return capitalType;
 	}
 
-	public List<Environ> getEnvirons() {
+	public List<BaseGameEnviron> getEnvirons() {
 		return environs;
 	}
 
-	public Optional<RaceType> getHomeworld() {
+	public Optional<BaseGameRaceType> getHomeworld() {
 		return homeworld;
 	}
 
@@ -759,5 +927,8 @@ Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 	public BaseGameStarSystem getStarSystem() {
 		return starSystem;
 	}
-	
+
+	public boolean hasSecret() {
+		return hasSecret;
+	}
 }

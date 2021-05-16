@@ -90,7 +90,7 @@ public class BaseGameEnviron implements Environ {
 		return sovereign;
 	}
 
-	private static Environ of(EnvironType type, int size, OptionalInt resources, boolean starResources, OptionalInt coupRating, List<BaseGameRaceType> races, BaseGameCreature creature, BaseGameSovereign sovereign) {
+	private static BaseGameEnviron of(EnvironType type, int size, OptionalInt resources, boolean starResources, OptionalInt coupRating, List<BaseGameRaceType> races, BaseGameCreature creature, BaseGameSovereign sovereign) {
 		return new BaseGameEnviron(type, size, resources, starResources, coupRating, races, creature, sovereign);
 	}
 	
@@ -162,7 +162,7 @@ public class BaseGameEnviron implements Environ {
 			this.sovereign = sovereign;
 			return this;
 		}
-		public Environ build() {
+		public BaseGameEnviron build() {
 			return BaseGameEnviron.of(type, size, resources, starResources, coupRating, races, creature, sovereign);
 		}
 		
