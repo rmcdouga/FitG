@@ -1,5 +1,7 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
+import java.util.Optional;
+
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 
 public interface RaceType {
@@ -17,7 +19,7 @@ public interface RaceType {
 	/**
 	 * @return the homePlanet
 	 */
-	BaseGamePlanet getHomePlanet();
+	Optional<BaseGamePlanet> getHomePlanet();
 
 	/**
 	 * @return the description

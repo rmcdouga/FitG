@@ -2,11 +2,12 @@ package com.rogers.rmcdouga.fitg.basegame.map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,13 +19,12 @@ import com.rogers.rmcdouga.fitg.basegame.BaseGameSovereign;
 
 class BaseGamePlanetTest {
 
-	@Test
-	void testGetEnvirons() {
-		fail("Not yet implemented");
-	}
-
 	private static <T> void addOnce(Set<T> set, T obj) {
 		assertTrue(set.add(obj), "Should be no duplicates, but '" + obj + "' is  duplicated.");
+	}
+	
+	private static <K, V> void addOnce(Map<K, V> map, K key, V value) {
+		assertNull(map.put(key, value), "Should be no duplicates, but '" + key +  "/" + value + "' is  duplicated.");
 	}
 	
 	private static <T> void shouldContainAll(Set<T> target, Set<T> completeSet) {
@@ -38,15 +38,28 @@ class BaseGamePlanetTest {
 	void testAllRacesHaveHomeworld() {
 		Set<BaseGameRaceType> allRaces = EnumSet.allOf(BaseGameRaceType.class);
 		Set<BaseGameRaceType> planetHomeworlds = EnumSet.noneOf(BaseGameRaceType.class);
-		Stream.of(BaseGamePlanet.values())
-			  .map(BaseGamePlanet::getHomeworld)
-			  .flatMap(Optional::stream)
-			  .forEach(race->addOnce(planetHomeworlds, race))
+		Stream.of(BaseGamePlanet.values())						// Go through all planets
+			  .map(BaseGamePlanet::getHomeworld)				// Get optional homeworld
+			  .flatMap(Optional::stream)						// Drop those that aren't homeworlds
+			  .forEach(race->addOnce(planetHomeworlds, race))	// Add then to our set,
 			;
 		planetHomeworlds.add(BaseGameRaceType.Rhone);	// Rhone's have no homeworld, so we add it manually.
 		shouldContainAll(planetHomeworlds, allRaces);
 	}
 
+	@Test
+	void testAllHomeworldsMatchRace() {
+		Map<BaseGameRaceType, BaseGamePlanet> homeworlds = new EnumMap<>(BaseGameRaceType.class);
+//		Map<BaseGameRaceType, BaseGamePlanet> homeworlds = new HashMap<>();
+		Stream.of(BaseGamePlanet.values())									// Go through all planets
+			  .filter(p->p.getHomeworld().isPresent())						// Only keep homeworlds
+			  .forEach(p->addOnce(homeworlds, p.getHomeworld().get(), p));	// Add to the Map (just once)
+		Stream.of(BaseGameRaceType.values())
+			  .filter(r->r.getHomePlanet().isPresent())						// Exclude Races that have no homeworld.
+			  .forEach(r->assertEquals(r.getHomePlanet().get(), homeworlds.get(r), "Homeworld doesn't match for race '" + r + "'."));
+		assertTrue(BaseGameRaceType.Rhone.getHomePlanet().isEmpty(), "Expected Rhone's to not have a homeworld.");
+	}
+	
 	@Test
 	void testHasAllSovereigns() {
 		Set<BaseGameSovereign> allSovereigns = EnumSet.allOf(BaseGameSovereign.class);

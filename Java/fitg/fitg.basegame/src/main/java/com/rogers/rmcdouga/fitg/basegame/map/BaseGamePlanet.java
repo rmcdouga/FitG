@@ -8,7 +8,6 @@ import java.util.function.IntUnaryOperator;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameCreature;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameRaceType;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameSovereign;
-import com.rogers.rmcdouga.fitg.basegame.RaceType;
 
 
 public enum BaseGamePlanet {
