@@ -1,6 +1,5 @@
 package com.rogers.rmcdouga.fitg.basegame.map;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
