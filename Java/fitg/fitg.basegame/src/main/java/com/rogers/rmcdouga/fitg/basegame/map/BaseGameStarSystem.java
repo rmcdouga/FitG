@@ -39,9 +39,9 @@ public enum BaseGameStarSystem {
 	
 	private final BaseGameProvince province;
 	private final List<BaseGamePlanet> planets;
-	private final List<BaseGateSpaceRoute> spaceRoutes;
+	private final List<BaseGameSpaceRoute> spaceRoutes;
 
-	private BaseGameStarSystem(BaseGameProvince province, List<BaseGamePlanet> planets, List<BaseGateSpaceRoute> spaceRoutes) {
+	private BaseGameStarSystem(BaseGameProvince province, List<BaseGamePlanet> planets, List<BaseGameSpaceRoute> spaceRoutes) {
 		this.province = province;
 		this.planets = planets;
 		this.spaceRoutes = spaceRoutes;
@@ -75,7 +75,7 @@ public enum BaseGameStarSystem {
 		return planets;
 	}
 
-	public List<BaseGateSpaceRoute> getSpaceRoutes() {
+	public List<BaseGameSpaceRoute> getSpaceRoutes() {
 		return spaceRoutes;
 	}
 }

@@ -6,19 +6,19 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-class BaseGateSpaceRouteTest {
+class BaseGameSpaceRouteTest {
 	
 	@Test
 	void testNumNavigationStars() {
-		int numNavigationStars = Stream.of(BaseGateSpaceRoute.values())
-									   .mapToInt(BaseGateSpaceRoute::getNavigationStars)
+		int numNavigationStars = Stream.of(BaseGameSpaceRoute.values())
+									   .mapToInt(BaseGameSpaceRoute::getNavigationStars)
 									   .sum();
 		assertEquals(20, numNavigationStars);	// Should be 20 Navigation Stars
 	}
 
 	@Test
 	void testNumRoutes() {
-		assertEquals(42, BaseGateSpaceRoute.values().length);	// Should be 20 Navigation Stars
+		assertEquals(42, BaseGameSpaceRoute.values().length);	// Should be 20 Navigation Stars
 	}
 
 }

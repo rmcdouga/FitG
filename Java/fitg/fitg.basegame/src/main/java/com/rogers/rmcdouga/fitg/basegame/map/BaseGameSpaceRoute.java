@@ -1,6 +1,6 @@
 package com.rogers.rmcdouga.fitg.basegame.map;
 
-public enum BaseGateSpaceRoute {
+public enum BaseGameSpaceRoute {
 	// Province 1 internal
 	R_11_12(BaseGameStarSystem.Tardyn, BaseGameStarSystem.Uracus, 1),
 	R_11_13(BaseGameStarSystem.Tardyn, BaseGameStarSystem.Zamorax, 0),
@@ -74,7 +74,7 @@ public enum BaseGateSpaceRoute {
 	private final BaseGameStarSystem terminus2;
 	private final int navigationStars;
 	
-	private BaseGateSpaceRoute(BaseGameStarSystem end1, BaseGameStarSystem end2, int navigationStars) {
+	private BaseGameSpaceRoute(BaseGameStarSystem end1, BaseGameStarSystem end2, int navigationStars) {
 		this.terminus1 = end1;
 		this.terminus2 = end2;
 		this.navigationStars = navigationStars;
