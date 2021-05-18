@@ -4,53 +4,64 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public enum BaseGameStarSystem {
-	Tardyn(BaseGameProvince.One, Collections.emptyList(), Collections.emptyList()),
-	Uracus(BaseGameProvince.One, Collections.emptyList(), Collections.emptyList()),
-	Zamorax(BaseGameProvince.One, Collections.emptyList(), Collections.emptyList()),
-	Atriard(BaseGameProvince.One, Collections.emptyList(), Collections.emptyList()),
-	Bex(BaseGameProvince.One, Collections.emptyList(), Collections.emptyList()),
-	Osirius(BaseGameProvince.One, Collections.emptyList(), Collections.emptyList()),
+public enum BaseGameStarSystem implements StarSystem {
+	Tardyn(BaseGameProvince.One),
+	Uracus(BaseGameProvince.One),
+	Zamorax(BaseGameProvince.One),
+	Atriard(BaseGameProvince.One),
+	Bex(BaseGameProvince.One),
+	Osirius(BaseGameProvince.One),
 	
-	Phisaria(BaseGameProvince.Two, Collections.emptyList(), Collections.emptyList()),
-	Egrix(BaseGameProvince.Two, Collections.emptyList(), Collections.emptyList()),
-	Ancore(BaseGameProvince.Two, Collections.emptyList(), Collections.emptyList()),
-	Gellas(BaseGameProvince.Two, Collections.emptyList(), Collections.emptyList()),
+	Phisaria(BaseGameProvince.Two),
+	Egrix(BaseGameProvince.Two),
+	Ancore(BaseGameProvince.Two),
+	Gellas(BaseGameProvince.Two),
 
-	Pycius(BaseGameProvince.Three, Collections.emptyList(), Collections.emptyList()),
-	Ribex(BaseGameProvince.Three, Collections.emptyList(), Collections.emptyList()),
-	Rorth(BaseGameProvince.Three, Collections.emptyList(), Collections.emptyList()),
-	Aziza(BaseGameProvince.Three, Collections.emptyList(), Collections.emptyList()),
-	Luine(BaseGameProvince.Three, Collections.emptyList(), Collections.emptyList()),
+	Pycius(BaseGameProvince.Three),
+	Ribex(BaseGameProvince.Three),
+	Rorth(BaseGameProvince.Three),
+	Aziza(BaseGameProvince.Three),
+	Luine(BaseGameProvince.Three),
 
-	Erwind(BaseGameProvince.Four, Collections.emptyList(), Collections.emptyList()),
-	Wex(BaseGameProvince.Four, Collections.emptyList(), Collections.emptyList()),
-	Varu(BaseGameProvince.Four, Collections.emptyList(), Collections.emptyList()),
-	Deblon(BaseGameProvince.Four, Collections.emptyList(), Collections.emptyList()),
-	Martigna(BaseGameProvince.Four, Collections.emptyList(), Collections.emptyList()),
+	Erwind(BaseGameProvince.Four),
+	Wex(BaseGameProvince.Four),
+	Varu(BaseGameProvince.Four),
+	Deblon(BaseGameProvince.Four),
+	Martigna(BaseGameProvince.Four),
 
-	Zakir(BaseGameProvince.Five, Collections.emptyList(), Collections.emptyList()),
-	Eudox(BaseGameProvince.Five, Collections.emptyList(), Collections.emptyList()),
-	Corusa(BaseGameProvince.Five, Collections.emptyList(), Collections.emptyList()),
-	Irajeba(BaseGameProvince.Five, Collections.emptyList(), Collections.emptyList()),
-	Moda(BaseGameProvince.Five, Collections.emptyList(), Collections.emptyList()),
+	Zakir(BaseGameProvince.Five),
+	Eudox(BaseGameProvince.Five),
+	Corusa(BaseGameProvince.Five),
+	Irajeba(BaseGameProvince.Five),
+	Moda(BaseGameProvince.Five),
 	;
 	
 	private final BaseGameProvince province;
-	private final List<BaseGamePlanet> planets;
-	private final List<BaseGameSpaceRoute> spaceRoutes;
+	private final Supplier<List<BaseGamePlanet>> planets;
+	private final Supplier<List<BaseGameSpaceRoute>> spaceRoutes;
 
-	private BaseGameStarSystem(BaseGameProvince province, List<BaseGamePlanet> planets, List<BaseGameSpaceRoute> spaceRoutes) {
+	private BaseGameStarSystem(BaseGameProvince province, Supplier<List<BaseGamePlanet>> planets, Supplier<List<BaseGameSpaceRoute>> spaceRoutes) {
 		this.province = province;
 		this.planets = planets;
 		this.spaceRoutes = spaceRoutes;
 	}
 
+	private BaseGameStarSystem(BaseGameProvince province) {
+		this.province = province;
+		this.planets = this::listPlanets;
+		this.spaceRoutes = this::listSpaceRoutes;
+	}
+
+	@Override
 	public BaseGameProvince getProvince() {
 		return province;
 	}
 
+	@Override
 	public int getId() {
 		int myIndex = this.ordinal();
 		BaseGameStarSystem[] allStarSystems = BaseGameStarSystem.values();
@@ -67,15 +78,30 @@ public enum BaseGameStarSystem {
 		return this.province.getId() * 10 + (offset + 1);
 	}
 
+	@Override
 	public String getName() {
 		return this.toString();
 	}
 
+	@Override
 	public List<BaseGamePlanet> getPlanets() {
-		return planets;
+		return planets.get();
 	}
 
+	@Override
 	public List<BaseGameSpaceRoute> getSpaceRoutes() {
-		return spaceRoutes;
+		return spaceRoutes.get();
+	}
+	
+	private List<BaseGamePlanet> listPlanets() {
+		return Stream.of(BaseGamePlanet.values())
+					 .filter(p->this.equals(p.getStarSystem()))
+					 .collect(Collectors.toUnmodifiableList());
+	}
+	
+	private List<BaseGameSpaceRoute> listSpaceRoutes() {
+		return Stream.of(BaseGameSpaceRoute.values())
+					 .filter(r->this.equals(r.getTerminus1()) || this.equals(r.getTerminus2()))
+					 .collect(Collectors.toUnmodifiableList());
 	}
 }

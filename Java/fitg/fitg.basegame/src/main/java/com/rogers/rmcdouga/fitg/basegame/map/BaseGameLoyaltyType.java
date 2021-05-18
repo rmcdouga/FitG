@@ -1,5 +1,8 @@
 package com.rogers.rmcdouga.fitg.basegame.map;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 public enum BaseGameLoyaltyType implements LoyaltyType {
 	Patriotic, Loyal, Neutral, Dissent, Unrest;
 	
@@ -18,5 +21,11 @@ public enum BaseGameLoyaltyType implements LoyaltyType {
 	public LoyaltyType shiftRight() {
 		int ordinal = this.ordinal();
 		return ordinal < Unrest.ordinal() ? values()[ordinal + 1] : this;
+	}
+	
+	public static Optional<BaseGameLoyaltyType> from(String name) {
+		return Stream.of(BaseGameLoyaltyType.values())
+					 .filter(t->t.getName().equalsIgnoreCase(name))
+					 .findFirst();
 	}
 }

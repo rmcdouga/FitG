@@ -1,6 +1,6 @@
 package com.rogers.rmcdouga.fitg.basegame.map;
 
-public enum BaseGameSpaceRoute {
+public enum BaseGameSpaceRoute implements SpaceRoute {
 	// Province 1 internal
 	R_11_12(BaseGameStarSystem.Tardyn, BaseGameStarSystem.Uracus, 1),
 	R_11_13(BaseGameStarSystem.Tardyn, BaseGameStarSystem.Zamorax, 0),
@@ -80,14 +80,17 @@ public enum BaseGameSpaceRoute {
 		this.navigationStars = navigationStars;
 	}
 
+	@Override
 	public BaseGameStarSystem getTerminus1() {
 		return terminus1;
 	}
 
+	@Override
 	public BaseGameStarSystem getTerminus2() {
 		return terminus2;
 	}
 
+	@Override
 	public int getNavigationStars() {
 		return navigationStars;
 	}

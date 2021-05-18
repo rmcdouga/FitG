@@ -17,13 +17,13 @@ public class LoyaltyTypeTest {
 	
 	@ParameterizedTest
 	@CsvSource({"Unrest, Dissent", "Dissent, Neutral", "Neutral, Loyal", "Loyal, Patriotic", "Patriotic, Patriotic"})
-	public void testShiftLeft(LoyaltyType source, LoyaltyType result) {
+	public void testShiftLeft(BaseGameLoyaltyType source, BaseGameLoyaltyType result) {
 		assertEquals(source.shiftLeft(), result);
 	}
 
 	@ParameterizedTest
 	@CsvSource({"Patriotic, Loyal", "Loyal, Neutral", "Neutral, Dissent", "Dissent, Unrest", "Unrest, Unrest"})
-	public void testShiftRight(LoyaltyType source, LoyaltyType result) {
+	public void testShiftRight(BaseGameLoyaltyType source, BaseGameLoyaltyType result) {
 		assertEquals(source.shiftRight(), result);
 	}
 

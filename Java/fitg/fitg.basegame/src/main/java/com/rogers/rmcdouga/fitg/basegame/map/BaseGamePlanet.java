@@ -10,7 +10,7 @@ import com.rogers.rmcdouga.fitg.basegame.BaseGameRaceType;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameSovereign;
 
 
-public enum BaseGamePlanet {
+public enum BaseGamePlanet implements Planet {
 	// Tardyn,11
 	Mimulus(BaseGameStarSystem.Tardyn, BaseGameCapitalType.None, BaseGameRaceType.Kayn, 
 			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
@@ -863,18 +863,22 @@ Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 		this.hasSecret = hasSecret;
 	}
 
+	@Override
 	public LoyaltyType getCurrentLoyalty() {
 		return currentLoyalty;
 	}
 
+	@Override
 	public void setCurrentLoyalty(LoyaltyType currentLoyalty) {
 		this.currentLoyalty = currentLoyalty;
 	}
 
+	@Override
 	public String getName() {
 		return this.toString().replace('_', ' ');
 	}
 
+	@Override
 	public int getId() {
 		int myIndex = this.ordinal();
 		BaseGamePlanet[] allPlanets = BaseGamePlanet.values();
@@ -891,42 +895,52 @@ Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 		return this.starSystem.getId() * 10 + (offset + 1);
 	}
 
+	@Override
 	public BaseGameCapitalType getCapitalType() {
 		return capitalType;
 	}
 
+	@Override
 	public List<BaseGameEnviron> getEnvirons() {
 		return environs;
 	}
 
+	@Override
 	public Optional<BaseGameRaceType> getHomeworld() {
 		return homeworld;
 	}
 
+	@Override
 	public BaseGamePlanetaryControlType getControlA() {
 		return controlA;
 	}
 
+	@Override
 	public LoyaltyType getStartingLoyaltyS() {
 		return startingLoyaltyS;
 	}
 
+	@Override
 	public LoyaltyType getStartingLoyaltyA() {
 		return startingLoyaltyA;
 	}
 
+	@Override
 	public BaseGamePlanetaryControlType getCurrentControl() {
 		return currentControl;
 	}
 
+	@Override
 	public void setCurrentControl(BaseGamePlanetaryControlType currentControl) {
 		this.currentControl = currentControl;
 	}
 
+	@Override
 	public BaseGameStarSystem getStarSystem() {
 		return starSystem;
 	}
 
+	@Override
 	public boolean hasSecret() {
 		return hasSecret;
 	}
