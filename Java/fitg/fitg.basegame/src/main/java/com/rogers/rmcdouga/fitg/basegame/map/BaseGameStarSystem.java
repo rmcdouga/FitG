@@ -4,11 +4,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
-import java.util.function.Predicate;
 
 public enum BaseGameStarSystem {
 	Tardyn(BaseGameProvince.One, Collections.emptyList(), Collections.emptyList()),
-	Uracas(BaseGameProvince.One, Collections.emptyList(), Collections.emptyList()),
+	Uracus(BaseGameProvince.One, Collections.emptyList(), Collections.emptyList()),
 	Zamorax(BaseGameProvince.One, Collections.emptyList(), Collections.emptyList()),
 	Atriard(BaseGameProvince.One, Collections.emptyList(), Collections.emptyList()),
 	Bex(BaseGameProvince.One, Collections.emptyList(), Collections.emptyList()),

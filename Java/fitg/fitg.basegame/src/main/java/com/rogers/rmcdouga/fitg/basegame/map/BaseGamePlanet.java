@@ -58,7 +58,7 @@ public enum BaseGamePlanet {
 	// Environ of(EnvironType type, int size, int resources, boolean starResources, int coupRating, List<BaseGameRaceType> races, BaseGameCreature creature, BaseGameSovereign sovereign)
 
 	// Uracas,12
-	Kalgar(BaseGameStarSystem.Uracas, BaseGameCapitalType.None, 
+	Kalgar(BaseGameStarSystem.Uracus, BaseGameCapitalType.None, 
 			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled,
 			BaseGameEnviron.subterranian(6)
 			   .resources(7)
@@ -66,7 +66,7 @@ public enum BaseGamePlanet {
 			   .races(BaseGameRaceType.Kayn, BaseGameRaceType.Saurian)
 			   .creature(BaseGameCreature.Crunge)
 			   .build()),
-	Bajukai(BaseGameStarSystem.Uracas, BaseGameCapitalType.None, BaseGameRaceType.Segunden, 
+	Bajukai(BaseGameStarSystem.Uracus, BaseGameCapitalType.None, BaseGameRaceType.Segunden, 
 			BaseGameLoyaltyType.Loyal, BaseGameLoyaltyType.Neutral, BaseGamePlanetaryControlType.ImperialControlled,
 			BaseGameEnviron.urban(3)
 			   .resources(8)

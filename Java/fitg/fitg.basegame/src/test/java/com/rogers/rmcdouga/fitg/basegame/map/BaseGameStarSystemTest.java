@@ -10,7 +10,7 @@ class BaseGameStarSystemTest {
 	void testGetProvince() {
 		assertAll(
 			()->assertEquals(BaseGameProvince.One, BaseGameStarSystem.Tardyn.getProvince()),
-			()->assertEquals(BaseGameProvince.One, BaseGameStarSystem.Uracas.getProvince()),
+			()->assertEquals(BaseGameProvince.One, BaseGameStarSystem.Uracus.getProvince()),
 			()->assertEquals(BaseGameProvince.One, BaseGameStarSystem.Zamorax.getProvince()),
 			()->assertEquals(BaseGameProvince.One, BaseGameStarSystem.Atriard.getProvince()),
 			()->assertEquals(BaseGameProvince.One, BaseGameStarSystem.Bex.getProvince()),
@@ -45,7 +45,7 @@ class BaseGameStarSystemTest {
 	void testGetId() {
 		assertAll(
 			()->assertEquals(11, BaseGameStarSystem.Tardyn.getId()),
-			()->assertEquals(12, BaseGameStarSystem.Uracas.getId()),
+			()->assertEquals(12, BaseGameStarSystem.Uracus.getId()),
 			()->assertEquals(13, BaseGameStarSystem.Zamorax.getId()),
 			()->assertEquals(14, BaseGameStarSystem.Atriard.getId()),
 			()->assertEquals(15, BaseGameStarSystem.Bex.getId()),
@@ -80,7 +80,7 @@ class BaseGameStarSystemTest {
 	void testGetPlanets() {
 		assertAll(
 			()->assertEquals(3, BaseGameStarSystem.Tardyn.getPlanets().size()),
-			()->assertEquals(2, BaseGameStarSystem.Uracas.getPlanets().size()),
+			()->assertEquals(2, BaseGameStarSystem.Uracus.getPlanets().size()),
 			()->assertEquals(1, BaseGameStarSystem.Zamorax.getPlanets().size()),
 			()->assertEquals(3, BaseGameStarSystem.Atriard.getPlanets().size()),
 			()->assertEquals(2, BaseGameStarSystem.Bex.getPlanets().size()),
