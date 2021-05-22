@@ -79,35 +79,35 @@ class BaseGameStarSystemTest {
 	@Test
 	void testGetPlanets() {
 		assertAll(
-			()->assertEquals(3, BaseGameStarSystem.Tardyn.getPlanets().size()),
-			()->assertEquals(2, BaseGameStarSystem.Uracus.getPlanets().size()),
-			()->assertEquals(1, BaseGameStarSystem.Zamorax.getPlanets().size()),
-			()->assertEquals(3, BaseGameStarSystem.Atriard.getPlanets().size()),
-			()->assertEquals(2, BaseGameStarSystem.Bex.getPlanets().size()),
-			()->assertEquals(3, BaseGameStarSystem.Osirius.getPlanets().size()),
+			()->assertEquals(3, BaseGameStarSystem.Tardyn.listPlanets().size()),
+			()->assertEquals(2, BaseGameStarSystem.Uracus.listPlanets().size()),
+			()->assertEquals(1, BaseGameStarSystem.Zamorax.listPlanets().size()),
+			()->assertEquals(3, BaseGameStarSystem.Atriard.listPlanets().size()),
+			()->assertEquals(2, BaseGameStarSystem.Bex.listPlanets().size()),
+			()->assertEquals(3, BaseGameStarSystem.Osirius.listPlanets().size()),
 		
-			()->assertEquals(2, BaseGameStarSystem.Phisaria.getPlanets().size()),
-			()->assertEquals(3, BaseGameStarSystem.Egrix.getPlanets().size()),
-			()->assertEquals(2, BaseGameStarSystem.Ancore.getPlanets().size()),
-			()->assertEquals(1, BaseGameStarSystem.Gellas.getPlanets().size()),
+			()->assertEquals(2, BaseGameStarSystem.Phisaria.listPlanets().size()),
+			()->assertEquals(3, BaseGameStarSystem.Egrix.listPlanets().size()),
+			()->assertEquals(2, BaseGameStarSystem.Ancore.listPlanets().size()),
+			()->assertEquals(1, BaseGameStarSystem.Gellas.listPlanets().size()),
 		
-			()->assertEquals(2, BaseGameStarSystem.Pycius.getPlanets().size()),
-			()->assertEquals(3, BaseGameStarSystem.Ribex.getPlanets().size()),
-			()->assertEquals(1, BaseGameStarSystem.Rorth.getPlanets().size()),
-			()->assertEquals(2, BaseGameStarSystem.Aziza.getPlanets().size()),
-			()->assertEquals(2, BaseGameStarSystem.Luine.getPlanets().size()),
+			()->assertEquals(2, BaseGameStarSystem.Pycius.listPlanets().size()),
+			()->assertEquals(3, BaseGameStarSystem.Ribex.listPlanets().size()),
+			()->assertEquals(1, BaseGameStarSystem.Rorth.listPlanets().size()),
+			()->assertEquals(2, BaseGameStarSystem.Aziza.listPlanets().size()),
+			()->assertEquals(2, BaseGameStarSystem.Luine.listPlanets().size()),
 		
-			()->assertEquals(2, BaseGameStarSystem.Erwind.getPlanets().size()),
-			()->assertEquals(1, BaseGameStarSystem.Wex.getPlanets().size()),
-			()->assertEquals(3, BaseGameStarSystem.Varu.getPlanets().size()),
-			()->assertEquals(2, BaseGameStarSystem.Deblon.getPlanets().size()),
-			()->assertEquals(1, BaseGameStarSystem.Martigna.getPlanets().size()),
+			()->assertEquals(2, BaseGameStarSystem.Erwind.listPlanets().size()),
+			()->assertEquals(1, BaseGameStarSystem.Wex.listPlanets().size()),
+			()->assertEquals(3, BaseGameStarSystem.Varu.listPlanets().size()),
+			()->assertEquals(2, BaseGameStarSystem.Deblon.listPlanets().size()),
+			()->assertEquals(1, BaseGameStarSystem.Martigna.listPlanets().size()),
 		
-			()->assertEquals(3, BaseGameStarSystem.Zakir.getPlanets().size()),
-			()->assertEquals(3, BaseGameStarSystem.Eudox.getPlanets().size()),
-			()->assertEquals(1, BaseGameStarSystem.Corusa.getPlanets().size()),
-			()->assertEquals(2, BaseGameStarSystem.Irajeba.getPlanets().size()),
-			()->assertEquals(1, BaseGameStarSystem.Moda.getPlanets().size())
+			()->assertEquals(3, BaseGameStarSystem.Zakir.listPlanets().size()),
+			()->assertEquals(3, BaseGameStarSystem.Eudox.listPlanets().size()),
+			()->assertEquals(1, BaseGameStarSystem.Corusa.listPlanets().size()),
+			()->assertEquals(2, BaseGameStarSystem.Irajeba.listPlanets().size()),
+			()->assertEquals(1, BaseGameStarSystem.Moda.listPlanets().size())
 			);
 	}
 }

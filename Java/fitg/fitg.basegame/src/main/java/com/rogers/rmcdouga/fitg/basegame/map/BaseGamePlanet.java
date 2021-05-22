@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.rogers.rmcdouga.fitg.basegame.BaseGameCreature;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameRaceType;
@@ -901,8 +904,13 @@ Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 	}
 
 	@Override
-	public List<BaseGameEnviron> getEnvirons() {
+	public List<BaseGameEnviron> listEnvirons() {
 		return environs;
+	}
+
+	@Override
+	public Stream<BaseGameEnviron> streamEnvirons() {
+		return environs.stream();
 	}
 
 	@Override
@@ -944,4 +952,25 @@ Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 	public boolean hasSecret() {
 		return hasSecret;
 	}
+	
+	private static final List<BaseGamePlanet> planetList = List.of(BaseGamePlanet.values());
+	
+	public static List<BaseGamePlanet> planets() {
+		return planetList;
+	}
+	
+	public static List<BaseGamePlanet> planets(Predicate<BaseGamePlanet> predicate) {
+		return BaseGamePlanet.stream()
+							 .filter(predicate)
+							 .collect(Collectors.toUnmodifiableList());
+	}
+	
+	public static Stream<BaseGamePlanet> stream() {
+		return Stream.of(BaseGamePlanet.values());
+	}
+
+	public static Stream<BaseGamePlanet> stream(Predicate<BaseGamePlanet> predicate) {
+		return BaseGamePlanet.stream().filter(predicate);
+	}
+
 }

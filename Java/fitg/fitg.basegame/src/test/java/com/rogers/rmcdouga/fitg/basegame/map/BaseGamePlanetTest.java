@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -51,7 +50,7 @@ class BaseGamePlanetTest {
 	void testAllHomeworldsMatchRace() {
 		Map<BaseGameRaceType, BaseGamePlanet> homeworlds = new EnumMap<>(BaseGameRaceType.class);
 //		Map<BaseGameRaceType, BaseGamePlanet> homeworlds = new HashMap<>();
-		Stream.of(BaseGamePlanet.values())									// Go through all planets
+		BaseGamePlanet.stream()
 			  .filter(p->p.getHomeworld().isPresent())						// Only keep homeworlds
 			  .forEach(p->addOnce(homeworlds, p.getHomeworld().get(), p));	// Add to the Map (just once)
 		Stream.of(BaseGameRaceType.values())
@@ -64,8 +63,8 @@ class BaseGamePlanetTest {
 	void testHasAllSovereigns() {
 		Set<BaseGameSovereign> allSovereigns = EnumSet.allOf(BaseGameSovereign.class);
 		Set<BaseGameSovereign> planetSovereigns = EnumSet.noneOf(BaseGameSovereign.class);
-		Stream.of(BaseGamePlanet.values())
-			  .flatMap(p->p.getEnvirons().stream())			// Get All Environs
+		BaseGamePlanet.stream()
+			  .flatMap(p->p.listEnvirons().stream())			// Get All Environs
 			  .flatMap(e->e.getSovereign().stream())		// Get Sovereigns (if any)
 			  .forEach(sov->addOnce(planetSovereigns, sov))	// Add them to planetSovereigns
 			  ;
@@ -76,8 +75,8 @@ class BaseGamePlanetTest {
 	void testHasAllCreatures() {
 		Set<BaseGameCreature> allCreatures = EnumSet.allOf(BaseGameCreature.class);
 		Set<BaseGameCreature> planetCreatures = EnumSet.noneOf(BaseGameCreature.class);
-		Stream.of(BaseGamePlanet.values())
-		  	  .flatMap(p->p.getEnvirons().stream())		// Get All Environs
+		BaseGamePlanet.stream()
+		  	  .flatMap(p->p.listEnvirons().stream())		// Get All Environs
 		  	  .flatMap(e->e.getCreature().stream())		// Get Creatures (if any)
 		  	  .forEach(c->addOnce(planetCreatures, c));	// Add them to planetCreatures
 		  	  ; 

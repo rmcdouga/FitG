@@ -3,8 +3,7 @@ package com.rogers.rmcdouga.fitg.basegame.map;
 import java.util.List;
 import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public enum BaseGameStarSystem implements StarSystem {
@@ -40,19 +39,12 @@ public enum BaseGameStarSystem implements StarSystem {
 	;
 	
 	private final BaseGameProvince province;
-	private final Supplier<List<BaseGamePlanet>> planets;
-	private final Supplier<List<BaseGameSpaceRoute>> spaceRoutes;
-
-	private BaseGameStarSystem(BaseGameProvince province, Supplier<List<BaseGamePlanet>> planets, Supplier<List<BaseGameSpaceRoute>> spaceRoutes) {
-		this.province = province;
-		this.planets = planets;
-		this.spaceRoutes = spaceRoutes;
-	}
+	private final Predicate<BaseGamePlanet> planetsPredicate = p->this.equals(p.getStarSystem());
+	private final Predicate<BaseGameSpaceRoute> spaceRoutesPredicate = r->this.equals(r.getTerminus1()) || this.equals(r.getTerminus2());
+	
 
 	private BaseGameStarSystem(BaseGameProvince province) {
 		this.province = province;
-		this.planets = this::listPlanets;
-		this.spaceRoutes = this::listSpaceRoutes;
 	}
 
 	@Override
@@ -83,24 +75,31 @@ public enum BaseGameStarSystem implements StarSystem {
 	}
 
 	@Override
-	public List<BaseGamePlanet> getPlanets() {
-		return planets.get();
+	public List<BaseGamePlanet> listPlanets() {
+		return BaseGamePlanet.planets(planetsPredicate);
 	}
 
 	@Override
-	public List<BaseGameSpaceRoute> getSpaceRoutes() {
-		return spaceRoutes.get();
+	public List<BaseGameSpaceRoute> listSpaceRoutes() {
+		return BaseGameSpaceRoute.spaceRoutes(spaceRoutesPredicate);
+	}
+
+	@Override
+	public Stream<BaseGamePlanet> streamPlanets() {
+		return BaseGamePlanet.stream().filter(planetsPredicate);
+	}
+
+	@Override
+	public Stream<BaseGameSpaceRoute> streamSpaceRoutes() {
+		return BaseGameSpaceRoute.stream().filter(spaceRoutesPredicate);
 	}
 	
-	private List<BaseGamePlanet> listPlanets() {
-		return Stream.of(BaseGamePlanet.values())
-					 .filter(p->this.equals(p.getStarSystem()))
-					 .collect(Collectors.toUnmodifiableList());
+	public static Stream<BaseGameStarSystem> stream() {
+		return Stream.of(BaseGameStarSystem.values());
 	}
-	
-	private List<BaseGameSpaceRoute> listSpaceRoutes() {
-		return Stream.of(BaseGameSpaceRoute.values())
-					 .filter(r->this.equals(r.getTerminus1()) || this.equals(r.getTerminus2()))
-					 .collect(Collectors.toUnmodifiableList());
+
+	public static Stream<BaseGameStarSystem> stream(Predicate<BaseGameStarSystem> predicate) {
+		return BaseGameStarSystem.stream().filter(predicate);
 	}
+
 }

@@ -1,5 +1,10 @@
 package com.rogers.rmcdouga.fitg.basegame.map;
 
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public enum BaseGameSpaceRoute implements SpaceRoute {
 	// Province 1 internal
 	R_11_12(BaseGameStarSystem.Tardyn, BaseGameStarSystem.Uracus, 1),
@@ -94,4 +99,21 @@ public enum BaseGameSpaceRoute implements SpaceRoute {
 	public int getNavigationStars() {
 		return navigationStars;
 	}
+	
+	private static final List<BaseGameSpaceRoute> spaceRouteList = List.of(BaseGameSpaceRoute.values());
+	
+	public static List<BaseGameSpaceRoute> spaceRoutes() {
+		return spaceRouteList;
+	}
+	
+	public static List<BaseGameSpaceRoute> spaceRoutes(Predicate<BaseGameSpaceRoute> predicate) {
+		return BaseGameSpaceRoute.stream()
+							 .filter(predicate)
+							 .collect(Collectors.toUnmodifiableList());
+	}
+	
+	public static Stream<BaseGameSpaceRoute> stream() {
+		return spaceRouteList.stream();
+	}
+
 }

@@ -31,11 +31,11 @@ class BaseGameProvinceTest {
 	@Test
 	void testGetStarSystems() {
 		assertAll(
-			()->assertEquals(6, BaseGameProvince.One.getStarSystems().size()),
-			()->assertEquals(4, BaseGameProvince.Two.getStarSystems().size()),
-			()->assertEquals(5, BaseGameProvince.Three.getStarSystems().size()),
-			()->assertEquals(5, BaseGameProvince.Four.getStarSystems().size()),
-			()->assertEquals(5, BaseGameProvince.Five.getStarSystems().size())
+			()->assertEquals(6, BaseGameProvince.One.listStarSystems().size()),
+			()->assertEquals(4, BaseGameProvince.Two.listStarSystems().size()),
+			()->assertEquals(5, BaseGameProvince.Three.listStarSystems().size()),
+			()->assertEquals(5, BaseGameProvince.Four.listStarSystems().size()),
+			()->assertEquals(5, BaseGameProvince.Five.listStarSystems().size())
 			);
 	}
 
