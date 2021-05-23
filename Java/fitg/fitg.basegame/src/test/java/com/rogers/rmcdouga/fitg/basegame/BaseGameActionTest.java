@@ -24,7 +24,7 @@ class BaseGameActionTest {
 
 	@Test
 	void testIsSuccessful_false() {
-		assertFalse(BaseGameAction.CARD_68.isSuccessful(BaseGameMission.ASSASSINATION, Action.EnvironType.URBAN), "Expected Mission to be successful.");
+		assertFalse(BaseGameAction.CARD_68.isSuccessful(BaseGameMission.ASSASINATION, Action.EnvironType.URBAN), "Expected Mission to be successful.");
 	}
 
 	@Test
@@ -47,7 +47,7 @@ class BaseGameActionTest {
 		assertEquals(2, missions.size(), "Expected only two missions for card 68.");
 		assertTrue(missions.contains(BaseGameMission.STEAL_ENEMY_RESOURCES), "Expected Card 68 missions to contain STEAL EMENY RESOURCES");
 		assertTrue(missions.contains(BaseGameMission.START_STOP_REBELLION), "Expected Card 68 missions to contain START_STOP_REBELLION");
-		assertFalse(missions.contains(BaseGameMission.ASSASSINATION), "Expected Card 68 missions to not contain ASSASSINATION");
+		assertFalse(missions.contains(BaseGameMission.ASSASINATION), "Expected Card 68 missions to not contain ASSASSINATION");
 	}
 	
 	@Test

@@ -34,8 +34,12 @@ class BaseGamePlanetTest {
 	}
 
 	@Test
-	void testAllRacesHaveHomeworld() {
-		Set<BaseGameRaceType> allRaces = EnumSet.allOf(BaseGameRaceType.class);
+	void testAllStarFaringRacesHaveHomeworld() {
+		Set<BaseGameRaceType> allStarFaringRaces = EnumSet.copyOf(
+				Stream.of(BaseGameRaceType.values())
+					  .filter(r->r.isStarFaring())
+					  .collect(Collectors.toSet())
+				);
 		Set<BaseGameRaceType> planetHomeworlds = EnumSet.noneOf(BaseGameRaceType.class);
 		Stream.of(BaseGamePlanet.values())						// Go through all planets
 			  .map(BaseGamePlanet::getHomeworld)				// Get optional homeworld
@@ -43,7 +47,7 @@ class BaseGamePlanetTest {
 			  .forEach(race->addOnce(planetHomeworlds, race))	// Add then to our set,
 			;
 		planetHomeworlds.add(BaseGameRaceType.Rhone);	// Rhone's have no homeworld, so we add it manually.
-		shouldContainAll(planetHomeworlds, allRaces);
+		shouldContainAll(planetHomeworlds, allStarFaringRaces);
 	}
 
 	@Test
@@ -54,6 +58,7 @@ class BaseGamePlanetTest {
 			  .filter(p->p.getHomeworld().isPresent())						// Only keep homeworlds
 			  .forEach(p->addOnce(homeworlds, p.getHomeworld().get(), p));	// Add to the Map (just once)
 		Stream.of(BaseGameRaceType.values())
+		  	  .filter(r->r.isStarFaring())									// Only include starfaring races.
 			  .filter(r->r.getHomePlanet().isPresent())						// Exclude Races that have no homeworld.
 			  .forEach(r->assertEquals(r.getHomePlanet().get(), homeworlds.get(r), "Homeworld doesn't match for race '" + r + "'."));
 		assertTrue(BaseGameRaceType.Rhone.getHomePlanet().isEmpty(), "Expected Rhone's to not have a homeworld.");

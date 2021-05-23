@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.rogers.rmcdouga.fitg.basegame.utils.MarkdownString;
 
@@ -41,7 +42,7 @@ public enum BaseGameMission implements Mission {
 	FREE_PRISONERS(59, 'F', "Free Prisoners", 
 			"May attempt to free Friendly captured characters in the same Environ.", 
 			"Every time that the mission letter comes up in the Action Deck, one captured character may be freed; place the captured character with the Mission Group.  If more that one character is currently captured, the Phasing Player takes the one of his choice from among the Enemy's prisoners (but only those in the same Environ)."),
-	ASSASSINATION(60, 'A', "Assassination", 
+	ASSASINATION(60, 'A', "Assasination", 
 			"May attempt to assassinate any one detected Enemy character in Environ.\r\n" + 
 			"May only be performed in an Environ occupied by at least one detected Enemy character (who must be named before drawing Action Cards).", 
 			"If the mission letter comes up in the Action Deck, the  named Enemy character is removed from play.  If it does not come up, roll the die.  On a roll of 4 or 5 all characters on the mission are captured; on a roll of 6, all characters on the mission are killed.\r\n" + 
@@ -168,7 +169,11 @@ public enum BaseGameMission implements Mission {
 		public Set<Mission> getMissionsFromMnemonics(Set<Character> mnemonics) {
 			EnumSet<BaseGameMission> result = EnumSet.noneOf(BaseGameMission.class);
 			// Look at all the mnemonic Characters and add any that have corresponding missions to result Collection.
-			mnemonics.stream().filter(Character::isLetter).map(this::getMissionEnumFromMnemonic).filter(Optional::isPresent).forEach(m->result.add(m.get()));
+			mnemonics.stream()
+					 .filter(Character::isLetter)
+					 .map(this::getMissionEnumFromMnemonic)
+					 .filter(Optional::isPresent)
+					 .forEach(m->result.add(m.get()));
 			return Collections.<Mission>unmodifiableSet(result);
 		}
 
@@ -190,5 +195,9 @@ public enum BaseGameMission implements Mission {
 		 return BaseGameMission.missionFactory;
 	 }
 	 
-	 
+	 public static Optional<BaseGameMission> fromMnemonic(char mnemonic) {
+		 return Stream.of(BaseGameMission.values())
+				 	  .filter(m->m.mnemonic == mnemonic)
+				 	  .findAny();
+	 }
 }

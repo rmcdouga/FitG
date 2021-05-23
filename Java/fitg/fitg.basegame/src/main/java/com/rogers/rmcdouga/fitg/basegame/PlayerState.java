@@ -1,7 +1,7 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
 public class PlayerState implements Player {
-	enum Faction { REBEL, IMPERIAL, NEUTRAL, ADMIN };
+	public enum Faction { REBEL, IMPERIAL, NEUTRAL, ADMIN };
 	
 	public final String name;
 	public final Faction faction;

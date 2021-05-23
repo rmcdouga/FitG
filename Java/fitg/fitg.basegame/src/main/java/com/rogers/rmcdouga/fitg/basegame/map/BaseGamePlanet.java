@@ -481,7 +481,7 @@ public enum BaseGamePlanet implements Planet {
 			   .build(),
 			BaseGameEnviron.wild(5)
 			   .resources(7)
-//			   .races(BaseGameRaceType.Leonids)	// Non-starfaring race
+			   .races(BaseGameRaceType.Leonid)	// Non-starfaring race
 			   .sovereign(BaseGameSovereign.Odel_Hobar)
 			   .build()),
 	//	Troliso,411,,2,2,Province,,Urban,6,8,TRUE,,Rhones,Sekekers,,,,,,,,,,,,,,,,
