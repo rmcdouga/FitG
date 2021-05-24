@@ -271,7 +271,7 @@ public enum BaseGamePlanet implements Planet {
 		   BaseGameEnviron.wild(3)
 			   .resources(5)
 			   .starResources()
-//			   .races(BaseGameRaceType.Charkhans)	// Non-start-faring race
+			   .races(BaseGameRaceType.Charkhan)	// Non-start-faring race
 			   .sovereign(BaseGameSovereign.Megda_Sheels)
 			   .build()),
 	// Quibron,221,,1,-2,,TRUE,Wild,4,6,TRUE,,Saurians,Snow Giants,,,,,,,,,,,,,,,,
@@ -307,7 +307,7 @@ public enum BaseGamePlanet implements Planet {
 			   .build(),
 		   BaseGameEnviron.wild(3)
 			   .resources(3)
-//			   .races(BaseGameRaceType.Ursi)	// Non-start-faring race
+			   .races(BaseGameRaceType.Ursi)	// Non-start-faring race
 			   .creature(BaseGameCreature.Batranoban)
 			   .build()),
 	// Pronox,231,,2,1,,,Urban,3,6,TRUE,,Rhones,Propangs,Ascaill (i),Air,3,5,TRUE,,,,,,,,,,,
@@ -341,7 +341,7 @@ public enum BaseGamePlanet implements Planet {
 			   .build(),
 			BaseGameEnviron.wild(4)
 			   .resources(1)
-//			   .races(BaseGameRaceType.Mowevs)	// Non-starfaring race
+			   .races(BaseGameRaceType.Mowev)	// Non-starfaring race
 			   .build()),
 	Tamset(BaseGameStarSystem.Pycius, BaseGameCapitalType.None, 
 			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Loyal, BaseGamePlanetaryControlType.ImperialControlled, true,
@@ -353,7 +353,7 @@ public enum BaseGamePlanet implements Planet {
 			   .build(),
 			BaseGameEnviron.wild(5)
 			   .resources(5)
-//			   .races(BaseGameRaceType.Kirts)	// Non-starfaring race
+//			   .races(BaseGameRaceType.Kirt)	// Non-starfaring race
 			   .creature(BaseGameCreature.Gregg)
 			   .sovereign(BaseGameSovereign.Shirofune)
 			   .build()),
@@ -374,13 +374,13 @@ public enum BaseGamePlanet implements Planet {
 			BaseGameEnviron.subterranian(3)
 			   .resources(5)
 			   .starResources()
-//			   .races(BaseGameRaceType.Calmas)	// Non-stardaring rage
+			   .races(BaseGameRaceType.Calma)	// Non-stardaring rage
 			   .creature(BaseGameCreature.Arags)
 			   .sovereign(BaseGameSovereign.Xela_Grebb)
 			   .build(),
 			BaseGameEnviron.wild(4)
 			   .resources(3)
-//			   .races(BaseGameRaceType.Moghas)	// Non-starfaring race
+//			   .races(BaseGameRaceType.Mogha)	// Non-starfaring race
 			   .creature(BaseGameCreature.Chantenes)
 			   .build()),
 	Tsipa(BaseGameStarSystem.Ribex, BaseGameCapitalType.None, 
@@ -400,7 +400,7 @@ public enum BaseGamePlanet implements Planet {
 	//	Tsipa,323,,2,1,,,Urban,5,8,TRUE,,Rhones,,,Wild,4,6,TRUE,,Rhones,Queemers,,,,,,,,
 
 	//	Rorth,33
-	Squanot(BaseGameStarSystem.Rorth, BaseGameCapitalType.None, 
+	Squamot(BaseGameStarSystem.Rorth, BaseGameCapitalType.None, 
 			BaseGameLoyaltyType.Neutral, BaseGameLoyaltyType.Unrest, BaseGamePlanetaryControlType.RebelControlled, true,
 			BaseGameEnviron.urban(4)
 			   .resources(7)
@@ -421,7 +421,7 @@ public enum BaseGamePlanet implements Planet {
 			   .build(),
 			BaseGameEnviron.wild(4)
 			   .resources(2)
-//			   .races(BaseGameRaceType.Deaxins) // Non-starfaring race
+//			   .races(BaseGameRaceType.Deaxin) // Non-starfaring race
 			   .creature(BaseGameCreature.Vrialta)
 			   .build()),
 	Akubera(BaseGameStarSystem.Aziza, BaseGameCapitalType.None, 
@@ -437,7 +437,7 @@ public enum BaseGamePlanet implements Planet {
 			   .build(),
 			BaseGameEnviron.subterranian(4)
 			   .resources(6)
-//			   .races(BaseGameRaceType.Rylians) // Non-starfaring race
+//			   .races(BaseGameRaceType.Rylian) // Non-starfaring race
 			   .creature(BaseGameCreature.Elilad)
 			   .build()),
 	//	Midest,341,,2,1,,TRUE,Water,3,3,,2,Suvans,Morna,,Wild,4,2,,,Deaxins,Vrialta,,,,,,,,
@@ -476,7 +476,7 @@ public enum BaseGamePlanet implements Planet {
 			BaseGameEnviron.liquid(5)
 			   .resources(7)
 			   .starResources()
-//			   .races(BaseGameRaceType.Phans)	// Non-starfaring race
+//			   .races(BaseGameRaceType.Phan)	// Non-starfaring race
 			   .creature(BaseGameCreature.Virus)
 			   .build(),
 			BaseGameEnviron.wild(5)
@@ -510,7 +510,7 @@ public enum BaseGamePlanet implements Planet {
 			BaseGameEnviron.liquid(6)
 			   .resources(10)
 			   .starResources()
-//			   .races(BaseGameRaceType.Henones)	// Non-starfaring race
+			   .races(BaseGameRaceType.Henone)	// Non-starfaring race
 			   .creature(BaseGameCreature.Snorkas)
 			   .build()),
 	Solvia(BaseGameStarSystem.Varu, BaseGameCapitalType.None, 
@@ -540,7 +540,7 @@ public enum BaseGamePlanet implements Planet {
 			BaseGameEnviron.wild(3)
 			   .resources(5)
 			   .starResources()
-//			   .races(BaseGameRaceType.Illeas)	// Non-starfaring race
+			   .races(BaseGameRaceType.Illias)	// Non-starfaring race
 			   .build()),
 	//	Horon,431,,2,0,,,Water,6,10,TRUE,,Henones,Snorkas ,,,,,,,,,,,,,,,,
 	//	Solvia,432,,1,1,,,Urban,4,7,,2,Susperans ,Telebots,,Subterranian ,3,3,,,Piorads,,,Wild,5,3,,,Thoks,Gadhars
@@ -552,7 +552,7 @@ public enum BaseGamePlanet implements Planet {
 			BaseGameEnviron.wild(3)
 			   .resources(7)
 			   .starResources()
-//			   .races(BaseGameRaceType.Thesnians)	// Non-starfaring race
+			   .races(BaseGameRaceType.Theshian)	// Non-starfaring race
 			   .creature(BaseGameCreature.Thunk)
 			   .sovereign(BaseGameSovereign.Yaldor)
 			   .build()),
@@ -593,7 +593,7 @@ public enum BaseGamePlanet implements Planet {
 			BaseGameLoyaltyType.Patriotic, BaseGameLoyaltyType.Neutral, BaseGamePlanetaryControlType.ImperialControlled, true,
 			BaseGameEnviron.wild(5)
 			   .resources(7)
-//			   .races(BaseGameRaceType.Ardorats)	// Non-starfaring race
+//			   .races(BaseGameRaceType.Ardorat)	// Non-starfaring race
 			   .creature(BaseGameCreature.Garb)
 			   .coupRating(1)
 			   .build()),
@@ -601,7 +601,7 @@ public enum BaseGamePlanet implements Planet {
 			BaseGameLoyaltyType.Loyal, BaseGameLoyaltyType.Dissent, BaseGamePlanetaryControlType.ImperialControlled,
 			BaseGameEnviron.urban(3)
 			   .resources(6)
-//			   .races(BaseGameRaceType.Orthotins)	// Non-starfaring race
+//			   .races(BaseGameRaceType.Orthotin)	// Non-starfaring race
 			   .build(),
 			BaseGameEnviron.fire(5)
 			   .resources(4)

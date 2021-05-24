@@ -78,6 +78,13 @@ public enum BaseGameRaceType implements RaceType {
 			stellar-sail spacecraft.\
 			"""),
 	Leonid("Leonid", false, ()->Optional.of(BaseGamePlanet.Heliax), ""),
+	Calma("Calma", false, ()->Optional.of(BaseGamePlanet.Suti), ""), 
+	Theshian("Theshian", false, ()->Optional.of(BaseGamePlanet.Rhexia), ""), 
+	Illias("Illias", false, ()->Optional.of(BaseGamePlanet.Cercis), ""), 
+	Henone("Henone", false, ()->Optional.of(BaseGamePlanet.Horon), ""), 
+	Ursi("Ursi", false, ()->Optional.of(BaseGamePlanet.Lysenda), ""), 
+	Mowev("Mowev", false, ()->Optional.of(BaseGamePlanet.Chim), ""), 
+	Charkhan("Charkhan", false, ()->Optional.of(BaseGamePlanet.Charkhan), ""),
 	;
 	
 	
