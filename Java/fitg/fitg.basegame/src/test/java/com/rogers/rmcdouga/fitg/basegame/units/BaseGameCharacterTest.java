@@ -9,8 +9,11 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import com.rogers.rmcdouga.fitg.basegame.BaseGameMission;
+import com.rogers.rmcdouga.fitg.basegame.BaseGameRaceType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 
 class BaseGameCharacterTest {
@@ -36,5 +39,18 @@ class BaseGameCharacterTest {
 		assertFalse(Jon_Kidu.isHomePlanet(BaseGamePlanet.Orlog));
 	}
 	
+	@ParameterizedTest
+	@EnumSource
+	void testDescriptions(BaseGameCharacter character) {
+		// Test for characters that might accidently be introduced in a raw string.
+		// None of these characters appear in the descriptions, so they are likely artifacts that were introduced
+		// by accident.
+		String description = character.description();
+		assertFalse(description.isBlank());
+		assertFalse(description.contains("\n"));
+		assertFalse(description.contains("\r"));
+//		assertFalse(description.contains("\""));
+		assertFalse(description.contains("+"));
+	}
 
 }

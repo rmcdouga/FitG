@@ -20,7 +20,7 @@ public interface Character {
 	public Faction allegience();
 	public int bonusDraws(Mission mission);
 	public boolean hasSpecialAbility(SpecialAbility specialAbility);
-	public String descriptions();
+	public String description();
 	
 	public enum SpecialAbility {
 		OWNS_THE_EXPLORER,					// owns Explorer spaceship

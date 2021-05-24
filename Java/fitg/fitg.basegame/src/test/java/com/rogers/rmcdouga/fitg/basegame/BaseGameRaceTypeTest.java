@@ -21,9 +21,11 @@ class BaseGameRaceTypeTest {
 		// Test for characters that might accidently be introduced in a raw string.
 		// None of these characters appear in the descriptions, so they are likely artifacts that were introduced
 		// by accident.
-		assertFalse(race.getDescription().contains("\n"));
-		assertFalse(race.getDescription().contains("\r"));
-		assertFalse(race.getDescription().contains("\""));
-		assertFalse(race.getDescription().contains("+"));
+		String description = race.getDescription();
+		assertFalse(race.isStarFaring() && description.isBlank());	// All star-faring races should have a description.
+		assertFalse(description.contains("\n"));
+		assertFalse(description.contains("\r"));
+		assertFalse(description.contains("\""));
+		assertFalse(description.contains("+"));
 	}
 }
