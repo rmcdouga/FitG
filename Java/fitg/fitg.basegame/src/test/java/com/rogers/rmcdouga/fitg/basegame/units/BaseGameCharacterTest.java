@@ -13,21 +13,21 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import com.rogers.rmcdouga.fitg.basegame.BaseGameMission;
-import com.rogers.rmcdouga.fitg.basegame.BaseGameRaceType;
+import com.rogers.rmcdouga.fitg.basegame.CardTestUtils;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 
 class BaseGameCharacterTest {
 
 	@Test
 	void testNumberOfCharacters() {
-		Set<Integer> expectedCardNumbers = IntStream.range(1, 32)
+		Set<Integer> expectedCardNumbers = IntStream.range(1, 33)
 													.mapToObj(Integer::valueOf)
 													.collect(Collectors.toSet());
 		Set<Integer> actualCardNumbers = Stream.of(BaseGameCharacter.values())
 												.map(c->c.cardNumber())
 												.collect(Collectors.toSet());
-		expectedCardNumbers.removeAll(actualCardNumbers);
-		assertEquals(0, expectedCardNumbers.size(), ()->("Missing card numbers (" + expectedCardNumbers.stream().map(i->Integer.toString(i)).collect(Collectors.joining(",")) + ")."));
+		
+		assertIterableEquals(expectedCardNumbers, actualCardNumbers, ()->CardTestUtils.reportDifferences(expectedCardNumbers, actualCardNumbers));
 	}
 	
 	@Test
