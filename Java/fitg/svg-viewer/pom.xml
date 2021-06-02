@@ -18,9 +18,14 @@
 		<!-- Spring dependency versions -->
 		<java.version>16</java.version>
 		<junit-jupiter.version>5.7.1</junit-jupiter.version>
-		
+
 		<!-- Local dependency versions -->
 		<jfree-svg.version>4.2</jfree-svg.version>
+		<jcabi-xml.version>0.21.5</jcabi-xml.version>
+		<javapoet.version>1.13.0</javapoet.version>
+
+		<!-- Other local prjects -->
+		<fitg.basegame.version>0.0.1-SNAPSHOT</fitg.basegame.version>
 	</properties>
 
 
@@ -38,6 +43,23 @@
 			<groupId>org.jfree</groupId>
 			<artifactId>org.jfree.svg</artifactId>
 			<version>${jfree-svg.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jcabi</groupId>
+			<artifactId>jcabi-xml</artifactId>
+			<version>${jcabi-xml.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup</groupId>
+			<artifactId>javapoet</artifactId>
+			<version>${javapoet.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.rogers.rmcdouga</groupId>
+			<artifactId>fitg.basegame</artifactId>
+			<version>${fitg.basegame.version}</version>
 		</dependency>
 	</dependencies>
 
