@@ -1,27 +1,26 @@
 package com.rogers.rmcdouga.fitg.svgviewer;
 
-import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
-import com.rogers.rmcdouga.fitg.basegame.map.BaseGameStarSystem;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import com.rogers.rmcdouga.fitg.basegame.map.BaseGameStarSystem;
+
 public enum StarSystem {
 	Tardyn(BaseGameStarSystem.Tardyn, 2887, 576), 
 	Uracus(BaseGameStarSystem.Uracus,  2386, 1155), 
-	Zamorax(BaseGameStarSystem.Zamorax, 2576, 1856), 
+	Zamorax(BaseGameStarSystem.Zamorax, 2579, 1855), 
 	Atriard(BaseGameStarSystem.Atriard, 3139, 1421),
 	Bex(BaseGameStarSystem.Bex, 1917, 1788), 
 	Osirius(BaseGameStarSystem.Osirius, 2860, 2381),
 	Phisaria(BaseGameStarSystem.Phisaria, 3842, 369), 
-	Egrix(BaseGameStarSystem.Egrix, 4532, 464),
+	Egrix(BaseGameStarSystem.Egrix, 4535, 464),
 	Ancore(BaseGameStarSystem.Ancore, 3995, 1102), 
 	Gellas(BaseGameStarSystem.Gellas, 4659, 1281),
 	Pycius(BaseGameStarSystem.Pycius, 3687, 2076), 
 	Ribex(BaseGameStarSystem.Ribex, 4532, 2069),
-	Rorth(BaseGameStarSystem.Rorth, 3267, 2959), 
+	Rorth(BaseGameStarSystem.Rorth, 3269, 2959), 
 	Aziza(BaseGameStarSystem.Aziza, 3892, 2823),
 	Luine(BaseGameStarSystem.Luine, 4635, 2853), 
 	Erwind(BaseGameStarSystem.Erwind, 1049, 1967),

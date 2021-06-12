@@ -20,7 +20,7 @@
 		<junit-jupiter.version>5.7.1</junit-jupiter.version>
 
 		<!-- Local dependency versions -->
-		<jfree-svg.version>4.2</jfree-svg.version>
+		<jfree-svg.version>4.1</jfree-svg.version>
 		<jcabi-xml.version>0.21.5</jcabi-xml.version>
 		<javapoet.version>1.13.0</javapoet.version>
 

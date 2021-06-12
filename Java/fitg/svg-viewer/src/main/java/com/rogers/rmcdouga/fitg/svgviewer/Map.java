@@ -13,8 +13,8 @@ import org.jfree.svg.SVGGraphics2D;
 
 public final class Map {
 	
-	private static final int MAP_WIDTH = 4986;	// in pixels
-	private static final int MAP_HEIGHT = 3216;	
+	public static final int MAP_WIDTH = 4986;	// in pixels
+	public static final int MAP_HEIGHT = 3216;	
 	private static final Path MAP_IMAGE_FILENAME = Paths.get("FITGMAP.jpg");
 	
 	public String draw() throws IOException {
