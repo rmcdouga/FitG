@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameStarSystem;
 
 public enum StarSystem {
-	Tardyn(BaseGameStarSystem.Tardyn, 2887, 576), 
+	Tardyn(BaseGameStarSystem.Tardyn, 2886, 576), 
 	Uracus(BaseGameStarSystem.Uracus,  2386, 1155), 
 	Zamorax(BaseGameStarSystem.Zamorax, 2579, 1855), 
 	Atriard(BaseGameStarSystem.Atriard, 3139, 1421),
@@ -28,11 +28,11 @@ public enum StarSystem {
 	Varu(BaseGameStarSystem.Varu, 976, 2747),
 	Deblon(BaseGameStarSystem.Deblon, 1928, 2852), 
 	Martigna(BaseGameStarSystem.Martigna, 2634, 2954),
-	Zakir(BaseGameStarSystem.Zakir, 903, 457),
+	Zakir(BaseGameStarSystem.Zakir, 900, 457),
 	Eudox(BaseGameStarSystem.Eudox, 1725, 458),
 	Corusa(BaseGameStarSystem.Corusa, 2506, 258),
 	Irajeba(BaseGameStarSystem.Irajeba, 995, 1247),
-	Moda(BaseGameStarSystem.Moda, 1598, 1145);
+	Moda(BaseGameStarSystem.Moda, 1593, 1145);
 
 	private final BaseGameStarSystem bgStarSystem;
 	private final int x;
