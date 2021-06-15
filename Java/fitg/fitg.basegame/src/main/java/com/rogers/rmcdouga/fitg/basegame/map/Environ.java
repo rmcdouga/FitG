@@ -8,7 +8,7 @@ import com.rogers.rmcdouga.fitg.basegame.BaseGameCreature;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameSovereign;
 import com.rogers.rmcdouga.fitg.basegame.RaceType;
 
-public interface Environ {
+public interface Environ extends Location {
 
 	/**
 	 * @return the type
@@ -50,4 +50,21 @@ public interface Environ {
 	 */
 	Optional<BaseGameSovereign> getSovereign();
 
+	/**
+	 * Information that is common across environs.
+	 *
+	 */
+	public interface EnvironType {
+
+		/**
+		 * Name of the EnvironType
+		 */
+		String getName();
+
+		/**
+		 * @return the isSpecial
+		 */
+		boolean isSpecial();
+
+	}
 }

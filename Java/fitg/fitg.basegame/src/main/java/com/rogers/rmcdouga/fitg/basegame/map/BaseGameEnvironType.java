@@ -1,6 +1,6 @@
 package com.rogers.rmcdouga.fitg.basegame.map;
 
-public enum BaseGameEnvironType implements EnvironType {
+public enum BaseGameEnvironType implements Environ.EnvironType {
 	Urban(false), Wild(false), Liquid(true), Subterranian(true), Air(true), Fire(true);
 	
 	private final boolean isSpecial;

@@ -11,4 +11,15 @@ public interface StarSystem {
 	public List<? extends SpaceRoute> listSpaceRoutes();
 	public Stream<? extends Planet> streamPlanets();
 	public Stream<? extends SpaceRoute> streamSpaceRoutes();
+	public Drift drift();
+	public Drift drift2();
+	
+	public interface Drift extends Location {
+		public enum DriftType {
+			Drift, Drift2;
+		}
+		public DriftType type();
+		public StarSystem starSystem();
+	}
+
 }

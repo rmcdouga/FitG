@@ -6,6 +6,8 @@ import java.util.Map;
 public class Game implements GameState {
 	private static final String ACTION_DECK_LABEL = "actionDeck";
 	private final ActionDeck actionDeck = new ActionDeck();
+	private final CounterLocations counterLocations = new CounterLocations();
+	private final CounterPool unitPool = BaseGameCounterPool.create();
 
 	/**
 	 * @return the actionDeck

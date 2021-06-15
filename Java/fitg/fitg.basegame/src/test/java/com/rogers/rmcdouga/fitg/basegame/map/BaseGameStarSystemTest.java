@@ -110,4 +110,17 @@ class BaseGameStarSystemTest {
 			()->assertEquals(1, BaseGameStarSystem.Moda.listPlanets().size())
 			);
 	}
+	
+	@Test
+	void testDrift() {
+		assertEquals(BaseGameStarSystem.Egrix, BaseGameStarSystem.Egrix.drift().starSystem());
+		assertEquals(StarSystem.Drift.DriftType.Drift, BaseGameStarSystem.Egrix.drift().type());
+	}
+
+	@Test
+	void testDrift2() {
+		assertEquals(BaseGameStarSystem.Osirius, BaseGameStarSystem.Osirius.drift2().starSystem());
+		assertEquals(StarSystem.Drift.DriftType.Drift2, BaseGameStarSystem.Osirius.drift2().type());
+	}
+
 }

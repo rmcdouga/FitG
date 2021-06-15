@@ -56,4 +56,7 @@ public enum RebelMilitaryUnit implements Unit {
 		return this.isMobile;
 	}
 
+	public int getNumUnits() {
+		return numUnits;
+	}
 }

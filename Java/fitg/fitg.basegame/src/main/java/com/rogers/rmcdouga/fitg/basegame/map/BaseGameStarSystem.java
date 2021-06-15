@@ -41,6 +41,8 @@ public enum BaseGameStarSystem implements StarSystem {
 	private final BaseGameProvince province;
 	private final Predicate<BaseGamePlanet> planetsPredicate = p->this.equals(p.getStarSystem());
 	private final Predicate<BaseGameSpaceRoute> spaceRoutesPredicate = r->this.equals(r.getTerminus1()) || this.equals(r.getTerminus2());
+	private final Drift drift = new DriftImpl(Drift.DriftType.Drift);
+	private final Drift drift2 = new DriftImpl(Drift.DriftType.Drift2);
 	
 
 	private BaseGameStarSystem(BaseGameProvince province) {
@@ -94,6 +96,16 @@ public enum BaseGameStarSystem implements StarSystem {
 		return BaseGameSpaceRoute.stream().filter(spaceRoutesPredicate);
 	}
 	
+	@Override
+	public Drift drift() {
+		return drift;
+	}
+
+	@Override
+	public Drift drift2() {
+		return drift2;
+	}
+
 	public static Stream<BaseGameStarSystem> stream() {
 		return Stream.of(BaseGameStarSystem.values());
 	}
@@ -101,5 +113,21 @@ public enum BaseGameStarSystem implements StarSystem {
 	public static Stream<BaseGameStarSystem> stream(Predicate<BaseGameStarSystem> predicate) {
 		return BaseGameStarSystem.stream().filter(predicate);
 	}
+	
+	private class DriftImpl implements Drift {
+		private final DriftType type;
 
+		private DriftImpl(DriftType type) {
+			this.type = type;
+		}
+
+		public DriftType type() {
+			return type;
+		}
+
+		@Override
+		public StarSystem starSystem() {
+			return BaseGameStarSystem.this;
+		}
+	}
 }
