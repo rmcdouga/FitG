@@ -37,4 +37,7 @@ public enum ImperialMilitaryUnit implements Unit {
 		return this.isMobile;
 	}
 
+	public int numUnits() {
+		return numUnits;
+	}
 }

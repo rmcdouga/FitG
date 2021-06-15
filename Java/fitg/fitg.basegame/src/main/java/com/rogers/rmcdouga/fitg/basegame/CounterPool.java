@@ -1,5 +1,7 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
+import java.util.Optional;
+
 import com.rogers.rmcdouga.fitg.basegame.units.Unit;
 
 /**
@@ -8,6 +10,6 @@ import com.rogers.rmcdouga.fitg.basegame.units.Unit;
  */
 public interface CounterPool {
 	
-	Unit getUnit(Unit unitType);
+	Optional<Unit> getUnit(Unit unitType);
 	CounterPool returnCounter(Unit unit);
 }
