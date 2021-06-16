@@ -46,7 +46,7 @@ public class BaseGameCounterPool implements CounterPool {
 	}
 
 	@Override
-	public Optional<Unit> getUnit(Unit unitType) {
+	public Optional<Unit> getCounter(Unit unitType) {
 		if (unitType instanceof ImperialMilitaryUnit impUnit) {
 			return imperialUnits.get(impUnit)
 								.stream()

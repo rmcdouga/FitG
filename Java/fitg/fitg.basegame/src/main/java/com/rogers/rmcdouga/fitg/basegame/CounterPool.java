@@ -10,6 +10,6 @@ import com.rogers.rmcdouga.fitg.basegame.units.Unit;
  */
 public interface CounterPool {
 	
-	Optional<Unit> getUnit(Unit unitType);
+	Optional<Unit> getCounter(Unit unitType);
 	CounterPool returnCounter(Unit unit);
 }

@@ -34,13 +34,13 @@ class BaseGameCounterPoolTest {
 	
 	@Test
 	void testGetUnit() {
-		Unit result = underTest.getUnit(ImperialMilitaryUnit.Line).get();
+		Unit result = underTest.getCounter(ImperialMilitaryUnit.Line).get();
 		assertNotNull(result);
 	}
 
 	@Test
 	void testReturnCounter() {
-		Unit first = underTest.getUnit(RebelMilitaryUnit.Fire_2_3).get();
+		Unit first = underTest.getCounter(RebelMilitaryUnit.Fire_2_3).get();
 		assertNotNull(first, "Should be able to get one Fire_2_3");
 		assertAll(
 				()->assertEquals(2, first.environCombatStrength()),
@@ -48,19 +48,19 @@ class BaseGameCounterPoolTest {
 				()->assertEquals(true, first.isMobile())
 				);
 		
-		Optional<Unit> second = underTest.getUnit(RebelMilitaryUnit.Fire_2_3);
+		Optional<Unit> second = underTest.getCounter(RebelMilitaryUnit.Fire_2_3);
 		assertTrue(second.isEmpty(), "Shouldn't be able to get two Fire_2_3s");
 		
 		CounterPool fluent = underTest.returnCounter(first);
 		assertEquals(underTest, fluent);	// fluent interface should return the underTest.
 
-		Unit firstAgain = underTest.getUnit(RebelMilitaryUnit.Fire_2_3).get();
+		Unit firstAgain = underTest.getCounter(RebelMilitaryUnit.Fire_2_3).get();
 		assertNotNull(firstAgain, "Should be able to get one Fire_2_3 again, after return");  
 	}
 
 	@Test
 	void testGetUnit_InvalidUnit() {
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()->underTest.getUnit(invalidUnit));
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()->underTest.getCounter(invalidUnit));
 		String msg = ex.getMessage();
 		assertNotNull(msg);
 		String expectedMessage = "Invalid unit type supplied";
