@@ -7,7 +7,7 @@ import com.rogers.rmcdouga.fitg.basegame.PlayerState.Faction;
 import com.rogers.rmcdouga.fitg.basegame.RaceType;
 import com.rogers.rmcdouga.fitg.basegame.map.Planet;
 
-public interface Character {
+public interface Character extends Counter {
 	public int combat();
 	public int endurance();
 	public int intelligence();

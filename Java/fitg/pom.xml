@@ -15,9 +15,11 @@
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 
 		<junit.version>5.7.1</junit.version>
+		<hamcrest.version>2.2</hamcrest.version>
 		<commmons.lang.version>3.9</commmons.lang.version>
 		<commons.io.version>2.7</commons.io.version>
 		<commonmark.version>0.13.0</commonmark.version>
+		<commons.collections4.version>4.4</commons.collections4.version>
 	</properties>
 
 	<dependencies>
@@ -25,6 +27,12 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+			<version>${hamcrest.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -45,6 +53,11 @@
 				<groupId>com.atlassian.commonmark</groupId>
 				<artifactId>commonmark</artifactId>
 				<version>${commonmark.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-collections4</artifactId>
+				<version>${commons.collections4.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
