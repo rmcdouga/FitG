@@ -11,6 +11,38 @@ public enum MilitaryCombatResultsTable {
 			}
 	}
 	
+	public static class Modifier {
+		public static final Modifier NO_SHIFT = new Modifier(0);
+		public static final Modifier SHIFT_LEFT = shiftLeftOf(1);
+		public static final Modifier SHIFT_RIGHT = shiftRightOf(1);
+			
+		private final int amount;
+
+		private Modifier(int amount) {
+			this.amount = amount;
+		}
+
+		public Modifier shiftLeft(int amount) {
+			return new Modifier(this.amount - amount);
+		}
+		public Modifier shiftRight(int amount) {
+			return new Modifier(this.amount + amount);
+		}
+		public Modifier shiftLeft() {
+			return this.shiftLeft(1);
+		}
+		public Modifier shiftRight() {
+			return this.shiftRight(1);
+		}
+		
+		public static Modifier shiftLeftOf(int amount) {
+			return new Modifier(-amount);
+		}
+		public static Modifier shiftRightOf(int amount) {
+			return new Modifier(amount);
+		}
+	}
+	
 	private static Results[][] resultsTable = {
 		// 1-6		1-5		 1-4	  1-3	   1-2		1-1		 2-1	   3-1	   	4-1		5-1		 6-1
 		{of(8,0), of(7,0), of(6,0), of(5,0), of(5,0), of(4,0), of(3,1), of(3,2), of(2,2), of(2,3), of(1,4)},	// 1
@@ -27,12 +59,20 @@ public enum MilitaryCombatResultsTable {
 	public static Results roll(int attackerStrength, int defenderStrength) {
 		return result(Dice.D6.roll(), attackerStrength, defenderStrength);
 	}
-	
 	static Results result(int dieRoll, int attackerStrength, int defenderStrength) {
+		return result(dieRoll, attackerStrength, defenderStrength, Modifier.NO_SHIFT);
+	}
+	
+	static Results result(int dieRoll, int attackerStrength, int defenderStrength, Modifier modifier) {
 		if (!(attackerStrength > 0 && defenderStrength > 0)) {
 			throw new IllegalArgumentException("AttackerStrength (" + attackerStrength + ") and DefenderStrength (" + defenderStrength + ") must both be > 0.");
 		}
-		return resultsTable[dieRoll - 1][determineRawColumn(attackerStrength, defenderStrength)];
+		return resultsTable[dieRoll - 1][determineColumn(attackerStrength, defenderStrength, modifier)];
+	}
+	
+	// Determine the raw column (before column shifts are applied.
+	static int determineColumn(int attackerStrength, int defenderStrength, Modifier modifier) {
+		return Math.max(Math.min(resultsTable[0].length - 1, determineRawColumn(attackerStrength, defenderStrength) + modifier.amount), 0);
 	}
 	
 	// Determine the raw column (before column shifts are applied.

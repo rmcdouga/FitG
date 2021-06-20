@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 
 import static com.rogers.rmcdouga.fitg.basegame.tables.MilitaryCombatResultsTableTest.Result.of;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -47,6 +46,42 @@ class MilitaryCombatResultsTableTest {
 		Results result = MilitaryCombatResultsTable.result(dieRoll, attStr, defStr);
 		assertNotNull(result);
 		Result expectedResult = expectedResults[dieRoll -1][expectedColumn < 1 ? 1 : (expectedColumn > 9 ? 9 : expectedColumn)];
+		assertTrue(expectedResult.equals(result), ()->"expected (" + expectedResult + ") but was (" + result + ").");
+	}
+
+	@ParameterizedTest
+	@MethodSource("generateArguments")
+	void testResultWithShiftLeft(int dieRoll, int attStr, int defStr, int expectedColumn) {
+		Results result = MilitaryCombatResultsTable.result(dieRoll, attStr, defStr, MilitaryCombatResultsTable.Modifier.SHIFT_LEFT);
+		assertNotNull(result);
+		Result expectedResult = expectedResults[dieRoll -1][expectedColumn < 1 ? 0 : (expectedColumn > 9 ? 8 : expectedColumn - 1)];
+		assertTrue(expectedResult.equals(result), ()->"expected (" + expectedResult + ") but was (" + result + ").");
+	}
+
+	@ParameterizedTest
+	@MethodSource("generateArguments")
+	void testResultShiftRight(int dieRoll, int attStr, int defStr, int expectedColumn) {
+		Results result = MilitaryCombatResultsTable.result(dieRoll, attStr, defStr, MilitaryCombatResultsTable.Modifier.SHIFT_RIGHT);
+		assertNotNull(result);
+		Result expectedResult = expectedResults[dieRoll -1][expectedColumn < 1 ? 2 : (expectedColumn > 9 ? 10 : expectedColumn + 1)];
+		assertTrue(expectedResult.equals(result), ()->"expected (" + expectedResult + ") but was (" + result + ").");
+	}
+
+	@ParameterizedTest
+	@MethodSource("generateArguments")
+	void testResultWithShiftLeft2(int dieRoll, int attStr, int defStr, int expectedColumn) {
+		Results result = MilitaryCombatResultsTable.result(dieRoll, attStr, defStr, MilitaryCombatResultsTable.Modifier.shiftLeftOf(2));
+		assertNotNull(result);
+		Result expectedResult = expectedResults[dieRoll -1][expectedColumn < 2 ? 0 : (expectedColumn > 9 ? 7 : expectedColumn - 2)];
+		assertTrue(expectedResult.equals(result), ()->"expected (" + expectedResult + ") but was (" + result + ").");
+	}
+
+	@ParameterizedTest
+	@MethodSource("generateArguments")
+	void testResultShiftRight2(int dieRoll, int attStr, int defStr, int expectedColumn) {
+		Results result = MilitaryCombatResultsTable.result(dieRoll, attStr, defStr, MilitaryCombatResultsTable.Modifier.shiftRightOf(2));
+		assertNotNull(result);
+		Result expectedResult = expectedResults[dieRoll -1][expectedColumn < 1 ? 3 : (expectedColumn > 8 ? 10 : expectedColumn + 2)];
 		assertTrue(expectedResult.equals(result), ()->"expected (" + expectedResult + ") but was (" + result + ").");
 	}
 
