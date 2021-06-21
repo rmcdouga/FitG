@@ -46,6 +46,21 @@ public enum SearchTable {
 
 	
 	/**
+	 * Makes a an appropriate roll for the Search table
+	 * 
+	 * We separate roll and result so that they can both be logged.  The typical code would look like:
+	 * 
+	 * 		int roll = SearchTable.roll();
+	 *      boolean result = SearchTable.result(roll, searchVale, hidingValue);
+	 *		log("search value was '" + searchVale + "', hiding value was '" + hidingValue + "',  rolled '" + roll + "' on search table and got found='" + result "'.");
+	 * 
+	 * @return value between 1 and 6
+	 */
+	public static int roll() {
+		return Dice.D6.roll();
+	}
+
+	/**
 	 * Rolls on the Search Table.
 	 * 
 	 * @param searchValue
@@ -53,10 +68,18 @@ public enum SearchTable {
 	 * @return result of search, true = found, false = not found 
 	 */
 	public static boolean roll(int searchValue, int hidingValue) {
-		return result(Dice.D6.roll(), searchValue, hidingValue);
+		return result(roll(), searchValue, hidingValue);
 	}
 	
-	static boolean result(int dieRoll, int searchValue, int hidingValue) {
+	/**
+	 * Lookup the result of a die roll on the search table.
+	 * 
+	 * @param dieRoll
+	 * @param searchValue
+	 * @param hidingValue
+	 * @return
+	 */
+	public static boolean result(int dieRoll, int searchValue, int hidingValue) {
 		if (searchValue < 1) return false;
 		int requiredNumber = hidingIndex(hidingValue).getRequiredNumber(searchValue);
 		return dieRoll <= requiredNumber;

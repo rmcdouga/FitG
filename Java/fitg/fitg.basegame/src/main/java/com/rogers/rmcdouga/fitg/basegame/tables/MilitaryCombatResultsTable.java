@@ -59,10 +59,41 @@ public enum MilitaryCombatResultsTable {
 	private static int MAX_COLUMN = MIDDLE_COLUMN + 4;
 	private static int MIN_COLUMN = MIDDLE_COLUMN - 4;
 
-	public static Results roll(int attackerStrength, int defenderStrength) {
-		return result(Dice.D6.roll(), attackerStrength, defenderStrength);
+	/**
+	 * Makes a an appropriate roll for the Military Combat Results table
+	 * 
+	 * We separate roll and result so that they can both be logged.  The typical code would look like:
+	 * 
+	 * 		int roll = MilitaryCombatResultsTable.roll();
+	 *      Results result = MilitaryCombatResultsTable.result(roll, attackerStrength, defenderStrength);
+	 *		log("attacker strength was '" + attackerStrength + "', defender strength was '" + defenderStrength + "',  rolled '" + roll + "' on military combat results table and got '" + result "'.");
+	 * 
+	 * @return value between 1 and 6
+	 */
+	public static int roll() {
+		return Dice.D6.roll();
 	}
-	static Results result(int dieRoll, int attackerStrength, int defenderStrength) {
+
+	/**
+	 * Generate a result from the Military Combat Results Table.
+	 * 
+	 * @param attackerStrength
+	 * @param defenderStrength
+	 * @return
+	 */
+	public static Results roll(int attackerStrength, int defenderStrength) {
+		return result(roll(), attackerStrength, defenderStrength);
+	}
+	
+	/**
+	 * Lookup the result of a die roll on the Military Combat Results table
+	 * 
+	 * @param dieRoll
+	 * @param attackerStrength
+	 * @param defenderStrength
+	 * @return
+	 */
+	public static Results result(int dieRoll, int attackerStrength, int defenderStrength) {
 		return result(dieRoll, attackerStrength, defenderStrength, Modifier.NO_SHIFT);
 	}
 	

@@ -60,17 +60,49 @@ public enum DetectionTable {
 		}
 	}
 	
+	/**
+	 * Makes a an appropriate roll for the Detection Table
+	 * 
+	 * We separate roll and result so that they can both be logged.  The typical code would look like:
+	 * 
+	 * 		int roll = DetectionTable.roll();
+	 *      Result result = DetectionTable.result(roll, evasionValue);
+	 *		log("evasion value was '" + evastionValue + "'rolled '" + roll + "' on detection table and got '" + result "'.");
+	 * 
+	 * @return value between 1 and 6
+	 */
+	public static int roll() {
+		return Dice.D6.roll();
+	}
+
+	/**
+	 * Generate a resilt from the detection table.
+	 * 
+	 * @param evasionValue
+	 * @return
+	 */
 	public static Result roll(int evasionValue) {
-		return result(Dice.D6.roll(), evasionValue);
+		return result(roll(), evasionValue);
 	}
 	
-	static Result result(int roll, int evasionValue) {
+	/**
+	 * Determine the result for a given roll on the Detection Table
+	 * 
+	 * @param roll  - Die roll between 1 and 6
+	 * @param evasionValue
+	 * @return
+	 */
+	public static Result result(int roll, int evasionValue) {
 		if (evasionValue < 0) {
 			throw new IllegalArgumentException("Evasion Value out of range (" + evasionValue + ").");
 		} else if (roll < 1 || roll > 6) {
 			throw new IllegalArgumentException("Die roll out of range (" + roll + ").");
 		}
-		DetectionTable column = switch(evasionValue) {
+		return determineColumn(evasionValue).result(roll);
+	}
+
+	private static DetectionTable determineColumn(int evasionValue) {
+		return switch(evasionValue) {
 		case 0  -> Column0;
 		case 1  -> Column1;
 		case 2  -> Column2;
@@ -80,7 +112,5 @@ public enum DetectionTable {
 		case 7,8  -> Column78;
 		default -> Column9_;
 		};
-				
-		return column.result(roll);
 	}
 }
