@@ -85,6 +85,16 @@ class MilitaryCombatResultsTableTest {
 		assertTrue(expectedResult.equals(result), ()->"expected (" + expectedResult + ") but was (" + result + ").");
 	}
 
+	@ParameterizedTest
+	@MethodSource("generateArguments")
+	void testResultCombine(int dieRoll, int attStr, int defStr, int expectedColumn) {
+		Results result = MilitaryCombatResultsTable.result(dieRoll, attStr, defStr, 
+						MilitaryCombatResultsTable.Modifier.shiftLeftOf(5).combine(MilitaryCombatResultsTable.Modifier.shiftRightOf(5)));
+		assertNotNull(result);
+		Result expectedResult = expectedResults[dieRoll -1][expectedColumn < 1 ? 1 : (expectedColumn > 9 ? 9 : expectedColumn)];
+		assertTrue(expectedResult.equals(result), ()->"expected (" + expectedResult + ") but was (" + result + ").");
+	}
+
 	static Stream<Arguments> generateArguments() {
 		List<Arguments> result = new ArrayList<>(expectedResults.length * 6);
 		for (int die = 1; die < 7; die++) {

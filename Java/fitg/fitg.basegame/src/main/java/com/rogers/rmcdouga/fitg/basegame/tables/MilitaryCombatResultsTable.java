@@ -34,7 +34,10 @@ public enum MilitaryCombatResultsTable {
 		public Modifier shiftRight() {
 			return this.shiftRight(1);
 		}
-		
+		public Modifier combine(Modifier modifier) {
+			return new Modifier(this.amount + modifier.amount);
+		}
+
 		public static Modifier shiftLeftOf(int amount) {
 			return new Modifier(-amount);
 		}
