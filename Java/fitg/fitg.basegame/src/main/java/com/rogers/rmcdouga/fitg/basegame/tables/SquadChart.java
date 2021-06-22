@@ -11,19 +11,51 @@ public enum SquadChart {
 	
 	public static record Squad(int combat, int endurance) {}
 	
+	public enum Modifier {
+		LEADER_PRESENT(2),
+		ELITE_PRESENT(2),
+		;
+		
+		private final int modifier;
+
+		private Modifier(int modifier) {
+			this.modifier = modifier;
+		}
+		
+		public int add(int strength) {
+			return strength + modifier;
+		}
+	}
+	
 	private final Squad squad;
 	
 	private SquadChart(Squad squad) {
 		this.squad = squad;
 	}
 
-
 	/**
 	 * Lookup the squad characteristics based on military strength
 	 * 
+	 * @param militaryStrength
+	 * @return
 	 */
 	public static Squad result(int militaryStrength) {
 		return determineRow(militaryStrength).squad;
+	}
+	
+	/**
+	 * Lookup the squad characteristics based on military strength
+	 * 
+	 * @param militaryStrength
+	 * @param modifiers
+	 * @return
+	 */
+	public static Squad result(int militaryStrength, Modifier... modifiers) {
+		int strength = militaryStrength;
+		for (Modifier modifier : modifiers) {
+			strength = modifier.add(strength);
+		}
+		return determineRow(strength).squad;
 	}
 	
 	private static SquadChart determineRow(int militaryStrength) {

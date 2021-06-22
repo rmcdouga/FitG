@@ -30,5 +30,16 @@ class SquadChartTest {
 				);
 	}
 
+	@ParameterizedTest
+	@CsvSource({"1, 3", "2, 3", "3, 3", "4, 4", "5, 4", "6, 4", "7, 4", "8, 5", "9, 5", "10, 5", "11, 5", "12, 5", "13, 5"})
+	void testResultWithModifiers(int militaryStrength, int resultIndex) {
+		Results expectedResult = expectedResults[resultIndex];
+		Squad result = SquadChart.result(militaryStrength, SquadChart.Modifier.LEADER_PRESENT, SquadChart.Modifier.ELITE_PRESENT);
+		assertAll(
+				()->assertEquals(expectedResult.combat, result.combat()),
+				()->assertEquals(expectedResult.endurance, result.endurance())
+				);
+	}
+
 	
 }
