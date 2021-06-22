@@ -2,6 +2,7 @@ package com.rogers.rmcdouga.fitg.basegame;
 
 import java.util.Optional;
 
+import com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnvironType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 
 public interface RaceType {
@@ -25,5 +26,10 @@ public interface RaceType {
 	 * @return the description
 	 */
 	Optional<String> getDescription();
+
+	/**
+	 * @return the environ type
+	 */
+	Optional<BaseGameEnvironType> getEnvironType();
 
 }

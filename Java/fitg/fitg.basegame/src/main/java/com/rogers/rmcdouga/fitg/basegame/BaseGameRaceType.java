@@ -85,10 +85,10 @@ public enum BaseGameRaceType implements RaceType {
 	
 	// Non-starfaring races
 	Anon("Anon", ()->Optional.of(Jura), Air),
-	Andorat("Andorat", ()->Optional.of(Liatris), Wild),
+	Ardorats("Ardorats", ()->Optional.of(Liatris), Wild),
 	Bork("Borks", ()->Optional.of(Bajukai), Wild),
 	Calma("Calma", ()->Optional.of(Suti), Subterranian), 
-	Charkhan("Charkhan", ()->Optional.of(BaseGamePlanet.Charkhan), Wild),
+	Charkhans("Charkhan", ()->Optional.of(BaseGamePlanet.Charkhan), Wild),
 	Cavalkus("Cavalkus", ()->Optional.of(Annell), Air),
 	Deaxins("Deaxins", ()->Optional.of(Midest), Wild),
 	Illias("Illias", ()->Optional.of(BaseGamePlanet.Cercis), Wild), 
@@ -98,7 +98,7 @@ public enum BaseGameRaceType implements RaceType {
 	Leonid("Leonid", ()->Optional.of(BaseGamePlanet.Heliax), Wild),
 	Moghas("Moghas", ()->Optional.of(Suti), Wild),
 	Mowev("Mowev", ()->Optional.of(BaseGamePlanet.Chim), Wild), 
-	Orbotins("Orbotins", ()->Optional.of(Xan), Urban),
+	Ornotins("Ornotins", ()->Optional.of(Xan), Urban),
 	Phans("Phans", ()->Optional.of(Heliax), Liquid),
 	Rylians("Rylians", ()->Optional.of(Akubera), Subterranian),
 	Susperans("Susperans", ()->Optional.of(Solvia), Urban),
@@ -192,4 +192,12 @@ public enum BaseGameRaceType implements RaceType {
 	public Optional<String> getDescription() {
 		return description;
 	}
+
+	/**
+	 * @return the environ type
+	 */
+	@Override
+	public Optional<BaseGameEnvironType> getEnvironType() {
+		return environType;
+	}	
 }

@@ -452,7 +452,7 @@ public enum BaseGameCharacter implements Card, Character {
 			.bonusDraw(SABOTAGE, 2)
 			.build()
 			),
-	Saytar(Builder.character(23, IMPERIAL, BaseGameRaceType.Charkhan)
+	Saytar(Builder.character(23, IMPERIAL, BaseGameRaceType.Charkhans)
 			.combat(4)
 			.endurance(4)
 			.intelligence(4)

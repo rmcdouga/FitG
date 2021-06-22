@@ -1,12 +1,12 @@
 package com.rogers.rmcdouga.fitg.basegame.tables;
 
 public enum SquadChart {
-	Row1(new Squad(4, 4)),
-	Row2(new Squad(6, 4)),
-	Row3(new Squad(8, 6)),
-	Row4(new Squad(10, 6)),
-	Row5(new Squad(12, 8)),
-	Row6(new Squad(14, 8)),
+	Row1(Squad.of(4, 4)),
+	Row2(Squad.of(6, 4)),
+	Row3(Squad.of(8, 6)),
+	Row4(Squad.of(10, 6)),
+	Row5(Squad.of(12, 8)),
+	Row6(Squad.of(14, 8)),
 	;
 	
 	public enum Modifier {
