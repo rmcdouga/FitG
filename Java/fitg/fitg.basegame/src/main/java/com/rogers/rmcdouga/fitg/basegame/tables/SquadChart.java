@@ -9,8 +9,6 @@ public enum SquadChart {
 	Row6(new Squad(14, 8)),
 	;
 	
-	public static record Squad(int combat, int endurance) {}
-	
 	public enum Modifier {
 		LEADER_PRESENT(2),
 		ELITE_PRESENT(2),

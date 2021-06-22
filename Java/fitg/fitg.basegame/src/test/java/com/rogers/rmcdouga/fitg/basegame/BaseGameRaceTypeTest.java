@@ -12,7 +12,7 @@ class BaseGameRaceTypeTest {
 	@Test
 	void testGetDescription() {
 //		System.out.println("{" + Yester.getDescription() + "}");
-		assertEquals("{This bird-like race thrives in the clouds and wind currents of any hydrogen-rich atmosphere. With their high intuitive intelligence and curious nature, they learned the secrets of spaceflight long ago from other races and have colonized the skies of many planets in their beautiful stellar-sail spacecraft.}", "{" + Yester.getDescription() + "}");
+		assertEquals("{This bird-like race thrives in the clouds and wind currents of any hydrogen-rich atmosphere. With their high intuitive intelligence and curious nature, they learned the secrets of spaceflight long ago from other races and have colonized the skies of many planets in their beautiful stellar-sail spacecraft.}", "{" + Yester.getDescription().get() + "}");
 	}
 
 	@ParameterizedTest
@@ -21,11 +21,13 @@ class BaseGameRaceTypeTest {
 		// Test for characters that might accidently be introduced in a raw string.
 		// None of these characters appear in the descriptions, so they are likely artifacts that were introduced
 		// by accident.
-		String description = race.getDescription();
-		assertFalse(race.isStarFaring() && description.isBlank());	// All star-faring races should have a description.
-		assertFalse(description.contains("\n"));
-		assertFalse(description.contains("\r"));
-		assertFalse(description.contains("\""));
-		assertFalse(description.contains("+"));
+		if (race.isStarFaring()) {
+			String description = race.getDescription().get();
+			assertFalse(race.isStarFaring() && description.isBlank());	// All star-faring races should have a description.
+			assertFalse(description.contains("\n"));
+			assertFalse(description.contains("\r"));
+			assertFalse(description.contains("\""));
+			assertFalse(description.contains("+"));
+		}
 	}
 }

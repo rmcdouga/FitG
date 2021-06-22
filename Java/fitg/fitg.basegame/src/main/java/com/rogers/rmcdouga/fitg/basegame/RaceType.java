@@ -24,6 +24,6 @@ public interface RaceType {
 	/**
 	 * @return the description
 	 */
-	String getDescription();
+	Optional<String> getDescription();
 
 }

@@ -1,12 +1,17 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
+import static com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnvironType.*;
+import static com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet.*;
+
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnvironType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 
 public enum BaseGameRaceType implements RaceType {
-	Kayn("Kayn", true, ()->Optional.of(BaseGamePlanet.Mimulus), 
+	// Star-faring Races
+	Kayn("Kayn", ()->Optional.of(Mimulus), 
 			"""
 			The Kayns are a humanoid race with dog-like facial features. Steeped in tradition, \
 			a Kayn will remain totally loyal to whomever or whatever he has been brought up to serve. \
@@ -15,7 +20,7 @@ public enum BaseGameRaceType implements RaceType {
 			freelance mercenaries or bodyguards for any person or cause that in-spires their devotion.\
 			"""
 			),
-	Piorad("Piorad", true, ()->Optional.of(BaseGamePlanet.Ayod), 
+	Piorad("Piorad", ()->Optional.of(Ayod), 
 			"""
 			Organized in a hierarchy of tribes, the Piorads have two seemingly opposing racial traits; \
 			they originated and still live for the most part in huge, artificial, underground halls, \
@@ -25,7 +30,7 @@ public enum BaseGameRaceType implements RaceType {
 			Piorad star-wanderers are among the galaxy's best spacecraft handlers and fighters.\
 			"""
 			),
-	Rhone("Rhone", true, ()->Optional.empty(), 
+	Rhone("Rhone", ()->Optional.empty(), 
 			"""
 			The race from which the founders of the Empire hailed, the Rhones are still the ruling race in the galaxy \
 			and the most numerous by far (it was not always thus). With records of mass colonization dating back far \
@@ -34,7 +39,7 @@ public enum BaseGameRaceType implements RaceType {
 			long before the Interstellar Concordance was formed.\
 			"""
 			),
-	Saurian("Saurian", true, ()->Optional.of(BaseGamePlanet.Unarpha), 
+	Saurian("Saurian", ()->Optional.of(Unarpha), 
 			"""
 			A reptilian race with humanoid bodies, the Saurians adapt easily to most planet conditions. \
 			Before the Empire increased the oppressive nature of its rule, the Saurians governed themselves \
@@ -42,7 +47,7 @@ public enum BaseGameRaceType implements RaceType {
 			Strong, stealthy, and intelligent, a Saurian soldier is a welcome addition to any army.\
 			"""
 			),
-	Segunden("Segunden", true, ()->Optional.of(BaseGamePlanet.Bajukai), 
+	Segunden("Segunden", ()->Optional.of(Bajukai), 
 			"""
 			The Segundens are a dark-skinned humanoid race possessing great intelligence. \
 			Never very interested in quick expansion and conquests, the Segundens have limited their influence \
@@ -53,7 +58,7 @@ public enum BaseGameRaceType implements RaceType {
 			in resources and lives would be even greater than that of peaceful submission.\
 			"""
 			),
-	Suvan("Suvan", true, ()->Optional.of(BaseGamePlanet.Mrane), 
+	Suvan("Suvan", ()->Optional.of(Mrane), 
 			"""
 			The Suvans are an amphibious race that thrive in mineral-rich water. \
 			They have developed sophisticated techniques for extracting everything imaginable from their life-giving liquid, \
@@ -62,7 +67,7 @@ public enum BaseGameRaceType implements RaceType {
 			many Suvans live in dry cities and towns near the water's edge, although they are much weaker physically out of water.\
 			"""
 			),
-	Xanthon("Xanthon", true, ()->Optional.of(BaseGamePlanet.Xan), 
+	Xanthon("Xanthon", ()->Optional.of(Xan), 
 			"""
 			The latest addition to the interstellar community are the Xanthons, a race possessing incredible \
 			strength and viciousness in hot environments. In temperate areas, Xanthons are weak and docile; \
@@ -70,21 +75,38 @@ public enum BaseGameRaceType implements RaceType {
 			have little of worth to surrender to the Empire and thus are little involved in galactic politics.\
 			"""
 			),
-	Yester("Yester", true, ()->Optional.of(BaseGamePlanet.Cieson), 
+	Yester("Yester", ()->Optional.of(Cieson), 
 			"""
 			This bird-like race thrives in the clouds and wind currents of any hydrogen-rich atmosphere. \
 			With their high intuitive intelligence and curious nature, they learned the secrets of spaceflight \
 			long ago from other races and have colonized the skies of many planets in their beautiful \
 			stellar-sail spacecraft.\
 			"""),
-	Leonid("Leonid", false, ()->Optional.of(BaseGamePlanet.Heliax), ""),
-	Calma("Calma", false, ()->Optional.of(BaseGamePlanet.Suti), ""), 
-	Theshian("Theshian", false, ()->Optional.of(BaseGamePlanet.Rhexia), ""), 
-	Illias("Illias", false, ()->Optional.of(BaseGamePlanet.Cercis), ""), 
-	Henone("Henone", false, ()->Optional.of(BaseGamePlanet.Horon), ""), 
-	Ursi("Ursi", false, ()->Optional.of(BaseGamePlanet.Lysenda), ""), 
-	Mowev("Mowev", false, ()->Optional.of(BaseGamePlanet.Chim), ""), 
-	Charkhan("Charkhan", false, ()->Optional.of(BaseGamePlanet.Charkhan), ""),
+	
+	// Non-starfaring races
+	Anon("Anon", ()->Optional.of(Jura), Air),
+	Andorat("Andorat", ()->Optional.of(Liatris), Wild),
+	Bork("Borks", ()->Optional.of(Bajukai), Wild),
+	Calma("Calma", ()->Optional.of(Suti), Subterranian), 
+	Charkhan("Charkhan", ()->Optional.of(BaseGamePlanet.Charkhan), Wild),
+	Cavalkus("Cavalkus", ()->Optional.of(Annell), Air),
+	Deaxins("Deaxins", ()->Optional.of(Midest), Wild),
+	Illias("Illias", ()->Optional.of(BaseGamePlanet.Cercis), Wild), 
+	Henone("Henone", ()->Optional.of(BaseGamePlanet.Horon), Liquid), 
+	Kirts("Kirts", ()->Optional.of(Tamset), Wild),
+	Jopers("Jopers", ()->Optional.of(Barak), Urban),
+	Leonid("Leonid", ()->Optional.of(BaseGamePlanet.Heliax), Wild),
+	Moghas("Moghas", ()->Optional.of(Suti), Wild),
+	Mowev("Mowev", ()->Optional.of(BaseGamePlanet.Chim), Wild), 
+	Orbotins("Orbotins", ()->Optional.of(Xan), Urban),
+	Phans("Phans", ()->Optional.of(Heliax), Liquid),
+	Rylians("Rylians", ()->Optional.of(Akubera), Subterranian),
+	Susperans("Susperans", ()->Optional.of(Solvia), Urban),
+	Theshian("Theshian", ()->Optional.of(BaseGamePlanet.Rhexia), Wild), 
+	Thoks("Thoks", ()->Optional.of(Solvia), Wild),
+	Ultraks("Ultraks", ()->Optional.of(Etreg), Urban),
+	Urgaks("Urgaks", ()->Optional.of(Fliad), Wild),
+	Ursi("Ursi", ()->Optional.of(BaseGamePlanet.Lysenda), Wild), 
 	;
 	
 	
@@ -120,13 +142,23 @@ public enum BaseGameRaceType implements RaceType {
 	private final String name;
 	private final boolean isStarFaring;
 	private final Supplier<Optional<BaseGamePlanet>> homePlanet;
-	private final String description;
+	private final Optional<String> description;
+	private final Optional<BaseGameEnvironType> environType;
 	
-	private BaseGameRaceType(String name, boolean isStarFaring, Supplier<Optional<BaseGamePlanet>> homePlanet, String description) {
+	private BaseGameRaceType(String name, Supplier<Optional<BaseGamePlanet>> homePlanet, BaseGameEnvironType environType) {
 		this.name = name;
-		this.isStarFaring = isStarFaring;
+		this.isStarFaring = false;
 		this.homePlanet = homePlanet;
-		this.description = description;
+		this.description = Optional.empty();
+		this.environType = Optional.of(environType);
+	}
+
+	private BaseGameRaceType(String name, Supplier<Optional<BaseGamePlanet>> homePlanet, String description) {
+		this.name = name;
+		this.isStarFaring = true;
+		this.homePlanet = homePlanet;
+		this.description = Optional.of(description);
+		this.environType = Optional.empty();
 	}
 
 	/**
@@ -157,7 +189,7 @@ public enum BaseGameRaceType implements RaceType {
 	 * @return the description
 	 */
 	@Override
-	public String getDescription() {
+	public Optional<String> getDescription() {
 		return description;
 	}
 }

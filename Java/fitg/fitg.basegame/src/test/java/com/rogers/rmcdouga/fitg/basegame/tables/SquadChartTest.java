@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import com.rogers.rmcdouga.fitg.basegame.tables.SquadChart.Squad;
-
 class SquadChartTest {
 	private static record Results(int combat, int endurance) {};
 	
