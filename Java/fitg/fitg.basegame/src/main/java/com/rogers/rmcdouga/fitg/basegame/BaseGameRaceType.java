@@ -2,12 +2,16 @@ package com.rogers.rmcdouga.fitg.basegame;
 
 import static com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnvironType.*;
 import static com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet.*;
+import static com.rogers.rmcdouga.fitg.basegame.tables.Squad.*;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnvironType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
+import com.rogers.rmcdouga.fitg.basegame.tables.Squad;
 
 public enum BaseGameRaceType implements RaceType {
 	// Star-faring Races
@@ -18,7 +22,8 @@ public enum BaseGameRaceType implements RaceType {
 			Their society is very military in structure and has provided the Empire with many of its best soldiers. \
 			Not all Kayns have been raised under the wing of the Empire, however, and many become \
 			freelance mercenaries or bodyguards for any person or cause that in-spires their devotion.\
-			"""
+			""",
+			Map.of(Wild, SQUAD_7_6, Subterranian, SQUAD_6_4)
 			),
 	Piorad("Piorad", ()->Optional.of(Ayod), 
 			"""
@@ -28,7 +33,8 @@ public enum BaseGameRaceType implements RaceType {
 			wandering from opportunity to opportunity. They are a wealthy race, loathe to share their riches \
 			with other races, yielding just enough to the Empire to avoid retaliation. \
 			Piorad star-wanderers are among the galaxy's best spacecraft handlers and fighters.\
-			"""
+			""",
+			Map.of(Urban, SQUAD_4_4, Subterranian, SQUAD_6_6)
 			),
 	Rhone("Rhone", ()->Optional.empty(), 
 			"""
@@ -37,7 +43,8 @@ public enum BaseGameRaceType implements RaceType {
 			before the founding of the current Imperial system, the Rhones' place of origin is not known; although \
 			many suggest that they came from a distant corner of the galaxy or another one altogether, \
 			long before the Interstellar Concordance was formed.\
-			"""
+			""",
+			Map.of(Urban, SQUAD_5_4, Wild, SQUAD_4_4, Subterranian, SQUAD_4_4)
 			),
 	Saurian("Saurian", ()->Optional.of(Unarpha), 
 			"""
@@ -45,7 +52,8 @@ public enum BaseGameRaceType implements RaceType {
 			Before the Empire increased the oppressive nature of its rule, the Saurians governed themselves \
 			with a strong parliamentary system that kept good order among their many colonized planets. \
 			Strong, stealthy, and intelligent, a Saurian soldier is a welcome addition to any army.\
-			"""
+			""",
+			Map.of(Urban, SQUAD_5_6, Wild, SQUAD_5_4, Subterranian, SQUAD_5_2, Liquid, SQUAD_5_2)
 			),
 	Segunden("Segunden", ()->Optional.of(Bajukai), 
 			"""
@@ -56,7 +64,8 @@ public enum BaseGameRaceType implements RaceType {
 			personal integrity and pride, having made the decision to meet the Empire's demands only after \
 			extensive calculations showed that, although they could defeat the Empire in open war, the cost \
 			in resources and lives would be even greater than that of peaceful submission.\
-			"""
+			""",
+			Map.of(Urban, SQUAD_6_4, Liquid, SQUAD_5_2)
 			),
 	Suvan("Suvan", ()->Optional.of(Mrane), 
 			"""
@@ -65,7 +74,8 @@ public enum BaseGameRaceType implements RaceType {
 			and, when not wandering through the oceans of the planets they inhabit, they live on wide pavilions \
 			constructed just beneath the water's surface. Somewhat adaptable to breathing outside of their natural habitat, \
 			many Suvans live in dry cities and towns near the water's edge, although they are much weaker physically out of water.\
-			"""
+			""",
+			Map.of(Urban, SQUAD_6_2, Liquid, SQUAD_7_4)
 			),
 	Xanthon("Xanthon", ()->Optional.of(Xan), 
 			"""
@@ -73,7 +83,8 @@ public enum BaseGameRaceType implements RaceType {
 			strength and viciousness in hot environments. In temperate areas, Xanthons are weak and docile; \
 			in cold areas, they cannot survive. Technologically behind the other star-faring races, the Xanthons \
 			have little of worth to surrender to the Empire and thus are little involved in galactic politics.\
-			"""
+			""",
+			Map.of(Fire, SQUAD_8_6)
 			),
 	Yester("Yester", ()->Optional.of(Cieson), 
 			"""
@@ -81,32 +92,34 @@ public enum BaseGameRaceType implements RaceType {
 			With their high intuitive intelligence and curious nature, they learned the secrets of spaceflight \
 			long ago from other races and have colonized the skies of many planets in their beautiful \
 			stellar-sail spacecraft.\
-			"""),
+			""",
+			Map.of(Urban, SQUAD_6_2, Air, SQUAD_6_4)
+			),
 	
 	// Non-starfaring races
-	Anon("Anon", ()->Optional.of(Jura), Air),
-	Ardorats("Ardorats", ()->Optional.of(Liatris), Wild),
-	Bork("Borks", ()->Optional.of(Bajukai), Wild),
-	Calma("Calma", ()->Optional.of(Suti), Subterranian), 
-	Charkhans("Charkhan", ()->Optional.of(BaseGamePlanet.Charkhan), Wild),
-	Cavalkus("Cavalkus", ()->Optional.of(Annell), Air),
-	Deaxins("Deaxins", ()->Optional.of(Midest), Wild),
-	Illias("Illias", ()->Optional.of(BaseGamePlanet.Cercis), Wild), 
-	Henone("Henone", ()->Optional.of(BaseGamePlanet.Horon), Liquid), 
-	Kirts("Kirts", ()->Optional.of(Tamset), Wild),
-	Jopers("Jopers", ()->Optional.of(Barak), Urban),
-	Leonid("Leonid", ()->Optional.of(BaseGamePlanet.Heliax), Wild),
-	Moghas("Moghas", ()->Optional.of(Suti), Wild),
-	Mowev("Mowev", ()->Optional.of(BaseGamePlanet.Chim), Wild), 
-	Ornotins("Ornotins", ()->Optional.of(Xan), Urban),
-	Phans("Phans", ()->Optional.of(Heliax), Liquid),
-	Rylians("Rylians", ()->Optional.of(Akubera), Subterranian),
-	Susperans("Susperans", ()->Optional.of(Solvia), Urban),
-	Theshian("Theshian", ()->Optional.of(BaseGamePlanet.Rhexia), Wild), 
-	Thoks("Thoks", ()->Optional.of(Solvia), Wild),
-	Ultraks("Ultraks", ()->Optional.of(Etreg), Urban),
-	Urgaks("Urgaks", ()->Optional.of(Fliad), Wild),
-	Ursi("Ursi", ()->Optional.of(BaseGamePlanet.Lysenda), Wild), 
+	Anon("Anon", ()->Optional.of(Jura), Air, SQUAD_4_2_HTH),
+	Ardorats("Ardorats", ()->Optional.of(Liatris), Wild, SQUAD_4_4),
+	Bork("Borks", ()->Optional.of(Bajukai), Wild, SQUAD_8_2),
+	Calma("Calma", ()->Optional.of(Suti), Subterranian, SQUAD_5_4), 
+	Charkhans("Charkhan", ()->Optional.of(BaseGamePlanet.Charkhan), Wild, SQUAD_5_4),
+	Cavalkus("Cavalkus", ()->Optional.of(Annell), Air, SQUAD_4_3_HTH),
+	Deaxins("Deaxins", ()->Optional.of(Midest), Wild, SQUAD_5_5_HTH),
+	Illias("Illias", ()->Optional.of(BaseGamePlanet.Cercis), Wild, SQUAD_4_4), 
+	Henone("Henone", ()->Optional.of(BaseGamePlanet.Horon), Liquid, SQUAD_6_6), 
+	Kirts("Kirts", ()->Optional.of(Tamset), Wild, SQUAD_5_4),
+	Jopers("Jopers", ()->Optional.of(Barak), Urban, SQUAD_6_2),
+	Leonid("Leonid", ()->Optional.of(BaseGamePlanet.Heliax), Wild, SQUAD_6_4),
+	Moghas("Moghas", ()->Optional.of(Suti), Wild, SQUAD_7_3_HTH),
+	Mowev("Mowev", ()->Optional.of(BaseGamePlanet.Chim), Wild, SQUAD_4_4_HTH), 
+	Ornotins("Ornotins", ()->Optional.of(Xan), Urban, SQUAD_6_4),
+	Phans("Phans", ()->Optional.of(Heliax), Liquid, SQUAD_4_4),
+	Rylians("Rylians", ()->Optional.of(Akubera), Subterranian, SQUAD_8_2_HTH),
+	Susperans("Susperans", ()->Optional.of(Solvia), Urban, SQUAD_4_4),
+	Theshian("Theshian", ()->Optional.of(BaseGamePlanet.Rhexia), Wild, SQUAD_4_2), 
+	Thoks("Thoks", ()->Optional.of(Solvia), Wild, SQUAD_6_5_HTH),
+	Ultraks("Ultraks", ()->Optional.of(Etreg), Urban, SQUAD_4_4),
+	Urgaks("Urgaks", ()->Optional.of(Fliad), Wild, SQUAD_6_4),
+	Ursi("Ursi", ()->Optional.of(BaseGamePlanet.Lysenda), Wild, SQUAD_7_6_HTH), 
 	;
 	
 	
@@ -144,21 +157,26 @@ public enum BaseGameRaceType implements RaceType {
 	private final Supplier<Optional<BaseGamePlanet>> homePlanet;
 	private final Optional<String> description;
 	private final Optional<BaseGameEnvironType> environType;
-	
-	private BaseGameRaceType(String name, Supplier<Optional<BaseGamePlanet>> homePlanet, BaseGameEnvironType environType) {
+	private final Map<BaseGameEnvironType, Squad> squads;
+
+	// Constructor for non-starfaring races
+	private BaseGameRaceType(String name, Supplier<Optional<BaseGamePlanet>> homePlanet, BaseGameEnvironType environType, Squad squad) {
 		this.name = name;
 		this.isStarFaring = false;
 		this.homePlanet = homePlanet;
 		this.description = Optional.empty();
 		this.environType = Optional.of(environType);
+		this.squads = Map.of(environType, squad);	// Build in Map is fine because it has special implementation.
 	}
 
-	private BaseGameRaceType(String name, Supplier<Optional<BaseGamePlanet>> homePlanet, String description) {
+	// Constructor for starfaring races
+	private BaseGameRaceType(String name, Supplier<Optional<BaseGamePlanet>> homePlanet, String description, Map<BaseGameEnvironType, Squad> squads) {
 		this.name = name;
 		this.isStarFaring = true;
 		this.homePlanet = homePlanet;
 		this.description = Optional.of(description);
 		this.environType = Optional.empty();
+		this.squads = new EnumMap<>(squads);	// Use an enumMap because it is efficient.
 	}
 
 	/**
@@ -199,5 +217,14 @@ public enum BaseGameRaceType implements RaceType {
 	@Override
 	public Optional<BaseGameEnvironType> getEnvironType() {
 		return environType;
-	}	
+	}
+	
+	/**
+	 * @param environ
+	 * @return the Squad type associated with this race and environ
+	 */
+	@Override
+	public Optional<Squad> getSquad(BaseGameEnvironType environ) {
+		return Optional.ofNullable(squads.get(environ));
+	}
 }

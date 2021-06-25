@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnvironType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
+import com.rogers.rmcdouga.fitg.basegame.tables.Squad;
 
 public interface RaceType {
 
@@ -32,4 +33,9 @@ public interface RaceType {
 	 */
 	Optional<BaseGameEnvironType> getEnvironType();
 
+	/**
+	 * @param environ
+	 * @return the Squad type associated with this race and environ (if any)
+	 */
+	Optional<Squad> getSquad(BaseGameEnvironType environ);
 }
