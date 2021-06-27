@@ -53,4 +53,4 @@ class SearchTableTest {
 		}
 		return result.stream();
 	}
-	}
+}
