@@ -91,9 +91,9 @@ class CharacterCombatResultsTableTest {
 	}
 	
 	static Stream<Arguments> generateCombatArguments() {
-		return IntStream.range(-8, 13)
+		return IntStream.range(-8, 13)						// combatDifferential values (-8 to 12) 
 					    .boxed()
-					    .flatMap(cd->IntStream.range(1, 7)
+					    .flatMap(cd->IntStream.range(1, 7)	// die roll values (1 to 6)
 					    					  .mapToObj(r->Arguments.arguments(cd, r))
 					    		)
 				;
