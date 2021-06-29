@@ -6,4 +6,8 @@ public interface Spaceship extends Possession {
 	public int shields();
 	public int maneuver();
 	public int maxPassengers();
+	
+	public default boolean overLimit(int numChars) {
+		return numChars > maxPassengers();
+	}
 }

@@ -13,7 +13,7 @@ import com.rogers.rmcdouga.fitg.basegame.units.Counter;
  * This is a data structure that maintains the locations of counters on the map
  *
  */
-public class CounterLocations {
+public class CounterLocations implements GameState {
 	
 	private HashSetValuedHashMap<Location, Counter> locationMap = new HashSetValuedHashMap<>();
 	private Map<Counter, Location> counterMap = new HashMap<>();
@@ -91,5 +91,17 @@ public class CounterLocations {
 			throw new IllegalStateException("Couldn't find counter's location (" + counter + "/" + counterLocation + ").");
 		}
 		return this;
+	}
+
+	@Override
+	public Map<String, Object> getState() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Not implemented yet.");
+	}
+
+	@Override
+	public void setState(Map<String, Object> state) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Not implemented yet.");
 	}
 }

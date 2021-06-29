@@ -1,13 +1,26 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
+import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 
 public class Game implements GameState {
 	private static final String ACTION_DECK_LABEL = "actionDeck";
 	private final ActionDeck actionDeck = new ActionDeck();
 	private final CounterLocations counterLocations = new CounterLocations();
 	private final CounterPool unitPool = BaseGameCounterPool.create();
+	
+	private final Scenario scenario;
+	private final Collection<StarSystem> map;
+	
+	private Game(Scenario scenario) {
+		this.scenario = scenario;
+		this.map = scenario.createMap();
+		scenario.setupCounters(counterLocations, unitPool);
+	}
 
 	/**
 	 * @return the actionDeck
@@ -31,5 +44,10 @@ public class Game implements GameState {
 		actionDeck.setState(actionDeckState);
 	}
 
+	public static Game createGame(Scenario scenario) {
+		Game game = new Game(scenario);
+		
+		return game;
+	}
 	
 }

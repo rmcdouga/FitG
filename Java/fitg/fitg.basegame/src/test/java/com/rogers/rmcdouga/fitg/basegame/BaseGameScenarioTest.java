@@ -4,11 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class ScenarioTest {
+class BaseGameScenarioTest {
 
 	@Test
 	void testCreateFlightToEgrixGame() {
-		assertNotNull(Scenario.FlightToEgrix.createGame());
+		Game game = Game.createGame(BaseGameScenario.FlightToEgrix);
+		assertNotNull(game);
 	}
 
 }
