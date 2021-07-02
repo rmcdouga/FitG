@@ -7,6 +7,8 @@ import static com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,11 +16,15 @@ import org.junit.jupiter.api.Test;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnviron;
 import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
+import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
+import com.rogers.rmcdouga.fitg.basegame.units.StackManager.Stack;
 
 class CounterLocationsTest {
 
-	private CounterLocations underTest = new CounterLocations();
-	private final List<Counter> counters = List.of(Adam_Starlight, Agan_Rafa);
+	private final StackManager stackMgr = new StackManager();
+	private CounterLocations underTest = new CounterLocations(stackMgr);
+	private final Stack stack = stackMgr.of(Doctor_Sontag, Drakir_Grebb);
+	private final List<Counter> counters = List.of(Adam_Starlight, Agan_Rafa, stack);
 	private final BaseGameEnviron location = Adare.listEnvirons().get(0);
 	
 	@BeforeEach
@@ -39,11 +45,26 @@ class CounterLocationsTest {
 	}
 
 	@Test
-	void testLocation() {
-		Location result = underTest.location(Agan_Rafa);
+	void testLocation_present() {
+		Optional<Location> result = underTest.location(Agan_Rafa);
 		
-		assertNotNull(result);
-		assertEquals(location, result);
+		assertTrue(result.isPresent());
+		assertEquals(location, result.get());
+	}
+
+	@Test
+	void testLocation_notPresent() {
+		Optional<Location> result = underTest.location(Professor_Mareg);
+		
+		assertTrue(result.isEmpty());
+	}
+
+	@Test
+	void testLocation_presentInStack() {
+		Optional<Location> result = underTest.location(Doctor_Sontag);
+		
+		assertTrue(result.isPresent());
+		assertEquals(location, result.get());
 	}
 
 	@Test
@@ -52,8 +73,24 @@ class CounterLocationsTest {
 		
 		CounterLocations result = underTest.move(Agan_Rafa, newLocation);
 		assertNotNull(result);
-		assertIterableEquals(List.of(Adam_Starlight), underTest.countersAt(location));
-		assertIterableEquals(List.of(Agan_Rafa), underTest.countersAt(newLocation));
+		assertAll(
+				()->assertEquals(Set.of(Adam_Starlight, stack), Set.of(underTest.countersAt(location).toArray())),
+				()->assertIterableEquals(List.of(Agan_Rafa), underTest.countersAt(newLocation))
+				);
+	}
+	
+	@Test
+	void testMove_stack() {
+		Location newLocation = Adare.listEnvirons().get(1);
+		
+		CounterLocations result = underTest.move(stack, newLocation);
+		assertNotNull(result);
+		assertAll(
+				()->assertIterableEquals(List.of(Adam_Starlight, Agan_Rafa), underTest.countersAt(location)),
+				()->assertIterableEquals(List.of(stack), underTest.countersAt(newLocation)),
+				()->assertEquals(newLocation, underTest.location(stack).get()),
+				()->assertEquals(newLocation, underTest.location(Drakir_Grebb).get())
+				);
 	}
 	
 	@Test
@@ -69,7 +106,23 @@ class CounterLocationsTest {
 				);
 		
 	}
+
+	@Test
+	void testRemove_stack() {
+		CounterLocations result = underTest.remove(stack);
+		assertNotNull(result);
+		
+		Collection<Counter> counterLeft = result.countersAt(location);
+		assertAll(
+				()->assertEquals(counters.size() - 1,counterLeft.size()),
+				()->assertTrue(counterLeft.contains(Agan_Rafa)),
+				()->assertFalse(counterLeft.contains(stack)),
+				()->assertFalse(counterLeft.contains(Doctor_Sontag))
+				);
+		
+	}
 	
+
 	@Test
 	void testDuplicateAdd() {
 		UnsupportedOperationException ex = assertThrows(UnsupportedOperationException.class, ()->underTest.add(Adam_Starlight, Adare.environ(0)));

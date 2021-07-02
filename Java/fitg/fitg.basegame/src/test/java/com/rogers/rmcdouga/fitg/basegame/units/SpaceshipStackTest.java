@@ -11,12 +11,16 @@ import static org.hamcrest.Matchers.*;
 
 import org.junit.jupiter.api.Test;
 
+import com.rogers.rmcdouga.fitg.basegame.units.StackManager.SpaceshipStack;
+
 class SpaceshipStackTest {
 
 	private static final BaseGameSpaceship TEST_SHIP = Stellar_Courier;
 	private static final int TEST_SHIP_CAPACITY = TEST_SHIP.maxPassengers();
-	
-	SpaceshipStack underTest = SpaceshipStack.of(TEST_SHIP, Adam_Starlight, Agan_Rafa, Barca, Boccanegra);
+
+	private final StackManager stackMgr= new StackManager();
+
+	SpaceshipStack underTest = stackMgr.of(TEST_SHIP, Adam_Starlight, Agan_Rafa, Barca, Boccanegra);
 
 //	@Test
 //	void testOfSpaceshipCounterArray() {
@@ -25,7 +29,7 @@ class SpaceshipStackTest {
 
 	@Test
 	void testOfSpaceshipCounterArray_TooManyChars() {
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,  ()->SpaceshipStack.of(TEST_SHIP, Adam_Starlight, Agan_Rafa, Barca, Boccanegra, Drakir_Grebb));
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,  ()->stackMgr.of(TEST_SHIP, Adam_Starlight, Agan_Rafa, Barca, Boccanegra, Drakir_Grebb));
 		String msg = ex.getMessage();
 		assertNotNull(msg);
 		assertThat(msg, allOf(containsString("5"), containsString("4"), containsString("Stellar_Courier")));

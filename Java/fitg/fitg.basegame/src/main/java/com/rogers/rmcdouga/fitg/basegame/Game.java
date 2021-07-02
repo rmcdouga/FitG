@@ -3,23 +3,24 @@ package com.rogers.rmcdouga.fitg.basegame;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
+import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 
 public class Game implements GameState {
 	private static final String ACTION_DECK_LABEL = "actionDeck";
 	private final ActionDeck actionDeck = new ActionDeck();
-	private final CounterLocations counterLocations = new CounterLocations();
+	private final StackManager stackMgr = new StackManager();
+	private final CounterLocations counterLocations = new CounterLocations(stackMgr);
 	private final CounterPool unitPool = BaseGameCounterPool.create();
 	
 	private final Scenario scenario;
 	private final Collection<StarSystem> map;
 	
-	private Game(Scenario scenario) {
+	private Game(Scenario scenario, Scenario.PlayerDecisions rebelDecisions, Scenario.PlayerDecisions imperialDecisions) {
 		this.scenario = scenario;
 		this.map = scenario.createMap();
-		scenario.setupCounters(counterLocations, unitPool);
+		scenario.setupCounters(counterLocations, unitPool, stackMgr, rebelDecisions, imperialDecisions);
 	}
 
 	/**
@@ -44,8 +45,8 @@ public class Game implements GameState {
 		actionDeck.setState(actionDeckState);
 	}
 
-	public static Game createGame(Scenario scenario) {
-		Game game = new Game(scenario);
+	public static Game createGame(Scenario scenario, Scenario.PlayerDecisions rebelDecisions, Scenario.PlayerDecisions imperialDecisions) {
+		Game game = new Game(scenario, rebelDecisions, imperialDecisions);
 		
 		return game;
 	}
