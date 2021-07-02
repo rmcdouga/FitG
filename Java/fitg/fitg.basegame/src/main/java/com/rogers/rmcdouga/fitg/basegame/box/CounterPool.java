@@ -1,4 +1,4 @@
-package com.rogers.rmcdouga.fitg.basegame;
+package com.rogers.rmcdouga.fitg.basegame.box;
 
 import java.util.Optional;
 

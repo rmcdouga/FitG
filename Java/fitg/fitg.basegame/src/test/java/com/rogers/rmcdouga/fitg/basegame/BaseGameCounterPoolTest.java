@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
+import com.rogers.rmcdouga.fitg.basegame.box.BaseGameBox;
+import com.rogers.rmcdouga.fitg.basegame.box.CounterPool;
 import com.rogers.rmcdouga.fitg.basegame.units.ImperialMilitaryUnit;
 import com.rogers.rmcdouga.fitg.basegame.units.RebelMilitaryUnit;
 import com.rogers.rmcdouga.fitg.basegame.units.Unit;
@@ -30,7 +32,7 @@ class BaseGameCounterPoolTest {
 		}
 	};
 
-	private CounterPool underTest = BaseGameCounterPool.create();
+	private CounterPool underTest = BaseGameBox.create();
 	
 	@Test
 	void testGetUnit() {

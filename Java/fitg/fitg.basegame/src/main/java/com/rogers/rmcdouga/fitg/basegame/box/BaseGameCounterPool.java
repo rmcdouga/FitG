@@ -1,4 +1,4 @@
-package com.rogers.rmcdouga.fitg.basegame;
+package com.rogers.rmcdouga.fitg.basegame.box;
 
 import static java.util.function.Predicate.not;
 
@@ -12,7 +12,7 @@ import com.rogers.rmcdouga.fitg.basegame.units.ImperialMilitaryUnit;
 import com.rogers.rmcdouga.fitg.basegame.units.RebelMilitaryUnit;
 import com.rogers.rmcdouga.fitg.basegame.units.Unit;
 
-public class BaseGameCounterPool implements CounterPool {
+class BaseGameCounterPool implements CounterPool {
 
 	private static Map<ImperialMilitaryUnit, Set<Unit>> imperialUnits = new EnumMap<>(ImperialMilitaryUnit.class);
 	private static Map<RebelMilitaryUnit, Set<Unit>> rebelUnits = new EnumMap<>(RebelMilitaryUnit.class);

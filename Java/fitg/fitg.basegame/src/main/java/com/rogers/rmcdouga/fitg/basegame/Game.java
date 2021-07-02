@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.rogers.rmcdouga.fitg.basegame.box.BaseGameBox;
+import com.rogers.rmcdouga.fitg.basegame.box.CounterPool;
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 
@@ -12,7 +14,7 @@ public class Game implements GameState {
 	private final ActionDeck actionDeck = new ActionDeck();
 	private final StackManager stackMgr = new StackManager();
 	private final CounterLocations counterLocations = new CounterLocations(stackMgr);
-	private final CounterPool unitPool = BaseGameCounterPool.create();
+	private final CounterPool unitPool = BaseGameBox.create();
 	
 	private final Scenario scenario;
 	private final Collection<StarSystem> map;

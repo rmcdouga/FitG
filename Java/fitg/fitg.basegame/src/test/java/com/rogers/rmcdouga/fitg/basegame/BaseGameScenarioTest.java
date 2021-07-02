@@ -15,6 +15,8 @@ import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 import com.rogers.rmcdouga.fitg.basegame.MockPlayerStrategies.FlightToEgrixStrategies.ScenarioRebelDecisions;
+import com.rogers.rmcdouga.fitg.basegame.box.BaseGameBox;
+import com.rogers.rmcdouga.fitg.basegame.box.CounterPool;
 import com.rogers.rmcdouga.fitg.basegame.MockPlayerStrategies.FlightToEgrixStrategies.ScenarioImperialDecisions;
 
 
@@ -24,7 +26,7 @@ class BaseGameScenarioTest {
 	
 	StackManager stackMgr = new StackManager();
 	CounterLocations counterLocations = new CounterLocations(stackMgr);
-	CounterPool counterPool = BaseGameCounterPool.create();
+	CounterPool counterPool = BaseGameBox.create();
 
 	@Test
 	void testFlightToEgrixGame_createMap() {

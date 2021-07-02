@@ -2,6 +2,7 @@ package com.rogers.rmcdouga.fitg.basegame;
 
 import java.util.Collection;
 
+import com.rogers.rmcdouga.fitg.basegame.box.CounterPool;
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
