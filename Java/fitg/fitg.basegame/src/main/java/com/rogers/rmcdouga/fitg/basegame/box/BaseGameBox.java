@@ -2,6 +2,8 @@ package com.rogers.rmcdouga.fitg.basegame.box;
 
 import java.util.Optional;
 
+import com.rogers.rmcdouga.fitg.basegame.PlayerState.Faction;
+import com.rogers.rmcdouga.fitg.basegame.units.Character;
 import com.rogers.rmcdouga.fitg.basegame.units.Possession;
 import com.rogers.rmcdouga.fitg.basegame.units.Unit;
 
@@ -25,19 +27,13 @@ public class BaseGameBox implements GameBox {
 	}
 
 	@Override
-	public CharacterPool cloneCharacter() {
+	public Optional<Character> cloneCharacter(Faction faction) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Character randomRebelCounter() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Character randomImperialCounter() {
+	public Optional<Character> randomCharacter(Faction faction) {
 		// TODO Auto-generated method stub
 		return null;
 	}
