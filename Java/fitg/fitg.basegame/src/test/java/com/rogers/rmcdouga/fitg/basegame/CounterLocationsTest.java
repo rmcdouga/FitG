@@ -74,8 +74,8 @@ class CounterLocationsTest {
 		CounterLocations result = underTest.move(Agan_Rafa, newLocation);
 		assertNotNull(result);
 		assertAll(
-				()->assertEquals(Set.of(Adam_Starlight, stack), Set.of(underTest.countersAt(location).toArray())),
-				()->assertIterableEquals(List.of(Agan_Rafa), underTest.countersAt(newLocation))
+				()->assertEquals(Set.of(Adam_Starlight, stack), Set.copyOf(underTest.countersAt(location))),
+				()->assertEquals(Set.of(Agan_Rafa), Set.copyOf(underTest.countersAt(newLocation)))
 				);
 	}
 	
@@ -86,8 +86,8 @@ class CounterLocationsTest {
 		CounterLocations result = underTest.move(stack, newLocation);
 		assertNotNull(result);
 		assertAll(
-				()->assertIterableEquals(List.of(Adam_Starlight, Agan_Rafa), underTest.countersAt(location)),
-				()->assertIterableEquals(List.of(stack), underTest.countersAt(newLocation)),
+				()->assertEquals(Set.of(Adam_Starlight, Agan_Rafa), Set.copyOf(underTest.countersAt(location))),	// any order
+				()->assertEquals(Set.of(stack), Set.copyOf(underTest.countersAt(newLocation))),
 				()->assertEquals(newLocation, underTest.location(stack).get()),
 				()->assertEquals(newLocation, underTest.location(Drakir_Grebb).get())
 				);

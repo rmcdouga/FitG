@@ -75,7 +75,17 @@ class BaseGameCharacterPoolTest {
 	@Test
 	void testRandomCharacter() {
 		assertEquals(Zina_Adora, underTest.randomCharacter(REBEL).get());	// Zina Adora is at location 0 for Rebels;
+		IllegalArgumentException exRebel = assertThrows(IllegalArgumentException.class, ()->underTest.getCharacter(Zina_Adora));
+		String msgRebel = exRebel.getMessage();
+		assertNotNull(msgRebel);
+//		System.out.println(msg);
+		assertThat(msgRebel, allOf(containsString(Zina_Adora.toString()), containsString("is not available"), containsString("IN_PLAY")));
 		assertEquals(Thysa_Kymbo, underTest.randomCharacter(IMPERIAL).get());	// Thysa_Kymbo is at location 0 for Imperials;
+		IllegalArgumentException exImp = assertThrows(IllegalArgumentException.class, ()->underTest.getCharacter(Thysa_Kymbo));
+		String msgImp = exImp.getMessage();
+		assertNotNull(msgImp);
+//		System.out.println(msg);
+		assertThat(msgImp, allOf(containsString(Thysa_Kymbo.toString()), containsString("is not available"), containsString("IN_PLAY")));
 	}
 
 	@Test

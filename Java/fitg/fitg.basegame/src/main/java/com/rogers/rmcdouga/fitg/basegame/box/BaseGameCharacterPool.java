@@ -55,7 +55,7 @@ class BaseGameCharacterPool implements CharacterPool {
 	@Override
 	public Optional<Character> randomCharacter(Faction faction) {
 		// select available rebal character at random and call get();
-		return selectRandomly(e->e.getKey().allegience() == faction && e.getValue() == CharacterState.AVAILABLE)
+		return selectRandomly(e->e.getKey().allegience() == faction && e.getValue() == CharacterState.AVAILABLE) 	// Select randomly from AVAILABLE character of the correct faction.
 					.map(this::getCharacter);
 	}
 
@@ -69,10 +69,8 @@ class BaseGameCharacterPool implements CharacterPool {
 	}
 
 	private Optional<BaseGameCharacter> selectRandomly(List<BaseGameCharacter> candidates) {
-		if (candidates.isEmpty()) {
-			return Optional.empty();
-		}
-		return Optional.of(candidates.get(this.randomFn.apply(candidates.size())));
+		return candidates.isEmpty() ? Optional.empty() 
+									: Optional.of(candidates.get(this.randomFn.apply(candidates.size())));
 	}
 	
 	private BaseGameCharacter changeAvailability(Character character, CharacterState newStatus) {

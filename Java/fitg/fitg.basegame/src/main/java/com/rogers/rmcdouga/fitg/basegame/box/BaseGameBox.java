@@ -5,37 +5,49 @@ import java.util.Optional;
 import com.rogers.rmcdouga.fitg.basegame.PlayerState.Faction;
 import com.rogers.rmcdouga.fitg.basegame.units.Character;
 import com.rogers.rmcdouga.fitg.basegame.units.Possession;
+import com.rogers.rmcdouga.fitg.basegame.units.Spaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.Unit;
 
 public class BaseGameBox implements GameBox {
-	private CounterPool counterPool = BaseGameCounterPool.create();
+	private CounterPool counterPool;
+	private CharacterPool characterPool;
+	private PossessionPool possessionPool;
 	
+	private BaseGameBox() {
+		this(BaseGameCounterPool.create(), new BaseGameCharacterPool(), new BaseGamePossessionPool());
+		
+	}
+	
+	BaseGameBox(CounterPool counterPool, CharacterPool characterPool, PossessionPool possessionPool) {
+		super();
+		this.counterPool = counterPool;
+		this.characterPool = characterPool;
+		this.possessionPool = possessionPool;
+	}
+
 	public static GameBox create() {
 		return new BaseGameBox();
 	}
 
 	@Override
 	public Character getCharacter(Character character) {
-		// TODO Auto-generated method stub
-		return null;
+		return characterPool.getCharacter(character);
 	}
 
 	@Override
 	public CharacterPool kill(Character character) {
-		// TODO Auto-generated method stub
-		return null;
+		characterPool.kill(character);
+		return this;
 	}
 
 	@Override
 	public Optional<Character> cloneCharacter(Faction faction) {
-		// TODO Auto-generated method stub
-		return null;
+		return characterPool.cloneCharacter(faction);
 	}
 
 	@Override
 	public Optional<Character> randomCharacter(Faction faction) {
-		// TODO Auto-generated method stub
-		return null;
+		return characterPool.randomCharacter(faction);
 	}
 
 	@Override
@@ -51,32 +63,35 @@ public class BaseGameBox implements GameBox {
 
 	@Override
 	public Possession getPossession(Possession possesion) {
-		// TODO Auto-generated method stub
-		return null;
+		return possessionPool.getPossession(possesion);
+	}
+
+	@Override
+	public Optional<Spaceship> getSpaceship(Spaceship possesion) {
+		return possessionPool.getSpaceship(possesion);
 	}
 
 	@Override
 	public PossessionPool lost(Possession possesion) {
-		// TODO Auto-generated method stub
-		return null;
+		possessionPool.lost(possesion);
+		return this;
 	}
 
 	@Override
 	public PossessionPool captured(Possession possesion) {
-		// TODO Auto-generated method stub
-		return null;
+		possessionPool.captured(possesion);
+		return this;
 	}
 
 	@Override
 	public PossessionPool destroyed(Possession possesion) {
-		// TODO Auto-generated method stub
-		return null;
+		possessionPool.destroyed(possesion);
+		return this;
 	}
 
 	@Override
-	public Possession random() {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<Possession> randomPossession() {
+		return possessionPool.randomPossession();
 	}
 
 }
