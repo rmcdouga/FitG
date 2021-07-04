@@ -13,7 +13,7 @@ import com.rogers.rmcdouga.fitg.basegame.units.Character;
 
 class BaseGameCharacterPool implements CharacterPool {
 
-	private final Map<BaseGameCharacter, CharacterStatus> pool;
+	private final Map<BaseGameCharacter, CharacterState> pool;
 	private final IntFunction<Integer> randomFn;
 	
 	BaseGameCharacterPool() {
@@ -22,7 +22,7 @@ class BaseGameCharacterPool implements CharacterPool {
 
 	BaseGameCharacterPool(IntFunction<Integer> randomFn) {
 		this.pool = new EnumMap<>(BaseGameCharacter.class);
-		BaseGameCharacter.stream().forEach(c->this.pool.put(c, CharacterStatus.AVAILABLE));
+		BaseGameCharacter.stream().forEach(c->this.pool.put(c, CharacterState.AVAILABLE));
 		this.randomFn = randomFn;
 	}
 
@@ -31,7 +31,7 @@ class BaseGameCharacterPool implements CharacterPool {
 		if (checkAvailability(character) != CharacterState.AVAILABLE) {
 			throw new IllegalArgumentException("Character (" + character + ") is not available (" + checkAvailability(character) + ").");
 		}
-		changeAvailability(character, CharacterStatus.IN_PLAY);
+		changeAvailability(character, CharacterState.IN_PLAY);
 		return character;
 	}
 
@@ -40,26 +40,26 @@ class BaseGameCharacterPool implements CharacterPool {
 		if (checkAvailability(character) != CharacterState.IN_PLAY) {
 			throw new IllegalArgumentException("Character (" + character + ") is not in play (" + checkAvailability(character) + ").");
 		}
-		changeAvailability(character, CharacterStatus.DEAD);
+		changeAvailability(character, CharacterState.DEAD);
 		return this;
 	}
 
 	@Override
 	public Optional<Character> cloneCharacter(Faction faction) {
-		Optional<BaseGameCharacter> randomDeadChar = selectRandomly(e->e.getKey().allegience() == faction && e.getValue() == CharacterStatus.DEAD);
+		Optional<BaseGameCharacter> randomDeadChar = selectRandomly(e->e.getKey().allegience() == faction && e.getValue() == CharacterState.DEAD);
 
-		return randomDeadChar.isPresent() ? randomDeadChar.map(c->changeAvailability(c, CharacterStatus.IN_PLAY)).map(Character.class::cast) 
+		return randomDeadChar.isPresent() ? randomDeadChar.map(c->changeAvailability(c, CharacterState.IN_PLAY)).map(Character.class::cast) 
 										  : randomCharacter(faction);
 	}
 
 	@Override
 	public Optional<Character> randomCharacter(Faction faction) {
 		// select available rebal character at random and call get();
-		return selectRandomly(e->e.getKey().allegience() == faction && e.getValue() == CharacterStatus.AVAILABLE)
+		return selectRandomly(e->e.getKey().allegience() == faction && e.getValue() == CharacterState.AVAILABLE)
 					.map(this::getCharacter);
 	}
 
-	private Optional<BaseGameCharacter> selectRandomly(Predicate<Map.Entry<BaseGameCharacter, CharacterStatus>> predicate) {
+	private Optional<BaseGameCharacter> selectRandomly(Predicate<Map.Entry<BaseGameCharacter, CharacterState>> predicate) {
 		var list = this.pool.entrySet()
 						    .stream()
 						    .filter(predicate)
@@ -68,10 +68,6 @@ class BaseGameCharacterPool implements CharacterPool {
 		return selectRandomly(list);
 	}
 
-	private Optional<BaseGameCharacter> selectRandomlyByStatus(Predicate<CharacterStatus> predicate) {
-		return selectRandomly(e->predicate.test(e.getValue()));
-	}
-	
 	private Optional<BaseGameCharacter> selectRandomly(List<BaseGameCharacter> candidates) {
 		if (candidates.isEmpty()) {
 			return Optional.empty();
@@ -79,7 +75,7 @@ class BaseGameCharacterPool implements CharacterPool {
 		return Optional.of(candidates.get(this.randomFn.apply(candidates.size())));
 	}
 	
-	private BaseGameCharacter changeAvailability(Character character, CharacterStatus newStatus) {
+	private BaseGameCharacter changeAvailability(Character character, CharacterState newStatus) {
 		if (character instanceof BaseGameCharacter bgc) {
 			this.pool.replace(bgc, newStatus);
 			return bgc;
@@ -90,7 +86,7 @@ class BaseGameCharacterPool implements CharacterPool {
 
 	private CharacterState checkAvailability(Character character) {
 		if (character instanceof BaseGameCharacter bgc) {
-			return this.pool.get(bgc).available();
+			return this.pool.get(bgc);
 		} else {
 			throw new IllegalArgumentException("Character was not a BaseGameCharacter! (" + character + ").");
 		}
@@ -100,9 +96,24 @@ class BaseGameCharacterPool implements CharacterPool {
 		AVAILABLE, IN_PLAY, DEAD;
 	};
 	
-	private static record CharacterStatus(CharacterState available) {
-		private static final CharacterStatus AVAILABLE = new CharacterStatus(CharacterState.AVAILABLE);
-		private static final CharacterStatus IN_PLAY = new CharacterStatus(CharacterState.IN_PLAY);
-		private static final CharacterStatus DEAD = new CharacterStatus(CharacterState.DEAD);
-	}
+//	// This record is used because I anticipate tracking other stats besides CharacterState.  Other stats would then also
+//	// be added to this record structure. If this doesn't end up happening, then this record could be removed and the Pool
+//	// could use CharacterState directly.
+//	private static record CharacterState(CharacterState available) {
+//		private static final CharacterState AVAILABLE = new CharacterState(CharacterState.AVAILABLE);
+//		private static final CharacterState IN_PLAY = new CharacterState(CharacterState.IN_PLAY);
+//		private static final CharacterState DEAD = new CharacterState(CharacterState.DEAD);
+//		
+//		public CharacterState state(CharacterState newState) {
+//			return from(newState);
+//		}
+//
+//		public static CharacterState from(CharacterState available) {
+//			return switch(available) {
+//			case AVAILABLE -> AVAILABLE;
+//			case IN_PLAY -> IN_PLAY;
+//			case DEAD -> DEAD;
+//			};
+//		}
+//	}
 }

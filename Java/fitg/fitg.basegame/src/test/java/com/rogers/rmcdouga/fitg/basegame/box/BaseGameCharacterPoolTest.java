@@ -6,11 +6,23 @@ import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter.Adam_Sta
 import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter.Thysa_Kymbo;
 import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter.Zina_Adora;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.EnumSet;
+import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import static org.hamcrest.MatcherAssert.assertThat; 
 import static org.hamcrest.Matchers.*;
 
 import org.junit.jupiter.api.Test;
 
+import com.rogers.rmcdouga.fitg.basegame.Mission;
+import com.rogers.rmcdouga.fitg.basegame.PlayerState.Faction;
+import com.rogers.rmcdouga.fitg.basegame.RaceType;
+import com.rogers.rmcdouga.fitg.basegame.map.Planet;
+import com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter;
 import com.rogers.rmcdouga.fitg.basegame.units.Character;
 
 class BaseGameCharacterPoolTest {
@@ -65,5 +77,107 @@ class BaseGameCharacterPoolTest {
 		assertEquals(Zina_Adora, underTest.randomCharacter(REBEL).get());	// Zina Adora is at location 0 for Rebels;
 		assertEquals(Thysa_Kymbo, underTest.randomCharacter(IMPERIAL).get());	// Thysa_Kymbo is at location 0 for Imperials;
 	}
+
+	@Test
+	void testRandomCharacter_AllCharacters() {
+		Set<BaseGameCharacter> allRebelChars = BaseGameCharacter.stream(c->c.allegience() == REBEL).collect(Collectors.toSet());
+		Set<BaseGameCharacter> allImperialChars = BaseGameCharacter.stream(c->c.allegience() == IMPERIAL).collect(Collectors.toSet());
+		
+		BaseGameCharacterPool bgcp = new BaseGameCharacterPool();
+
+		Set<BaseGameCharacter> foundRebelChars = getAllCharsRandomly(REBEL, bgcp);
+		Set<BaseGameCharacter> foundImperialChars = getAllCharsRandomly(IMPERIAL, bgcp);
+
+		assertEquals(allRebelChars, foundRebelChars);
+		assertEquals(allImperialChars, foundImperialChars);
+	}
+
+	private static Set<BaseGameCharacter> getAllCharsRandomly(Faction faction, BaseGameCharacterPool bgcp) {
+		Set<BaseGameCharacter> foundChars = EnumSet.noneOf(BaseGameCharacter.class);
+		Optional<Character> randomChar = bgcp.randomCharacter(faction);
+		while(randomChar.isPresent()) {
+			foundChars.add((BaseGameCharacter)randomChar.get());
+			randomChar = bgcp.randomCharacter(faction);
+		}
+		return foundChars;
+	}
+
+	@Test
+	void testGetCharacter_NotBaseGameCharacter() {
+		Character anonCharacter = new Character() {
+
+			@Override
+			public int combat() {
+				return 0;
+			}
+
+			@Override
+			public int endurance() {
+				return 0;
+			}
+
+			@Override
+			public int intelligence() {
+				return 0;
+			}
+
+			@Override
+			public int leadership() {
+				return 0;
+			}
+
+			@Override
+			public OptionalInt spaceLeadership() {
+				return null;
+			}
+
+			@Override
+			public int diplomacy() {
+				return 0;
+			}
+
+			@Override
+			public int navigation() {
+				return 0;
+			}
+
+			@Override
+			public RaceType race() {
+				return null;
+			}
+
+			@Override
+			public boolean isHomePlanet(Planet planet) {
+				return false;
+			}
+
+			@Override
+			public Faction allegience() {
+				return null;
+			}
+
+			@Override
+			public int bonusDraws(Mission mission) {
+				return 0;
+			}
+
+			@Override
+			public boolean hasSpecialAbility(SpecialAbility specialAbility) {
+				return false;
+			}
+
+			@Override
+			public String description() {
+				return null;
+			}
+			
+		};
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()->underTest.getCharacter(anonCharacter));
+		String msg = ex.getMessage();
+		assertNotNull(msg);
+//		System.out.println(msg);
+		assertThat(msg, allOf(containsString("Character was not a BaseGameCharacter"), containsString(anonCharacter.getClass().getName())));
+	}
+
 
 }
