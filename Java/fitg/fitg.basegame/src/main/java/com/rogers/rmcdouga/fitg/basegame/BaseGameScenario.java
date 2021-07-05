@@ -1,5 +1,7 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
+import static com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet.Angoff;
+import static com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet.Quibron;
 import static com.rogers.rmcdouga.fitg.basegame.map.BaseGameStarSystem.*;
 import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter.*;
 
@@ -10,8 +12,10 @@ import java.util.function.Supplier;
 
 import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions;
 import com.rogers.rmcdouga.fitg.basegame.box.CounterPool;
+import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameStarSystem;
 import com.rogers.rmcdouga.fitg.basegame.map.Location;
+import com.rogers.rmcdouga.fitg.basegame.map.PdbManager;
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameSpaceship;
@@ -25,10 +29,17 @@ public enum BaseGameScenario implements Scenario {
 
 		@Override
 		public Collection<StarSystem> createMap() {
-			// TODO:  Set the PDBs
 			return List.of(Egrix);
 		}
 
+		@Override
+		public Scenario setupPdbs(PdbManager pdbManager) {
+			pdbManager.increasePdb(Quibron);						// Level 1 at Quibron
+			pdbManager.increasePdb(Angoff).increasePdb(Angoff);		// Level 2 at Angoff
+																	// Level 0 at Charkhan
+			return this;
+		}
+		
 		@Override
 		public CounterLocations setupCounters(CounterLocations counterLocations, CounterPool counterPool, StackManager stackMgr, PlayerDecisions rebelDecisons, PlayerDecisions imperialDecisions) {
 			
@@ -41,17 +52,22 @@ public enum BaseGameScenario implements Scenario {
 			imperialDecisions.placeCounters(counterLocations, List.of(imperials));
 			return counterLocations;
 		}
-		
+
 	},
 	// TODO:  Insert other scenarios here
 	GalacticGame(Type.StartRebellion, Rules.Galactic, 6) {
 
 		@Override
 		public Collection<StarSystem> createMap() {
-			// TODO:  Set the PDBs
 			return List.of(BaseGameStarSystem.values());
 		}
 
+		@Override
+		public Scenario setupPdbs(PdbManager pdbManager) {
+			// TODO Auto-generated method stub
+			return this;
+		}
+		
 		@Override
 		public CounterLocations setupCounters(CounterLocations counterLocations, CounterPool counterPool, StackManager stackMgr, PlayerDecisions rebelDecisons, PlayerDecisions imperialDecisions) {
 			// TODO:  Set up Counter Locations
