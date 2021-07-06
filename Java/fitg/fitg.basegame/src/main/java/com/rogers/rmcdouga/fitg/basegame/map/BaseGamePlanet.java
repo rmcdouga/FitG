@@ -929,4 +929,10 @@ Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 		return BaseGamePlanet.stream().filter(predicate);
 	}
 
+	public static BaseGamePlanet requireBgp(Planet planet) {
+		if (planet instanceof BaseGamePlanet bgp) {
+			return bgp;
+		}
+		throw new IllegalArgumentException("Planet (" + planet.getName() + ") is not a BaseGamePlanet.");
+	}
 }

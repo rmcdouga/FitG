@@ -17,7 +17,7 @@ public class Game implements GameState {
 	private final ActionDeck actionDeck = new ActionDeck();
 	private final StackManager stackMgr = new StackManager();
 	private final CounterLocations counterLocations = new CounterLocations(stackMgr);
-	private final PdbManager pdbManager = BaseGamePdbManager.create();
+	private final GameBoard gameBoard;
 	private final GameBox gameBox = BaseGameBox.create();
 	
 	private final Scenario scenario;
@@ -26,6 +26,8 @@ public class Game implements GameState {
 	private Game(Scenario scenario, Scenario.PlayerDecisions rebelDecisions, Scenario.PlayerDecisions imperialDecisions) {
 		this.scenario = scenario;
 		this.map = scenario.createMap();
+		this.gameBoard = BaseGameGameBoard.create(map, scenario.type());
+		
 		scenario.setupCounters(counterLocations, gameBox, stackMgr, rebelDecisions, imperialDecisions);
 	}
 

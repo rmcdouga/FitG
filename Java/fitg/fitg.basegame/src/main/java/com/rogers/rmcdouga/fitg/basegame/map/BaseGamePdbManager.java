@@ -1,5 +1,7 @@
 package com.rogers.rmcdouga.fitg.basegame.map;
 
+import static com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet.requireBgp;
+
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -47,10 +49,4 @@ public class BaseGamePdbManager implements PdbManager {
 		return new BaseGamePdbManager();
 	}
 	
-	private static BaseGamePlanet requireBgp(Planet planet) {
-		if (planet instanceof BaseGamePlanet bgp) {
-			return bgp;
-		}
-		throw new IllegalArgumentException("Planet (" + planet.getName() + ") is not a BaseGamePlanet.");
-	}
 }
