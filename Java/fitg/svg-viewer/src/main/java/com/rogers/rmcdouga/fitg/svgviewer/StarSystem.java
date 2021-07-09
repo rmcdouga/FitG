@@ -2,6 +2,9 @@ package com.rogers.rmcdouga.fitg.svgviewer;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.EnumMap;
+import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -42,6 +45,11 @@ public enum StarSystem {
 	private static final int circle_diameter = 16;
 	private static final boolean displayGuidelines = true;
 
+	private static final java.util.Map<BaseGameStarSystem, StarSystem> bgssMap = new EnumMap<>(BaseGameStarSystem.class);
+	static {
+		Stream.of(values()).forEach(ss->bgssMap.put(ss.bgStarSystem, ss));
+	}
+
 	private StarSystem(BaseGameStarSystem bgStarSystem, int x, int y) {
 		this.bgStarSystem = bgStarSystem;
 		this.x = x;
@@ -64,12 +72,32 @@ public enum StarSystem {
 		}
 		
 		// Move the origin to the centre of the Star System.  The planets draw themselves relative to this.
-		Graphics2D planetGc = ((Graphics2D)gc.create());
-		planetGc.translate(this.x, this.y);
-		bgStarSystem.listPlanets().forEach(p->Planet.from(p).draw(planetGc));
+		drawPerPlanet(gc, (pGc,p)->p.draw(pGc));
+	}
+
+	public Graphics2D translate(Graphics2D gc) {
+		Graphics2D startSystemGc = ((Graphics2D)gc.create());
+		startSystemGc.translate(this.x, this.y);
+		return startSystemGc;
+	}
+	
+	public void drawPerPlanet(Graphics2D initGc, BiConsumer<Graphics2D, Planet> consumer) {
+		var gc2 = translate(initGc);
+		bgStarSystem.listPlanets().forEach(p->consumer.accept(gc2, Planet.from(p)));
 	}
 
 	public static void drawAll(Graphics2D gc) {
 		stream().forEach(ss->ss.draw(gc));
 	}
+	
+	public static record Coordinates(int x, int y) {};
+	
+	public Coordinates coordinates() {
+		return new Coordinates(x, y);
+	}
+	
+	public static StarSystem from (BaseGameStarSystem bgss) {
+		return Objects.requireNonNull(bgssMap.get(bgss));
+	}
+	
 }

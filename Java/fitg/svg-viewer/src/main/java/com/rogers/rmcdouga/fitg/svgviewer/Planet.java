@@ -1,5 +1,6 @@
 package com.rogers.rmcdouga.fitg.svgviewer;
 
+import com.rogers.rmcdouga.fitg.basegame.map.BaseGameLoyaltyType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 
 import java.awt.Color;
@@ -117,15 +118,17 @@ public enum Planet {
 		return planetMap.get(p);
 	}
 
+	public BaseGamePlanet bgPlanet() {
+		return this.bgPlanet;
+	}
+
 	public void draw(Graphics2D gc) {
-		int i = planetOrdinal() - 1;
 		// draw one planet orbit for each planet
-		int local_diameter = planet_diameter[i] + diameterCheat;
-		int radius = local_diameter/2;
+		int radius = radius();
 		if (displayGuidelines) {
 			// draw circle
 			gc.setColor(Color.WHITE);
-			gc.drawOval(-radius, -radius, local_diameter, local_diameter);
+			gc.drawOval(-radius, -radius, radius*2, radius*2);
 			
 			// draw sector lines
 			gc.drawLine(0, -radius - marker_size / 2, 0, -radius + marker_size / 2);
@@ -155,10 +158,55 @@ public enum Planet {
 			gc.drawLine(0, -radius - halfMarkerSize, 0, -radius + halfMarkerSize);
 			gc.drawString(Integer.toString(i), 0, -radius);
 		}
-
-}
+	}
+	
+	public Graphics2D translateToOrbit(Graphics2D g2d) {
+		var planetG2d = (Graphics2D)g2d.create();
+		// rotate to centre of the orbit box
+		double arc_size = this.orbitSize  / 2;  
+		planetG2d.rotate(Math.toRadians(arc_size));	// rotate past the orbit arc
+		planetG2d.translate(0, -radius());
+		return planetG2d;
+	}
+	
+	public Graphics2D translateToLoyalty(Graphics2D g2d, BaseGameLoyaltyType loyaltyType) {
+		var planetG2d = (Graphics2D)g2d.create();
+		// rotate past orbit box + other loyalties and to centre of the current loyaltyType
+		double arc_size = this.orbitSize + (this.loyaltySize * loyaltyType.ordinal()) + (loyaltySize / 2);  
+		planetG2d.rotate(Math.toRadians(arc_size));	// rotate past the orbit arc
+		planetG2d.translate(0, -radius());
+		return planetG2d;
+	}
 	
 	private int planetOrdinal() {
 		return bgPlanet.getId() % 10;
+	}
+	
+	public int radius() {
+		int local_diameter = planet_diameter[planetOrdinal() - 1] + diameterCheat;
+		return local_diameter/2;
+	}
+	
+	/**
+	 * start	- Start of arc in degrees
+	 * end		- End of arc in degrees
+	 *  0 degrees is straight up, movement is clockwise.
+	 */
+	public static record Arc(double start, double end) {};
+	
+	public Arc orbit() {
+		return new Arc(0, orbitSize);
+	}
+	
+	public Arc loyalty(BaseGameLoyaltyType type) {
+		return loyalty(type.ordinal());
+	}
+	
+	private Arc loyalty(int index) {
+		return new Arc(loyaltySize*index, loyaltySize*(index+1));
+	}
+	
+	public Arc environ(int index) {
+		throw new UnsupportedOperationException("Not implemented yet.");
 	}
 }

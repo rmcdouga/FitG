@@ -1,5 +1,7 @@
 package com.rogers.rmcdouga.fitg.svgviewer;
 
+import static com.rogers.rmcdouga.fitg.basegame.BaseGameScenario.FlightToEgrix;
+
 import java.awt.Image;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,6 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.rogers.rmcdouga.fitg.basegame.Game;
+import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixImperialStrategy;
+import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixRebelStrategy;
 
 @SpringBootApplication
 public class SvgViewerApplication implements CommandLineRunner {
@@ -36,7 +42,15 @@ public class SvgViewerApplication implements CommandLineRunner {
 	}
 
 	public String drawMap() throws IOException {
-		return new Map().draw();
+		var g2 = new SVGGraphics2D(Map.MAP_WIDTH, Map.MAP_HEIGHT);
+		new Map(g2, createGame()).draw();
+		return g2.getSVGDocument();
 	}
 	
+	// TODO:  Change this to read a game from a GameState.
+	private static Game createGame() {
+		FlightToEgrixRebelStrategy rebelDecisions = new FlightToEgrixRebelStrategy();
+		FlightToEgrixImperialStrategy imperialDecisions = new FlightToEgrixImperialStrategy();
+		return Game.createGame(FlightToEgrix, rebelDecisions, imperialDecisions);
+	}
 }

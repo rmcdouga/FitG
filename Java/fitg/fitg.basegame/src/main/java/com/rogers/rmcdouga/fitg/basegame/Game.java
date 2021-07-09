@@ -8,11 +8,15 @@ import com.rogers.rmcdouga.fitg.basegame.box.BaseGameBox;
 import com.rogers.rmcdouga.fitg.basegame.box.CounterPool;
 import com.rogers.rmcdouga.fitg.basegame.box.GameBox;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePdbManager;
+import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyManager;
+import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyType;
+import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
 import com.rogers.rmcdouga.fitg.basegame.map.PdbManager;
+import com.rogers.rmcdouga.fitg.basegame.map.Planet;
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 
-public class Game implements GameState {
+public class Game implements GameState, GameBoard {
 	private static final String ACTION_DECK_LABEL = "actionDeck";
 	private final ActionDeck actionDeck = new ActionDeck();
 	private final StackManager stackMgr = new StackManager();
@@ -21,12 +25,10 @@ public class Game implements GameState {
 	private final GameBox gameBox = BaseGameBox.create();
 	
 	private final Scenario scenario;
-	private final Collection<StarSystem> map;
 	
 	private Game(Scenario scenario, Scenario.PlayerDecisions rebelDecisions, Scenario.PlayerDecisions imperialDecisions) {
 		this.scenario = scenario;
-		this.map = scenario.createMap();
-		this.gameBoard = BaseGameGameBoard.create(map, scenario.type());
+		this.gameBoard = BaseGameGameBoard.create(scenario.createMap(), scenario.type());
 		
 		scenario.setupCounters(counterLocations, gameBox, stackMgr, rebelDecisions, imperialDecisions);
 	}
@@ -57,6 +59,51 @@ public class Game implements GameState {
 		Game game = new Game(scenario, rebelDecisions, imperialDecisions);
 		
 		return game;
+	}
+
+	@Override
+	public Pdb getPdb(Planet planet) {
+		return gameBoard.getPdb(planet);
+	}
+
+	@Override
+	public LoyaltyType getLoyalty(Planet planet) {
+		return gameBoard.getLoyalty(planet);
+	}
+
+	@Override
+	public PdbManager increasePdb(Planet planet) {
+		return gameBoard.increasePdb(planet);
+	}
+
+	@Override
+	public LoyaltyManager shiftLeft(Planet planet) {
+		return gameBoard.shiftLeft(planet);
+	}
+
+	@Override
+	public PdbManager decreasePdb(Planet planet) {
+		return gameBoard.decreasePdb(planet);
+	}
+
+	@Override
+	public LoyaltyManager shiftRight(Planet planet) {
+		return gameBoard.shiftRight(planet);
+	}
+
+	@Override
+	public PdbManager upPdb(Planet planet) {
+		return gameBoard.upPdb(planet);
+	}
+
+	@Override
+	public PdbManager downPdb(Planet planet) {
+		return gameBoard.downPdb(planet);
+	}
+
+	@Override
+	public Collection<StarSystem> getStarSystems() {
+		return gameBoard.getStarSystems();
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.rogers.rmcdouga.fitg.svgviewer;
 
+import static com.rogers.rmcdouga.fitg.basegame.BaseGameScenario.FlightToEgrix;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.awt.BasicStroke;
@@ -12,26 +13,39 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.jfree.svg.SVGGraphics2D;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import com.rogers.rmcdouga.fitg.basegame.BaseGameScenario;
+import com.rogers.rmcdouga.fitg.basegame.Game;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameStarSystem;
+import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixImperialStrategy;
+import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixRebelStrategy;
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@SpringBootTest(webEnvironment = WebEnvironment.NONE, classes = TestApplicationConfiguration.class)
 class MapTest {
 
-	@Test
-	void testDrawSVG() throws Exception {
-		String result = new Map().draw();
+	@ParameterizedTest
+	@ValueSource(strings = {"FlightToEgrix" /* , "GalacticGame" */})
+	void testDrawSVG(BaseGameScenario scenario) throws Exception {
+		var g2 = new SVGGraphics2D(Map.MAP_WIDTH, Map.MAP_HEIGHT);
+		new Map(g2, createFlightToEgrxxGame()).draw();
+		
+		String result = g2.getSVGDocument();
+		
+		Files.writeString(TestConstants.ACTUAL_RESULTS_DIR.resolve("FitgMap_" + scenario + ".svg"), result);
+		
 		XMLDocument xmlDoc = new XMLDocument(result);
 		List<XML> nodes = xmlDoc.nodes("/svg:svg/svg:image");
-		assertEquals(2, nodes.size());
+		assertEquals(52, nodes.size());	// 25 Pdbs + main map
 //		Node node = nodes.get(0).node();
 //		System.out.println("nodeName='" + node.getLocalName() + "'.");
-		Files.writeString(TestConstants.ACTUAL_RESULTS_DIR.resolve("FitgMap.svg"), result);
 	}
 
 	@Test
@@ -39,10 +53,11 @@ class MapTest {
 		BufferedImage off_Image = new BufferedImage(Map.MAP_WIDTH, Map.MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D g2 = off_Image.createGraphics();
-		new Map().draw(g2);
+		new Map(g2, createFlightToEgrxxGame()).draw();
 		ImageIO.write(off_Image, "png", TestConstants.ACTUAL_RESULTS_DIR.resolve("FitgMap.png").toFile());
 	}
 
+	@Disabled("This test is used to extract information from the inkscape file.")
 	@Test
 	void testInkscape() throws Exception {
 		XMLDocument xmlDoc = new XMLDocument(TestConstants.SAMPLE_FILES_DIR.resolve("FitgMap.svg"));
@@ -64,5 +79,11 @@ class MapTest {
 		// Math.PI * 3.5/18.0
 		System.out.println("Pi/3.5/18.0=" + Math.toDegrees(Math.PI * 3.5/18.0));
 		System.out.println("Pi/4.72/18.0=" + Math.toDegrees(Math.PI * 4.72/18.0));
+	}
+	
+	private static Game createFlightToEgrxxGame() {
+		FlightToEgrixRebelStrategy rebelDecisions = new FlightToEgrixRebelStrategy();
+		FlightToEgrixImperialStrategy imperialDecisions = new FlightToEgrixImperialStrategy();
+		return Game.createGame(FlightToEgrix, rebelDecisions, imperialDecisions);
 	}
 }

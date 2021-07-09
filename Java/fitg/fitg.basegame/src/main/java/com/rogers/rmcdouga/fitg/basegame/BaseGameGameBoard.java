@@ -14,11 +14,13 @@ import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 public class BaseGameGameBoard implements GameBoard {
 	private final LoyaltyManager loyaltyManager;
 	private final PdbManager pdbManager;
+	private final Collection<StarSystem> map;
 
 	// Prevent instantiation by anyone but me.
 	private BaseGameGameBoard(Collection<StarSystem> map, Scenario.Type scenarioType) {
 		this.loyaltyManager = BaseGameLoyaltyManager.create(map, scenarioType);
 		this.pdbManager = BaseGamePdbManager.create();
+		this.map = map;
 	}
 
 	@Override
@@ -61,6 +63,11 @@ public class BaseGameGameBoard implements GameBoard {
 		return pdbManager.downPdb(planet);
 	}
 	
+	@Override
+	public Collection<StarSystem> getStarSystems() {
+		return this.map;
+	}
+
 	public static GameBoard create(Collection<StarSystem> map, Scenario.Type scenarioType) {
 		return new BaseGameGameBoard(map, scenarioType);
 	}

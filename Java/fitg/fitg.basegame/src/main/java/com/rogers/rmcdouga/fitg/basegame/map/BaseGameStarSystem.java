@@ -130,4 +130,12 @@ public enum BaseGameStarSystem implements StarSystem {
 			return BaseGameStarSystem.this;
 		}
 	}
+	
+	public static BaseGameStarSystem requireBgss(StarSystem starSystem) {
+		if (starSystem instanceof BaseGameStarSystem bgss) {
+			return bgss;
+		}
+		throw new IllegalArgumentException("StarSystem (" + starSystem.getName() + ") is not a BaseGameStarSystem.");
+	}
+
 }
