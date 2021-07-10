@@ -32,38 +32,38 @@ public enum Planet {
 	Quibron(BaseGamePlanet.Quibron, 0, 60, 28.5),// Done
 	Angoff(BaseGamePlanet.Angoff, -12, 35, 17.3), // Done
 	Charkhan(BaseGamePlanet.Charkhan, -10, 25, 12.35),	// Done
-	Pronox(BaseGamePlanet.Pronox, 60, 47, 23),	// Done, Same as Midest
+	Pronox(BaseGamePlanet.Pronox, 70, 47, 23),	// Done, Same as Midest
 	Lysenda(BaseGamePlanet.Lysenda, 55), 	// Done
-	Orning(BaseGamePlanet.Orning, 63, 46.6, 23), // Done 
-	Chim(BaseGamePlanet.Chim, 60, 47, 23),	// Done, Same as Midest
+	Orning(BaseGamePlanet.Orning, 75, 46.6, 23), // Done
+	Chim(BaseGamePlanet.Chim, 70, 47, 23),	// Done, Same as Midest
 	Tamset(BaseGamePlanet.Tamset, 55),	// Done
-	Unarpha(BaseGamePlanet.Unarpha, 0, 58.9, 28.7), // Done
-	Suti(BaseGamePlanet.Suti, -7, 34, 17.3), // Done
-	Tsipa(BaseGamePlanet.Tsipa, -5, 24, 12.3), // was Done
-	Squamot(BaseGamePlanet.Squamot, 0, 58, 29.2),	// Done
-	Midest(BaseGamePlanet.Midest, 62, 47, 23),	// Done
+	Unarpha(BaseGamePlanet.Unarpha, -6, 58.9, 28.7), // Done
+	Suti(BaseGamePlanet.Suti, -15, 34, 17.3), // Done
+	Tsipa(BaseGamePlanet.Tsipa, -8, 24, 12.3), // was Done
+	Squamot(BaseGamePlanet.Squamot, -10, 58, 29.2),	// Done
+	Midest(BaseGamePlanet.Midest, 70, 47, 23),	// Done
 	Akubera(BaseGamePlanet.Akubera, 55), // Done
-	Mrane(BaseGamePlanet.Mrane, -5, 60, 28.4),	// Done
+	Mrane(BaseGamePlanet.Mrane, 0, 60, 28.4),	// Done
 	Kelta(BaseGamePlanet.Kelta, -15, 35, 17.3),	// Done
-	Troliso(BaseGamePlanet.Troliso, 0, 58, 28.75),	// Done
-	Heliax(BaseGamePlanet.Heliax, -8, 33.8, 17.3),	// Done
-	Lonica(BaseGamePlanet.Lonica, 65, 46.1, 23),	// Done
+	Troliso(BaseGamePlanet.Troliso, -3, 58, 28.75),	// Done 
+	Heliax(BaseGamePlanet.Heliax, -15, 33.8, 17.3),	// Done
+	Lonica(BaseGamePlanet.Lonica, 75, 46.1, 23),	// Done
 	Horon(BaseGamePlanet.Horon, 0, 59, 28.7),	// Done
-	Solvia(BaseGamePlanet.Solvia, -8, 34.35, 17.2),	// Done
-	Cercis(BaseGamePlanet.Cercis, -5, 24.6, 12.35),	// Done
-	Rhexia(BaseGamePlanet.Rhexia, 0, 58.5, 28.5),	// Done
-	Tartio(BaseGamePlanet.Tartio, -5, 34.1, 17.2),	// Done
-	Ayod(BaseGamePlanet.Ayod, 0, 59, 29),	// Done
-	Barak(BaseGamePlanet.Barak, 0, 58, 29.2),	// Done
-	Liatris(BaseGamePlanet.Liatris, -10, 34, 17.3),	// Done
-	Xan(BaseGamePlanet.Xan, -3, 24.2, 12.3),	// Done
-	Aras(BaseGamePlanet.Aras, 0, 59.5, 28.4),	// Done
-	Capilax(BaseGamePlanet.Capilax, -10, 34.5, 17.3),	// Done
-	Adrax(BaseGamePlanet.Adrax, -3, 24.6, 12.4),	// Done
-	Scythia(BaseGamePlanet.Scythia, 0, 58, 29),	// Done
-	Annell(BaseGamePlanet.Annell, 0, 58.5, 28.8),	// Done
-	Trov(BaseGamePlanet.Trov, -5, 34, 17.3),	// Done
-	Niconi(BaseGamePlanet.Niconi, 0, 58, 28.6),	// Done
+	Solvia(BaseGamePlanet.Solvia, -15, 34.35, 17.2),	// Done
+	Cercis(BaseGamePlanet.Cercis, -15, 24.6, 12.35),	// Done
+	Rhexia(BaseGamePlanet.Rhexia, -4, 58.5, 28.5),	// Done
+	Tartio(BaseGamePlanet.Tartio, -15, 34.1, 17.2),	// Done
+	Ayod(BaseGamePlanet.Ayod, -8, 59, 29),	// Done
+	Barak(BaseGamePlanet.Barak, -10, 58, 29.2),	// Done
+	Liatris(BaseGamePlanet.Liatris, -20, 34, 17.3),	// Done
+	Xan(BaseGamePlanet.Xan, -10, 24.2, 12.3),	// Done
+	Aras(BaseGamePlanet.Aras, -2, 59.5, 28.4),	// Done
+	Capilax(BaseGamePlanet.Capilax, -15, 34.5, 17.3),	// Done
+	Adrax(BaseGamePlanet.Adrax, -5, 24.6, 12.4),	// Done
+	Scythia(BaseGamePlanet.Scythia, -12, 58, 29),	// Done
+	Annell(BaseGamePlanet.Annell, -5, 58.5, 28.8),	// Done
+	Trov(BaseGamePlanet.Trov, -18, 34, 17.3),	// Done
+	Niconi(BaseGamePlanet.Niconi, -2, 58, 28.6),	// Done
 	;
 	
 	private static final java.util.Map<BaseGamePlanet, Planet> planetMap; // initialized in static block
