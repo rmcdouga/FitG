@@ -28,4 +28,12 @@ public enum BaseGameLoyaltyType implements LoyaltyType {
 					 .filter(t->t.getName().equalsIgnoreCase(name))
 					 .findFirst();
 	}
+	
+	public static BaseGameLoyaltyType requireBglt(LoyaltyType loyaltyType) {
+		if (loyaltyType instanceof BaseGameLoyaltyType bglt) {
+			return bglt;
+		}
+		throw new IllegalArgumentException("LoyaltyType (" + loyaltyType.getName() + ") is not a BaseGameLoyaltyType.");
+	}
+
 }

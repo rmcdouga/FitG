@@ -29,7 +29,7 @@ public class Game implements GameState, GameBoard {
 	private Game(Scenario scenario, Scenario.PlayerDecisions rebelDecisions, Scenario.PlayerDecisions imperialDecisions) {
 		this.scenario = scenario;
 		this.gameBoard = BaseGameGameBoard.create(scenario.createMap(), scenario.type());
-		
+		scenario.setupPdbs(gameBoard);
 		scenario.setupCounters(counterLocations, gameBox, stackMgr, rebelDecisions, imperialDecisions);
 	}
 

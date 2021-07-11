@@ -35,14 +35,13 @@ public final class Map {
 		Image image = ImageIO.read(Objects.requireNonNull(Map.class.getClassLoader().getResourceAsStream(MAP_IMAGE_FILENAME.toString())));
 		g2d.drawImage(image, 0, 0, null);
 
-		PdbRenderer pdbr = PdbRenderer.from(g2d, gameBoard);
-
+		LoyaltyTrackMarkerRenderer ltmr = LoyaltyTrackMarkerRenderer.create(g2d, gameBoard, gameBoard);
 		starSystems.stream()
 				   .map(BaseGameStarSystem::requireBgss)
 				   .map(StarSystem::from)
 				   .forEach(ss->{
 					   ss.draw(g2d);
-					   pdbr.draw(ss);
+					   ltmr.draw(ss);
 				   });
 
 		// Draw a test Pdb

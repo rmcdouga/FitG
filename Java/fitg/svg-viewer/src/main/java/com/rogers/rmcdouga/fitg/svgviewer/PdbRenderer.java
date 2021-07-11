@@ -10,6 +10,7 @@ import java.util.Objects;
 import javax.imageio.ImageIO;
 
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameLoyaltyType;
+import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
 import com.rogers.rmcdouga.fitg.basegame.map.PdbManager;
 
@@ -31,31 +32,29 @@ public final class PdbRenderer extends Marker {
 		}
 	}
 	
-	private final Graphics2D gc;
 	private final PdbManager pdbm;
 	
-	private PdbRenderer(Graphics2D gc, PdbManager pdbm) {
+	private PdbRenderer(PdbManager pdbm) {
 		super();
-		this.gc = gc;
 		this.pdbm = pdbm;
 	}
 
-	public void draw(StarSystem ss) {
-		ss.drawPerPlanet(gc, this::draw);
+	public void draw(Graphics2D gc, BaseGamePlanet p) {
+		Pdb pdb = this.pdbm.getPdb(p);
+		var img = pdb.isUp() ? pdbUpImage : pdbDownImage;
+		gc.drawImage(img, -img.getWidth(null)/2, -img.getHeight(null)/2, null);
 	}
 
-	private void draw(Graphics2D gc, Planet p) {
-		Pdb pdb = this.pdbm.getPdb(p.bgPlanet());
-		var img = pdb.isUp() ? pdbUpImage : pdbDownImage;
-		BaseGameLoyaltyType location = switch(pdb.level()) {
-			case ZERO -> BaseGameLoyaltyType.Neutral;
-			case ONE -> BaseGameLoyaltyType.Loyal;
-			case TWO -> BaseGameLoyaltyType.Patriotic;
-			};
-		p.translateToLoyalty(gc, location).drawImage(img, -img.getWidth(null)/2, -img.getHeight(null)/2, null);
+	public BaseGameLoyaltyType position(BaseGamePlanet p) {
+		Pdb pdb = this.pdbm.getPdb(p);
+		return switch(pdb.level()) {	// TODO: Handle Rebel-Controlled
+		case ZERO -> BaseGameLoyaltyType.Neutral;
+		case ONE -> BaseGameLoyaltyType.Loyal;
+		case TWO -> BaseGameLoyaltyType.Patriotic;
+		};
 	}
-	
-	public static PdbRenderer from(Graphics2D gc, PdbManager pdbm) {
-		return new PdbRenderer(gc, pdbm);
+
+	public static PdbRenderer create(PdbManager pdbm) {
+		return new PdbRenderer(pdbm);
 	}
 }
