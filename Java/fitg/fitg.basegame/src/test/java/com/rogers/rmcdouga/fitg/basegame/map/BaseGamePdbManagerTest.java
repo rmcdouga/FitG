@@ -21,27 +21,27 @@ class BaseGamePdbManagerTest {
 	@Test
 	void testGetPdb() {
 		Pdb result = underTest.getPdb(Adare);
-		testPdb(result, State.DOWN, Level.ZERO);
+		testPdb(result, State.UP, Level.ZERO);
 	}
 
 	@Test
 	void testIncreaseDecreasePdb() {
-		testPdb(underTest.getPdb(Adare), State.DOWN, Level.ZERO);						// establish baseline
-		testPdb(underTest.increasePdb(Adare).getPdb(Adare), State.DOWN, Level.ONE);
-		testPdb(underTest.increasePdb(Adare).getPdb(Adare), State.DOWN, Level.TWO);
-		testPdb(underTest.increasePdb(Adare).getPdb(Adare), State.DOWN, Level.TWO);		// Can't increase past 2
-		testPdb(underTest.decreasePdb(Adare).getPdb(Adare), State.DOWN, Level.ONE);
-		testPdb(underTest.decreasePdb(Adare).getPdb(Adare), State.DOWN, Level.ZERO);
-		testPdb(underTest.decreasePdb(Adare).getPdb(Adare), State.DOWN, Level.ZERO);	// Can't decrease past 0		
+		testPdb(underTest.getPdb(Adare), State.UP, Level.ZERO);						// establish baseline
+		testPdb(underTest.increasePdb(Adare).getPdb(Adare), State.UP, Level.ONE);
+		testPdb(underTest.increasePdb(Adare).getPdb(Adare), State.UP, Level.TWO);
+		testPdb(underTest.increasePdb(Adare).getPdb(Adare), State.UP, Level.TWO);		// Can't increase past 2
+		testPdb(underTest.decreasePdb(Adare).getPdb(Adare), State.UP, Level.ONE);
+		testPdb(underTest.decreasePdb(Adare).getPdb(Adare), State.UP, Level.ZERO);
+		testPdb(underTest.decreasePdb(Adare).getPdb(Adare), State.UP, Level.ZERO);	// Can't decrease past 0		
 	}
 
 	@Test
 	void testUpDownPdb() {
-		testPdb(underTest.getPdb(Adare), State.DOWN, Level.ZERO);						// establish baseline
-		testPdb(underTest.upPdb(Adare).getPdb(Adare), State.UP, Level.ZERO);
-		testPdb(underTest.upPdb(Adare).getPdb(Adare), State.UP, Level.ZERO);
+		testPdb(underTest.getPdb(Adare), State.UP, Level.ZERO);						// establish baseline
 		testPdb(underTest.downPdb(Adare).getPdb(Adare), State.DOWN, Level.ZERO);
 		testPdb(underTest.downPdb(Adare).getPdb(Adare), State.DOWN, Level.ZERO);
+		testPdb(underTest.upPdb(Adare).getPdb(Adare), State.UP, Level.ZERO);
+		testPdb(underTest.upPdb(Adare).getPdb(Adare), State.UP, Level.ZERO);
 	}
 
 	private void testPdb(Pdb pdb, State state, Level level) {
