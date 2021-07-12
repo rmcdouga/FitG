@@ -23,6 +23,7 @@
 		<jfree-svg.version>4.1</jfree-svg.version>
 		<jcabi-xml.version>0.21.5</jcabi-xml.version>
 		<javapoet.version>1.13.0</javapoet.version>
+		<image-comparison.version>4.4.0</image-comparison.version>
 
 		<!-- Other local prjects -->
 		<fitg.basegame.version>0.0.1-SNAPSHOT</fitg.basegame.version>
@@ -60,6 +61,12 @@
 			<groupId>com.rogers.rmcdouga</groupId>
 			<artifactId>fitg.basegame</artifactId>
 			<version>${fitg.basegame.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.romankh3</groupId>
+			<artifactId>image-comparison</artifactId>
+			<version>${image-comparison.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

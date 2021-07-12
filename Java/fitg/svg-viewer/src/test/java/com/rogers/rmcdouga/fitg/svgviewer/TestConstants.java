@@ -11,6 +11,7 @@ public class TestConstants {
 	public static final Path RESOURCES_DIR = Paths.get("src", "test", "resources");
 	public static final Path ACTUAL_RESULTS_DIR = RESOURCES_DIR.resolve("actualResults");
 	public static final Path SAMPLE_FILES_DIR = RESOURCES_DIR.resolve("sampleFiles");
+	public static final Path EXPECTED_RESULTS_DIR = RESOURCES_DIR.resolve("expectedResults");
 
 	public static <T> Set<T> compare(Set<? extends T> set1, Set<? extends T> set2) {
 		return set2.stream()

@@ -20,7 +20,12 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.xmlunit.diff.ComparisonResult;
 
+import com.github.romankh3.image.comparison.ImageComparison;
+import com.github.romankh3.image.comparison.ImageComparisonUtil;
+import com.github.romankh3.image.comparison.model.ImageComparisonResult;
+import com.github.romankh3.image.comparison.model.ImageComparisonState;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameScenario;
@@ -51,13 +56,26 @@ class MapTest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = {"FlightToEgrix" /* , "GalacticGame" */})
+	@ValueSource(strings = {"FlightToEgrix", "GalacticGame"})
 	void testDrawImage(BaseGameScenario scenario) throws Exception {
 		BufferedImage off_Image = new BufferedImage(Map.MAP_WIDTH, Map.MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-
 		Graphics2D g2 = off_Image.createGraphics();
 		new Map(g2, createGame(scenario)).draw();
-		ImageIO.write(off_Image, "png", TestConstants.ACTUAL_RESULTS_DIR.resolve("FitgMap_" + scenario + ".png").toFile());
+		String filename = "FitgMap_" + scenario + ".png";
+		// Compare using image comparison library: https://github.com/romankh3/image-comparison
+		BufferedImage expectedImage = ImageIO.read(TestConstants.EXPECTED_RESULTS_DIR.resolve(filename).toFile());
+		ImageComparisonResult comparisonResult = new ImageComparison(expectedImage, off_Image).compareImages();
+		
+		if (ImageComparisonState.MATCH != comparisonResult.getImageComparisonState()) {
+			// write out the actual 
+			ImageIO.write(off_Image, "png", TestConstants.ACTUAL_RESULTS_DIR.resolve(filename).toFile());
+			// write out the diff
+			String diffFilename = "FitgMap_" + scenario + "_diff.png";
+			comparisonResult.writeResultTo(TestConstants.ACTUAL_RESULTS_DIR.resolve(diffFilename).toFile());
+//			ImageComparisonUtil.saveImage(TestConstants.EXPECTED_RESULTS_DIR.resolve(diffFilename).toFile(),comparisonResult.getResult());
+		}
+		//Check the result
+        assertEquals(ImageComparisonState.MATCH, comparisonResult.getImageComparisonState());
 	}
 
 	@Disabled("This test is used to extract information from the inkscape file.")

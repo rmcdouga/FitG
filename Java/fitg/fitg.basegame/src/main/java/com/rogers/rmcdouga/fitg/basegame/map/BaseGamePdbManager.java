@@ -13,7 +13,7 @@ public class BaseGamePdbManager implements PdbManager {
 	Map<BaseGamePlanet, Pdb> pdbs = new EnumMap<>(BaseGamePlanet.class);
 
 	private BaseGamePdbManager() {
-		BaseGamePlanet.stream().forEach(p->pdbs.put(p, Pdb.of(State.DOWN, Level.ZERO)));
+		BaseGamePlanet.stream().forEach(p->pdbs.put(p, Pdb.of(State.UP, Level.ZERO)));
 	}
 
 	@Override
