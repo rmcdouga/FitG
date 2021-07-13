@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class SpaceshipTest {
 
 	private static final int GALACTIC_FRIEGHTER_LIMIT = 16;
-	Spaceship underTest = BaseGameSpaceship.Galactic_Freighter;
+	Spaceship underTest = BaseGameRebelSpaceship.Galactic_Freighter;
 
 	@Test
 	void testOverLimit_under() {

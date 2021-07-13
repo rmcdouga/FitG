@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameSpaceship.*;
+import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameRebelSpaceship.*;
 import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter.*;
 import static org.hamcrest.MatcherAssert.assertThat; 
 import static org.hamcrest.Matchers.*;
@@ -15,7 +15,7 @@ import com.rogers.rmcdouga.fitg.basegame.units.StackManager.SpaceshipStack;
 
 class SpaceshipStackTest {
 
-	private static final BaseGameSpaceship TEST_SHIP = Stellar_Courier;
+	private static final BaseGameRebelSpaceship TEST_SHIP = Stellar_Courier;
 	private static final int TEST_SHIP_CAPACITY = TEST_SHIP.maxPassengers();
 
 	private final StackManager stackMgr= new StackManager();

@@ -7,7 +7,7 @@ public enum BaseGamePossession {
 	;
 
 	public static Stream<Possession> stream() {
-		return Stream.of(BaseGameSpaceship.stream(), 
+		return Stream.of(BaseGameRebelSpaceship.stream(), 
 						 BaseGameWeapon.stream(), 
 						 BaseGameObject.stream(), 
 						 BaseGameCompanion.stream())

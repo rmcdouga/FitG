@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGamePossession;
 import com.rogers.rmcdouga.fitg.basegame.units.Possession;
+import com.rogers.rmcdouga.fitg.basegame.units.RebelSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.Spaceship;
 
 public class BaseGamePossessionPool implements PossessionPool {
@@ -32,7 +33,7 @@ public class BaseGamePossessionPool implements PossessionPool {
 	}
 
 	@Override
-	public Optional<Spaceship> getSpaceship(Spaceship spaceship) {
+	public Optional<Spaceship> getSpaceship(RebelSpaceship spaceship) {
 		if (checkAvailability(spaceship) != PossessionAvailability.AVAILABLE) {
 			return Optional.empty();
 		}
@@ -104,5 +105,4 @@ public class BaseGamePossessionPool implements PossessionPool {
 	private PossessionAvailability checkAvailability(Possession possession) {
 		return this.pool.get(possession);
 	}
-
 }

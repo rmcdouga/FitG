@@ -4,7 +4,9 @@ import java.util.Optional;
 
 import com.rogers.rmcdouga.fitg.basegame.PlayerState.Faction;
 import com.rogers.rmcdouga.fitg.basegame.units.Character;
+import com.rogers.rmcdouga.fitg.basegame.units.ImperialSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.Possession;
+import com.rogers.rmcdouga.fitg.basegame.units.RebelSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.Spaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.Unit;
 
@@ -62,12 +64,17 @@ public class BaseGameBox implements GameBox {
 	}
 
 	@Override
+	public Optional<Spaceship> getSpaceship(ImperialSpaceship possesion) {
+		return counterPool.getSpaceship(possesion);
+	}
+
+	@Override
 	public Possession getPossession(Possession possesion) {
 		return possessionPool.getPossession(possesion);
 	}
 
 	@Override
-	public Optional<Spaceship> getSpaceship(Spaceship possesion) {
+	public Optional<Spaceship> getSpaceship(RebelSpaceship possesion) {
 		return possessionPool.getSpaceship(possesion);
 	}
 

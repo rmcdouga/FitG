@@ -18,7 +18,7 @@ import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.map.PdbManager;
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter;
-import com.rogers.rmcdouga.fitg.basegame.units.BaseGameSpaceship;
+import com.rogers.rmcdouga.fitg.basegame.units.BaseGameRebelSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager.SpaceshipStack;
@@ -43,7 +43,7 @@ public enum BaseGameScenario implements Scenario {
 		@Override
 		public CounterLocations setupCounters(CounterLocations counterLocations, CounterPool counterPool, StackManager stackMgr, PlayerDecisions rebelDecisons, PlayerDecisions imperialDecisions) {
 			
-			Stack rebels = stackMgr.of(BaseGameSpaceship.Planetary_Privateer, Boccanegra, Doctor_Sontag, Frun_Sentel);
+			Stack rebels = stackMgr.of(BaseGameRebelSpaceship.Planetary_Privateer, Boccanegra, Doctor_Sontag, Frun_Sentel);
 			counterLocations.add(rebels, IN_SPACE);
 
 			// This is temporary - player will place these

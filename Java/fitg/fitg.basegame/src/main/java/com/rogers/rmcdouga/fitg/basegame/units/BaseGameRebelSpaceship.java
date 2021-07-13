@@ -3,7 +3,7 @@ package com.rogers.rmcdouga.fitg.basegame.units;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public enum BaseGameSpaceship implements Spaceship {
+public enum BaseGameRebelSpaceship implements RebelSpaceship {
 	Explorer(33, 2, 2, 4, 8),
 	Galactic_Freighter(34, 0, 1, 0, 16),
 	Interstellar_Sloop(35, 2, 1, 2, 4),
@@ -20,7 +20,7 @@ public enum BaseGameSpaceship implements Spaceship {
 	private final int maneuver;
 	private final int maxPassengers;
 	
-	private BaseGameSpaceship(int cardNumber, int cannons, int shields, int maneuver, int maxPassengers) {
+	private BaseGameRebelSpaceship(int cardNumber, int cannons, int shields, int maneuver, int maxPassengers) {
 		this.cardNumber = cardNumber;
 		this.cannons = cannons;
 		this.shields = shields;
@@ -53,11 +53,11 @@ public enum BaseGameSpaceship implements Spaceship {
 		return this.maxPassengers;
 	}
 
-	public static Stream<BaseGameSpaceship> stream() {
+	public static Stream<BaseGameRebelSpaceship> stream() {
 		return Stream.of(values());
 	}
 	
-	public static Stream<BaseGameSpaceship> stream(Predicate<BaseGameSpaceship> predicate) {
+	public static Stream<BaseGameRebelSpaceship> stream(Predicate<BaseGameRebelSpaceship> predicate) {
 		return stream().filter(predicate);
 	}
 }

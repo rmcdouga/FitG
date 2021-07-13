@@ -2,7 +2,7 @@ package com.rogers.rmcdouga.fitg.basegame.box;
 
 import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameCompanion.Norrocks;
 import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameObject.Personal_Body_Shield;
-import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameSpaceship.Star_Cruiser;
+import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameRebelSpaceship.Star_Cruiser;
 import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameWeapon.Snipers_Rifle;
 import static org.junit.jupiter.api.Assertions.*;
 
