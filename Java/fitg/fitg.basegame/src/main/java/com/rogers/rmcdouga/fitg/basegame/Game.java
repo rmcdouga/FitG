@@ -4,10 +4,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.PlaceCountersInstruction;
+import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.SetPdbInstructions;
 import com.rogers.rmcdouga.fitg.basegame.box.BaseGameBox;
-import com.rogers.rmcdouga.fitg.basegame.box.CounterPool;
 import com.rogers.rmcdouga.fitg.basegame.box.GameBox;
-import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePdbManager;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyManager;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyType;
 import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
@@ -29,8 +29,8 @@ public class Game implements GameState, GameBoard {
 	private Game(Scenario scenario, Scenario.PlayerDecisions rebelDecisions, Scenario.PlayerDecisions imperialDecisions) {
 		this.scenario = scenario;
 		this.gameBoard = BaseGameGameBoard.create(scenario.createMap(), scenario.type());
-		scenario.setupPdbs(gameBoard);
-		scenario.setupCounters(counterLocations, gameBox, stackMgr, rebelDecisions, imperialDecisions);
+		Collection<SetPdbInstructions> pdbsSetup = scenario.setupPdbs();
+		Collection<PlaceCountersInstruction> countersSetup = scenario.setupCounters(gameBox, stackMgr, rebelDecisions, imperialDecisions);
 	}
 
 	/**

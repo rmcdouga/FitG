@@ -13,8 +13,11 @@ import org.junit.jupiter.api.Test;
 
 import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
+import com.rogers.rmcdouga.fitg.basegame.units.Counter;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
+import com.rogers.rmcdouga.fitg.basegame.units.StackManager.Stack;
 import com.rogers.rmcdouga.fitg.basegame.MockPlayerStrategies.FlightToEgrixStrategies.ScenarioRebelDecisions;
+import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.PlaceCountersInstruction;
 import com.rogers.rmcdouga.fitg.basegame.box.BaseGameBox;
 import com.rogers.rmcdouga.fitg.basegame.box.CounterPool;
 import com.rogers.rmcdouga.fitg.basegame.MockPlayerStrategies.FlightToEgrixStrategies.ScenarioImperialDecisions;
@@ -24,9 +27,8 @@ class BaseGameScenarioTest {
 	private final PlayerDecisions fteRebelDecisions = new ScenarioRebelDecisions();
 	private final PlayerDecisions fteImperialDecisions = new ScenarioImperialDecisions();
 	
-	StackManager stackMgr = new StackManager();
-	CounterLocations counterLocations = new CounterLocations(stackMgr);
-	CounterPool counterPool = BaseGameBox.create();
+	private final StackManager stackMgr = new StackManager();
+	private final CounterPool counterPool = BaseGameBox.create();
 
 	@Test
 	void testFlightToEgrixGame_createMap() {
@@ -38,9 +40,12 @@ class BaseGameScenarioTest {
 
 	@Test
 	void testFlightToEgrixGame_setupCounters() {
-		CounterLocations result = FlightToEgrix.setupCounters(counterLocations, counterPool, stackMgr, fteRebelDecisions, fteImperialDecisions );
+		Collection<PlaceCountersInstruction> result = FlightToEgrix.setupCounters(counterPool, stackMgr, fteRebelDecisions, fteImperialDecisions );
 		assertNotNull(result);
-		Optional<Location> location = result.location(Jon_Kidu);
+		Optional<Location> location = result.stream()
+											.filter(i->contains(i, Jon_Kidu))
+											.findAny()
+											.map(PlaceCountersInstruction::location);
 		assertTrue(location.isPresent());
 		assertEquals(Quibron.environ(0), location.get());
 	}
@@ -55,4 +60,28 @@ class BaseGameScenarioTest {
 
 	}
 
+	private static boolean contains(PlaceCountersInstruction instruction, Counter targetCounter) {
+		Counter examinedCounter = instruction.counter();
+		if (examinedCounter instanceof Stack stack) {
+			return contains(stack, targetCounter);
+		}
+		return examinedCounter == targetCounter;
+	}
+
+	private static boolean contains(Stack stack, Counter counter) {
+//		System.out.println("Testing stack with:");
+//		stack.stream().forEach(System.out::println);
+		for (Counter c : stack) {
+			if (c instanceof Stack containedStack) {
+				if (contains(containedStack, counter)) {
+					return true;
+				}
+			} else {
+				if (c == counter) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
