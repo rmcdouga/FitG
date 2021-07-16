@@ -24,4 +24,11 @@ public enum BaseGameEnvironType implements Environ.EnvironType {
 	public boolean isSpecial() {
 		return isSpecial;
 	}
+	
+	public static BaseGameEnvironType requireBgEnvironType(Environ.EnvironType environType) {
+		if (environType instanceof BaseGameEnvironType bget) {
+			return bget;
+		}
+		throw new IllegalArgumentException("EnvironType (" + environType.getName() + ") is not a BaseGameEnvironType.");
+	}
 }

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -89,4 +90,13 @@ class BaseGamePlanetTest {
 		shouldContainAll(planetCreatures, allCreatures);
 	}
 
+	@Test
+	void testNoDuplicateEnvironsPerPlanet() {
+		for (BaseGamePlanet planet : BaseGamePlanet.values()) {
+			List<BaseGameEnviron> listOfEnvirons = planet.listEnvirons();
+			Set<BaseGameEnvironType> environTypes = EnumSet.noneOf(BaseGameEnvironType.class);
+			listOfEnvirons.forEach(e->environTypes.add(BaseGameEnvironType.requireBgEnvironType(e.getType())));
+			assertEquals(listOfEnvirons.size(), environTypes.size());
+		}
+	}
 }
