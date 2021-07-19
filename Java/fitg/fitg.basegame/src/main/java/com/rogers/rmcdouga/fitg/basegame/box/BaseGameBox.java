@@ -69,6 +69,11 @@ public class BaseGameBox implements GameBox {
 	}
 
 	@Override
+	public CounterPool returnSpaceship(ImperialSpaceship spaceship) {
+		return counterPool.returnSpaceship(spaceship);
+	}
+
+	@Override
 	public Possession getPossession(Possession possesion) {
 		return possessionPool.getPossession(possesion);
 	}
@@ -100,5 +105,4 @@ public class BaseGameBox implements GameBox {
 	public Optional<Possession> randomPossession() {
 		return possessionPool.randomPossession();
 	}
-
 }

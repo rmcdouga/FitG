@@ -121,5 +121,5 @@ public class CounterLocations implements GameState {
 	public void setState(Map<String, Object> state) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Not implemented yet.");
-	}
+	}	
 }

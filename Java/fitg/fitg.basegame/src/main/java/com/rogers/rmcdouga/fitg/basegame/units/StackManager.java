@@ -16,14 +16,22 @@ public class StackManager {
 	private final Map<Counter, Stack> counterStackTracker = new HashMap<>();
 	
 	public Stack of(Counter... counters) {
-		return trackStack(new Stack(Arrays.asList(counters)));
+		return of(Arrays.asList(counters));
 	}
 
 	public SpaceshipStack of(Spaceship spaceship, Counter... counters) {
-		if (spaceship.overLimit(counters.length)) {
-			throw new IllegalArgumentException("Can't add " + counters.length + " characters to " + spaceship + ".  It has a limit of " + spaceship.maxPassengers() + " characters.");
+		return of(spaceship, Arrays.asList(counters));
+	}
+
+	public Stack of(Collection<Counter> counterCol) {
+		return trackStack(new Stack(counterCol));
+	}
+
+	public SpaceshipStack of(Spaceship spaceship, Collection<Counter> counterCol) {
+		if (spaceship.overLimit(counterCol.size())) {
+			throw new IllegalArgumentException("Can't add " + counterCol.size() + " characters to " + spaceship + ".  It has a limit of " + spaceship.maxPassengers() + " characters.");
 		}
-		return new SpaceshipStack(spaceship, Arrays.asList(counters));
+		return new SpaceshipStack(spaceship, counterCol);
 	}
 
 	public Optional<Stack> stackContaining(Counter counter) {
@@ -72,6 +80,44 @@ public class StackManager {
 		protected Stack(Collection<Counter> stack) {
 			this.stack = new HashSet<>(stack);
 		}
+
+		public Stack of(Counter... counters) {
+			return StackManager.this.of(counters);
+		}
+
+		public SpaceshipStack of(Spaceship spaceship, Counter... counters) {
+			return StackManager.this.of(spaceship, counters);
+		}
+
+		public Stack of(Collection<Counter> counterCol) {
+			return StackManager.this.of(counterCol);
+		}
+
+		public SpaceshipStack of(Spaceship spaceship, Collection<Counter> counterCol) {
+			return StackManager.this.of(spaceship, counterCol);
+		}
+
+		public Stack replace(Counter... counters) {
+			this.clear();
+			return StackManager.this.of(counters);
+		}
+
+		public SpaceshipStack replace(Spaceship spaceship, Counter... counters) {
+			this.clear();
+			return StackManager.this.of(spaceship, counters);
+		}
+
+		public Stack replace(Collection<Counter> counterCol) {
+			this.clear();
+			return StackManager.this.of(counterCol);
+		}
+
+		public SpaceshipStack replace(Spaceship spaceship, Collection<Counter> counterCol) {
+			this.clear();
+			return StackManager.this.of(spaceship, counterCol);
+		}
+
+		
 
 //		public void forEach(Consumer<? super Counter> action) {
 //			stack.forEach(action);
@@ -195,12 +241,16 @@ public class StackManager {
 			this.spaceship = spaceship;
 		}
 		
+		public Spaceship spaceship() {
+			return spaceship;
+		}
+
 		@Override
 		public boolean add(Counter e) {
 			if (spaceship.overLimit(this.size() + 1)) {
 				throw new IllegalArgumentException("Can't add additional characters to " + spaceship + ".  It has a limit of " + spaceship.maxPassengers() + " characters and is at capacity.");
 			}
-			return super.add(e);
+			return super.add(requireCharacter(e));
 		}
 
 		@Override
@@ -208,7 +258,16 @@ public class StackManager {
 			if (spaceship.overLimit(this.size() + c.size())) {
 				throw new IllegalArgumentException("Can't add " + c.size() + " characters to " + spaceship + ".  It has a limit of " + spaceship.maxPassengers() + " characters and it already has " + this.size() + " passengers.");
 			}
+			c.forEach(SpaceshipStack::requireCharacter);
 			return super.addAll(c);
+		}
+
+		private static Counter requireCharacter(Counter counter) {
+			if (counter instanceof Character) {
+				return counter;
+			} else {
+				throw new IllegalArgumentException("Can only add characters to a spaceship. Not allowed (" + counter.getClass().getName() + ").");
+			}
 		}
 		
 		public boolean overLimit(int numChars) {

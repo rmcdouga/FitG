@@ -18,11 +18,14 @@ import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 
 public class Game implements GameState, GameBoard {
 	private static final String ACTION_DECK_LABEL = "actionDeck";
+	
 	private final ActionDeck actionDeck = new ActionDeck();
-	private final StackManager stackMgr = new StackManager();
-	private final CounterLocations counterLocations = new CounterLocations(stackMgr);
 	private final GameBoard gameBoard;
+	
+	private final StackManager stackMgr = new StackManager();
 	private final GameBox gameBox = BaseGameBox.create();
+	private final CounterLocations counterLocations = new CounterLocations(stackMgr);
+	private final CounterPlacement counterPlacement = new CounterPlacement(counterLocations, gameBox);
 	
 	private final Scenario scenario;
 	
