@@ -3,7 +3,7 @@ package com.rogers.rmcdouga.fitg.basegame;
 import static com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet.*;
 import static com.rogers.rmcdouga.fitg.basegame.map.BaseGameStarSystem.*;
 import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter.*;
-import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameImperialSpaceship.Imperial_Spaceship;
+import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameImperialSpaceship.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,6 +17,8 @@ import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameRebelSpaceship;
+import com.rogers.rmcdouga.fitg.basegame.units.ImperialSpaceship;
+import com.rogers.rmcdouga.fitg.basegame.units.Spaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager.Stack;
 
@@ -47,6 +49,10 @@ public enum BaseGameScenario implements Scenario {
 			// Jon_Kidu, Vans_Ka_Tia_A, Imperial_Spaceship
 			// One Line, three Patrol and three Militia
 			Collection<PlaceCountersInstruction> imperialInstructions = imperialDecisions.placeCounters(List.of(stackMgr.of(Jon_Kidu, Vans_Ka_Tia_A, Imperial_Spaceship)), stackMgr);
+			// Remove remaining Imperial Spaceships from play
+			counterPool.removeFromPlay((ImperialSpaceship)counterPool.getSpaceship(Imperial_Spaceship).get());
+			counterPool.removeFromPlay((ImperialSpaceship)counterPool.getSpaceship(Imperial_Spaceship).get());
+			counterPool.removeFromPlay((ImperialSpaceship)counterPool.getSpaceship(Redjacs_Spaceship).get());
 			return Stream.concat(rebelInstructions.stream(), imperialInstructions.stream()).toList();
 		}
 

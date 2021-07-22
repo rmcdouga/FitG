@@ -1,11 +1,11 @@
 package com.rogers.rmcdouga.fitg.basegame.box;
 
 import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameImperialSpaceship.*;
-import static java.util.function.Predicate.not;
 
 import java.lang.reflect.Array;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -71,14 +71,14 @@ class BaseGameCounterPool implements CounterPool {
 			return imperialUnits.get(impUnit)
 								.stream()
 								.map(GenericUnit.class::cast)
-								.filter(not(GenericUnit::isUsed))	// Find first unused unit
+								.filter(GenericUnit::isAvailable)	// Find first available unit
 								.findFirst()
 								.map(GenericUnit::used);			// Mark it used.
 		} else if (unitType instanceof RebelMilitaryUnit rebUnit) {
 			return rebelUnits.get(rebUnit)
 								.stream()
 								.map(GenericUnit.class::cast)
-								.filter(not(GenericUnit::isUsed))	// Find first unused unit
+								.filter(GenericUnit::isAvailable)	// Find first available unit
 								.findFirst()
 								.map(GenericUnit::used);			// Mark it used.
 			
@@ -92,7 +92,7 @@ class BaseGameCounterPool implements CounterPool {
 			return imperialSpaceships.get(impSpaceship)
 									 .stream()
 									 .map(GenericImperialSpaceship.class::cast)
-									 .filter(not(GenericImperialSpaceship::isUsed))	// Find first unused spaceship
+									 .filter(GenericImperialSpaceship::isAvailable)	// Find first available spaceship
 									 .findFirst()
 									 .map(GenericImperialSpaceship::used);			// Mark it used			
 		}
@@ -101,24 +101,34 @@ class BaseGameCounterPool implements CounterPool {
 
 	@Override
 	public CounterPool returnCounter(Unit unit) {
-		if (unit instanceof GenericUnit<?> genUnit) {
-			genUnit.unUsed();			// Mark it as unused.
-			return this;
-		}
-		throw new IllegalArgumentException("Invalid unit supplied (" + unit.getClass().getName() + ").");
+		GenericUnit.requireGu(unit).available();
+		return this;
 	}
 
 	@Override
 	public CounterPool returnSpaceship(ImperialSpaceship spaceship) {
-		if (spaceship instanceof GenericImperialSpaceship<?> genImpShip) {
-			genImpShip.unUsed();			// Mark it as unused.
-			return this;
-		}
-		throw new IllegalArgumentException("Invalid unit supplied (" + spaceship.getClass().getName() + ").");
+		GenericImperialSpaceship.requireGis(spaceship).available();
+		return this;
+	}
+
+	@Override
+	public CounterPool removeFromPlay(Unit unit) {
+		GenericUnit.requireGu(unit).removeFromPlay();
+		return this;
+	}
+
+	@Override
+	public CounterPool removeFromPlay(ImperialSpaceship spaceship) {
+		GenericImperialSpaceship.requireGis(spaceship).removeFromPlay();
+		return this;
 	}
 
 	public static CounterPool create() {
 		return new BaseGameCounterPool();
+	}
+
+	private enum Status {
+		AVAILABLE, USED, OUT_OF_PLAY;
 	}
 
 //	private static createImperialUnit(ImperialMilitaryUnit unit, int counter) {
@@ -129,11 +139,12 @@ class BaseGameCounterPool implements CounterPool {
 
 		private final T unitType;
 		private final int unitNum;
-		private boolean used;
-		
+		private Status status;
+
 		private GenericUnit(T unitType, int unitNum) {
 			this.unitType = unitType;
 			this.unitNum = unitNum;
+			this.status = Status.AVAILABLE;
 		}
 	
 		@Override
@@ -151,23 +162,35 @@ class BaseGameCounterPool implements CounterPool {
 			return unitType.isMobile();
 		}
 
-		public boolean isUsed() {
-			return used;
+		public boolean isAvailable() {
+			return status == Status.AVAILABLE;
 		}
 
 		public GenericUnit<T> used() {
-			this.used = true;
+			this.status = Status.USED;
 			return this;
 		}
 
-		public GenericUnit<T> unUsed() {
-			this.used = false;
+		public GenericUnit<T> available() {
+			this.status = Status.AVAILABLE;
+			return this;
+		}
+
+		public GenericUnit<T> removeFromPlay() {
+			this.status = Status.OUT_OF_PLAY;
 			return this;
 		}
 
 		@Override
 		public String toString() {
-			return "GenericUnit [unitType=" + unitType + ", unitNum=" + unitNum + ", used=" + used + "]";
+			return "GenericUnit [unitType=" + unitType + ", unitNum=" + unitNum + ", status=" + status + "]";
+		}
+		
+		public static GenericUnit<?> requireGu(Unit unit) {
+			if (unit instanceof GenericUnit<?> genUnit) {
+				return genUnit;
+			}
+			throw new IllegalArgumentException("Invalid unit supplied (" + unit.getClass().getName() + ").");
 		}
 	}
 
@@ -175,13 +198,13 @@ class BaseGameCounterPool implements CounterPool {
 
 		private final T unitType;
 		private final int unitNum;
-		private boolean used;
+		private Status status;
 
 		private GenericImperialSpaceship(T unitType, int unitNum) {
 			super();
 			this.unitType = unitType;
 			this.unitNum = unitNum;
-			this.used = false;
+			this.status = Status.AVAILABLE;
 		}
 
 		@Override
@@ -209,23 +232,41 @@ class BaseGameCounterPool implements CounterPool {
 			return unitType.overLimit(numChars);
 		}
 		
-		public boolean isUsed() {
-			return used;
+		public boolean isAvailable() {	// Is available in the Counter Pool
+			return this.status == Status.AVAILABLE;
 		}
 
 		public GenericImperialSpaceship<T> used() {
-			this.used = true;
+			this.status = Status.USED;
 			return this;
 		}
 
-		public GenericImperialSpaceship<T> unUsed() {
-			this.used = false;
+		public GenericImperialSpaceship<T> available() {
+			this.status = Status.AVAILABLE;
+			return this;
+		}
+
+		public GenericImperialSpaceship<T> removeFromPlay() {
+			this.status = Status.OUT_OF_PLAY;
 			return this;
 		}
 
 		@Override
 		public String toString() {
-			return "GenericImperialSpaceship [unitType=" + unitType + ", unitNum=" + unitNum + ", used=" + used + "]";
+			return "GenericImperialSpaceship [unitType=" + unitType + ", unitNum=" + unitNum + ", status=" + status + "]";
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(unitNum, unitType);
+		}
+		
+		public static GenericImperialSpaceship<?> requireGis(Spaceship spaceship) {
+			if (spaceship instanceof GenericImperialSpaceship<?> genImpShip) {
+				return genImpShip;
+			}
+			throw new IllegalArgumentException("Invalid unit supplied (" + spaceship.getClass().getName() + ").");
+
 		}
 	}
 //	private static class GenericImperialUnit implements Unit {

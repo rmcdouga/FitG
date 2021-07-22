@@ -14,6 +14,8 @@ public interface CounterPool {
 	
 	Optional<Unit> getCounter(Unit unitType);
 	CounterPool returnCounter(Unit unit);
+	CounterPool removeFromPlay(Unit unit);
 	Optional<Spaceship> getSpaceship(ImperialSpaceship spaceshipType);
 	CounterPool returnSpaceship(ImperialSpaceship spaceship);
+	CounterPool removeFromPlay(ImperialSpaceship spaceship);
 }

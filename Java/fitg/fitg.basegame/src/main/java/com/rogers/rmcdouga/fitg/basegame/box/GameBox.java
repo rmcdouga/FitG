@@ -97,4 +97,88 @@ public interface GameBox extends CharacterPool, CounterPool, PossessionPool {
 			throw new IllegalArgumentException("Unable to get " + spaceship + " from box.  Unexpected type (" + spaceship.getClass().getName() + ").");				
 		}
 	}
+	
+	default <T extends Counter> void returnToBox(T counter) {
+		if (counter instanceof Unit unit) {
+			returnCounter(unit);
+		} else if (counter instanceof Character character) {
+			kill(character);
+		} else if (counter instanceof Spaceship spaceship) {
+			returnSpaceshipToBox(spaceship);
+		} else if (counter instanceof Stack stack) {
+			returnStackToBox(stack);
+		} else {
+			throw new IllegalArgumentException("Unable to return " + counter + " to box.  Unexpected type (" + counter.getClass().getName() + ").");				
+		}
+	}
+
+	private void returnSpaceshipToBox(Spaceship spaceship) {
+		if ( spaceship instanceof ImperialSpaceship impSpaceship) {
+			returnSpaceship(impSpaceship);
+		} else if ( spaceship instanceof RebelSpaceship rebelSpaceship) {
+			lost(rebelSpaceship);
+		} else {
+			throw new IllegalArgumentException("Unable to return " + spaceship + " to box.  Unexpected type (" + spaceship.getClass().getName() + ").");				
+		}
+	}
+
+	private void returnStackToBox(Stack stack) {
+		if (stack instanceof SpaceshipStack ssStack) {
+			returnSpaceshipStackToBox(ssStack);
+		} else {
+			returnNormalStackToBox(stack);
+		}
+	}
+
+	private void returnSpaceshipStackToBox(SpaceshipStack stack) {
+		returnNormalStackToBox(stack);
+		returnSpaceshipToBox(stack.spaceship());
+	}
+
+	private void returnNormalStackToBox(Stack stack) {
+		stack.forEach(this::returnToBox);
+	}
+
+	default <T extends Counter> void removeFromPlay(T counter) {
+		if (counter instanceof Unit unit) {
+			returnCounter(unit);	// TODO:  Should there be a RemoveCounter?  For now, always return it.
+		} else if (counter instanceof Character character) {
+			kill(character);
+		} else if (counter instanceof Spaceship spaceship) {
+			removeSpaceshipFromPlay(spaceship);
+		} else if (counter instanceof Stack stack) {
+			removeStackFromPlay(stack);
+		} else {
+			throw new IllegalArgumentException("Unable to remove " + counter + " from play.  Unexpected type (" + counter.getClass().getName() + ").");				
+		}
+	}
+
+	private void removeSpaceshipFromPlay(Spaceship spaceship) {
+		if ( spaceship instanceof ImperialSpaceship impSpaceship) {
+			removeFromPlay(impSpaceship);
+		} else if ( spaceship instanceof RebelSpaceship rebelSpaceship) {
+			destroyed(rebelSpaceship);
+		} else {
+			throw new IllegalArgumentException("Unable to return " + spaceship + " to box.  Unexpected type (" + spaceship.getClass().getName() + ").");				
+		}
+	}
+
+	private void removeStackFromPlay(Stack stack) {
+		if (stack instanceof SpaceshipStack ssStack) {
+			removeSpaceshipStackFromPlay(ssStack);
+		} else {
+			removeNormalStackFromPlay(stack);
+		}
+	}
+
+	private void removeSpaceshipStackFromPlay(SpaceshipStack stack) {
+		removeNormalStackFromPlay(stack);
+		removeSpaceshipFromPlay(stack.spaceship());
+	}
+
+	private void removeNormalStackFromPlay(Stack stack) {
+		stack.forEach(this::removeFromPlay);
+	}
+
+
 }

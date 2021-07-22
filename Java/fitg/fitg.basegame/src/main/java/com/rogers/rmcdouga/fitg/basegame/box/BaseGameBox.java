@@ -74,6 +74,17 @@ public class BaseGameBox implements GameBox {
 	}
 
 	@Override
+	public CounterPool removeFromPlay(Unit unit) {
+		counterPool.removeFromPlay(unit);
+		return this;
+	}
+
+	@Override
+	public CounterPool removeFromPlay(ImperialSpaceship spaceship) {
+		counterPool.removeFromPlay(spaceship);
+		return this;
+	}
+	@Override
 	public Possession getPossession(Possession possesion) {
 		return possessionPool.getPossession(possesion);
 	}
