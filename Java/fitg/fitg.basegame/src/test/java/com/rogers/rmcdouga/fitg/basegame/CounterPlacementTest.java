@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import com.rogers.rmcdouga.fitg.basegame.CounterPlacement.PlacedCounter;
+import com.rogers.rmcdouga.fitg.basegame.CounterLocations.PlacedCounter;
 import com.rogers.rmcdouga.fitg.basegame.box.BaseGameBox;
 import com.rogers.rmcdouga.fitg.basegame.box.GameBox;
 import com.rogers.rmcdouga.fitg.basegame.map.Environ;
@@ -31,15 +31,14 @@ class CounterPlacementTest {
 	// It's debatable whether I should mock the dependencies, but at the moment it's just easier to use the real classes.
 	private final StackManager stackMgr = new StackManager();
 	private final GameBox gameBox = BaseGameBox.create();
-	private final CounterLocations counterLocations = new CounterLocations(stackMgr);
-	private final CounterPlacement counterPlacement = new CounterPlacement(counterLocations, gameBox);
+	private final CounterLocations counterLocations = new CounterLocations(gameBox);
 	
 	private final Stack testStack = stackMgr.of(Adam_Starlight, Els_Taroff, Liquid_2_3);
 	private final Stack testSpaceshipStack = stackMgr.of((Spaceship)Imperial_Spaceship, Senator_Dermond);
 
-	private final PlacedCounter<BaseGameCharacter> underTestCounter = counterPlacement.placeCounter(LOCATION, Jon_Kidu).get();
-	private final PlacedCounter<Stack> underTestStack = counterPlacement.placeCounter(LOCATION, testStack).get();
-	private final PlacedCounter<Stack> underTestSpaceshipStack = counterPlacement.placeCounter(LOCATION, testSpaceshipStack).get();
+	private final PlacedCounter<BaseGameCharacter> underTestCounter = counterLocations.placeCounter(LOCATION, Jon_Kidu).get();
+	private final PlacedCounter<Stack> underTestStack = counterLocations.placeCounter(LOCATION, testStack).get();
+	private final PlacedCounter<Stack> underTestSpaceshipStack = counterLocations.placeCounter(LOCATION, testSpaceshipStack).get();
 	
 	@Test
 	void testPlaceCounter_Counter() {
@@ -76,7 +75,7 @@ class CounterPlacementTest {
 
 	@Test
 	void testPlaceCounter_StackList() {
-		PlacedCounter<Stack> placedCounter = counterPlacement.placeCounter(LOCATION, stackMgr, Zina_Adora, Ly_Mantok).get();
+		PlacedCounter<Stack> placedCounter = counterLocations.placeCounter(LOCATION, Zina_Adora, Ly_Mantok).get();
 		assertEquals(LOCATION, placedCounter.location());
 		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()->gameBox.getCharacter(Zina_Adora), "Expected Zina Adora to be IN_PLAY");
 		String msg = ex.getMessage();
@@ -87,7 +86,7 @@ class CounterPlacementTest {
 
 	@Test
 	void testPlaceCounter_SpaceshipStackList() {
-		PlacedCounter<SpaceshipStack> placedCounter = counterPlacement.placeCounter(LOCATION, stackMgr, Explorer, Zina_Adora, Ly_Mantok).get();
+		PlacedCounter<SpaceshipStack> placedCounter = counterLocations.placeCounter(LOCATION, Explorer, Zina_Adora, Ly_Mantok).get();
 		assertEquals(LOCATION, placedCounter.location());
 		assertEquals(Explorer, placedCounter.counter().spaceship());
 		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()->gameBox.getCharacter(Zina_Adora), "Expected Zina Adora to be IN_PLAY");

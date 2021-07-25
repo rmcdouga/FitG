@@ -3,13 +3,18 @@ package com.rogers.rmcdouga.fitg.basegame;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 
+import com.rogers.rmcdouga.fitg.basegame.box.GameBox;
 import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
+import com.rogers.rmcdouga.fitg.basegame.units.Spaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
+import com.rogers.rmcdouga.fitg.basegame.units.StackManager.SpaceshipStack;
+import com.rogers.rmcdouga.fitg.basegame.units.StackManager.Stack;
 
 /**
  * This is a data structure that maintains the locations of counters on the map
@@ -19,12 +24,13 @@ public class CounterLocations implements GameState {
 	
 	private final HashSetValuedHashMap<Location, Counter> locationMap = new HashSetValuedHashMap<>();
 	private final Map<Counter, Location> counterMap = new HashMap<>();
-	private final StackManager stackMgr;
+	private final StackManager stackMgr = new StackManager();
+	private final GameBox gameBox;
 
-	public CounterLocations(StackManager stackMgr) {
-		this.stackMgr = stackMgr;
+	public CounterLocations(GameBox gameBox) {
+		this.gameBox = gameBox;
 	}
-
+	
 	/**
 	 * Adds a new Counter to the map.
 	 * 
@@ -32,7 +38,7 @@ public class CounterLocations implements GameState {
 	 * @param location
 	 * @return
 	 */
-	public CounterLocations add(Counter counter, Location location) {
+	private CounterLocations add(Counter counter, Location location) {
 		if (counterMap.containsKey(counter)) {
 			throw new UnsupportedOperationException("Counter (" + counter + ") is already on the map, use move() instead.");
 		}
@@ -40,7 +46,33 @@ public class CounterLocations implements GameState {
 		locationMap.put(location, counter);
 		return this;
 	}
+
+	public <T extends Counter> Optional<PlacedCounter<T>> placeCounter(Location location, T counter) {
+		// Get the counter from the GameBox and then place it.
+		return gameBox.get(transferStack(counter)).map(c->placeRetrievedCounter(location, c));
+	}
+
+	public <T extends Counter> Optional<PlacedCounter<Stack>> placeCounter(Location location, @SuppressWarnings("unchecked") T... counters) {
+		// Get the counter from the GameBox and then place it.
+		return gameBox.get(stackMgr, counters).map(c->placeRetrievedCounter(location, c));
+	}
+
+	public <T extends Counter> Optional<PlacedCounter<SpaceshipStack>> placeCounter(Location location, Spaceship spaceship, @SuppressWarnings("unchecked") T... counters) {
+		// Get the counter from the GameBox and then place it.
+		return gameBox.get(stackMgr, spaceship, counters).map(c->placeRetrievedCounter(location, c));
+	}
+
+	// Having gotten a counter from the GameBox, this places it (i.e. gives it a location).
+	private <T extends Counter> PlacedCounter<T> placeRetrievedCounter(Location location, T counter) {
+		this.add(counter, location);
+		return new PlacedCounter<T>(counter);
+	}
 	
+	@SuppressWarnings("unchecked")
+	private  <T extends Counter> T transferStack(T maybeStack) {
+		return maybeStack instanceof Stack definitelyStack ? (T) stackMgr.transfer(definitelyStack) : maybeStack;
+	}
+
 	/**
 	 * Moves an existing counter to a new location
 	 * 
@@ -48,7 +80,8 @@ public class CounterLocations implements GameState {
 	 * @param newLocation
 	 * @return
 	 */
-	public CounterLocations move(Counter counter, Location newLocation) {
+	public CounterLocations move(Counter counterParam, Location newLocation) {
+		Counter counter = fixIfStack(counterParam);
 		Location oldLocation = counterMap.replace(counter, newLocation);
 		if (oldLocation == null) {
 			throw new IllegalArgumentException("Couldn't find counter (" + counter + ").");
@@ -60,6 +93,16 @@ public class CounterLocations implements GameState {
 			throw new IllegalStateException("Couldn't find counter (" + counter + ") at location (" + oldLocation + ") when moving to location (" + newLocation + ").");
 		}
 		return this;
+	}
+
+	// If the passed in counter is a stack , it may be a stack created with another StackManager.  If so, we find and return the equivilent stack 
+	// within this stack manager.
+	private Counter fixIfStack(Counter counter) {
+		return counter instanceof Stack stack 
+				? stackMgr.find(stack)
+						  .map(Counter.class::cast)
+						  .orElseThrow(()->new IllegalArgumentException("Couldn't find stack (" + stack + ")."))
+				: counter;
 	}
 	
 	/**
@@ -84,13 +127,71 @@ public class CounterLocations implements GameState {
 	 * @param counter
 	 * @return
 	 */
-	public Optional<Location> location(Counter counter) {
+	public  Location location(Counter counterParam) {
 		// If there's a stack containing the counter, then get the stack's location rather than the counter's location.
+		Counter counter = fixIfStack(counterParam);
 		Counter stackOrCounter = stackMgr.stackContaining(counter)
 										 .map(Counter.class::cast)
 										 .orElse(counter);
 				
-		return Optional.ofNullable(counterMap.get(stackOrCounter));
+		return Objects.requireNonNull(counterMap.get(stackOrCounter), ()->"Couldn't find counter (" + counterParam + ").");
+	}
+
+	public class PlacedCounter<T extends Counter> {
+		private final T counter;
+
+		private PlacedCounter(T counter) {
+			this.counter = counter;
+		}
+		
+		public T counter() {
+			return counter;
+		}
+
+		public Location location() {
+			return getEnclosingInstance().location(counter);
+		}
+		
+		public PlacedCounter<T> move(Location newLocation) {
+			getEnclosingInstance().move(counter, newLocation);
+			return this;
+		}
+		
+		public void returnToBox() {
+			gameBox.returnToBox(this.counter);
+		}
+
+		public void removeFromPlay() {
+			gameBox.removeFromPlay(this.counter);
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + getEnclosingInstance().hashCode();
+			result = prime * result + Objects.hash(counter);
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			@SuppressWarnings("rawtypes")
+			PlacedCounter other = (PlacedCounter) obj;
+			if (!(getEnclosingInstance() == other.getEnclosingInstance()))
+				return false;
+			return Objects.equals(counter, other.counter);
+		}
+
+		private CounterLocations getEnclosingInstance() {
+			return CounterLocations.this;
+		}
 	}
 
 	/**
@@ -99,14 +200,15 @@ public class CounterLocations implements GameState {
 	 * @param counter
 	 * @return
 	 */
-	public CounterLocations remove(Counter counter) {
+	public CounterLocations remove(Counter counterParam) {
+		Counter counter = fixIfStack(counterParam);
 		Location counterLocation = counterMap.remove(counter);
 		if (counterLocation == null) {
-			throw new IllegalArgumentException("Couldn't find counter (" + counter + ").");
+			throw new IllegalArgumentException("Couldn't find counter (" + counterParam + ").");
 		}
 		if (locationMap.removeMapping(counterLocation, counter) == false) {
 			// This should never happen. 
-			throw new IllegalStateException("Couldn't find counter's location (" + counter + "/" + counterLocation + ").");
+			throw new IllegalStateException("Couldn't find counter's location (" + counterParam + "/" + counterLocation + ").");
 		}
 		return this;
 	}

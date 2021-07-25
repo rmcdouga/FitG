@@ -44,6 +44,10 @@ public interface GameBox extends CharacterPool, CounterPool, PossessionPool {
 		throw new IllegalArgumentException("Unable to get " + counter + " from box.  Unexpected type (" + counter.getClass().getName() + ").");				
 	}
 
+	@SuppressWarnings("unchecked")
+	default <T extends Counter> Optional<Stack> get(StackManager stackMgr, Collection<T> counters) {
+		return getCounters((Collection<Counter>)counters).map(stackMgr::of);
+	}
 	default <T extends Counter> Optional<Stack> get(StackManager stackMgr, @SuppressWarnings("unchecked") T... counters) {
 		return getCounters(Arrays.asList(counters)).map(stackMgr::of);
 	}

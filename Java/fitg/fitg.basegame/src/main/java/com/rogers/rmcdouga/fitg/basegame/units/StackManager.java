@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import com.rogers.rmcdouga.fitg.basegame.GameState;
 
@@ -24,7 +25,7 @@ public class StackManager {
 	}
 
 	public Stack of(Collection<Counter> counterCol) {
-		return trackStack(new Stack(counterCol));
+		return trackStack(new Stack(ensureNoStacks(counterCol)));
 	}
 
 	public SpaceshipStack of(Spaceship spaceship, Collection<Counter> counterCol) {
@@ -63,6 +64,47 @@ public class StackManager {
 		return stack;
 	}
 	
+	public static Collection<Counter> ensureNoStacks(Collection<Counter> counterCol) {
+		for(Counter counter : counterCol) {
+			if (counter instanceof Stack) {
+				throw new IllegalArgumentException("Stacks are not allowed in this context (" + counter + ").");
+			}
+		}
+		return counterCol;
+	}
+
+	/**
+	 * Transfer a stack (potentially from another Stack Manager) into this stack manager.
+	 * If the stack is already owned by this stack manager, then it is just returned as is.
+	 * 
+	 * @param stack stack to be transferred to this stack manager
+	 * @return stack managed by this stack manager,
+	 */
+	public Stack transfer(Stack stack) {
+		if (stack.getStackMgr().equals(this)) {
+			return stack;
+		}
+		return stack instanceof SpaceshipStack ss ? of(ss.spaceship(), (Collection<Counter>) ss): of((Collection<Counter>) stack);
+	}
+
+	/**
+	 * Find an equivalent stack from this Stack Manager.
+	 * 
+	 * @param stack
+	 * @return
+	 */
+	public Optional<Stack> find(Stack stack) {
+		if (stack.getStackMgr().equals(this)) {
+			return Optional.of(stack);
+		}
+		// find the stack that the first counter is in and compare it to the stack provided.
+		// since a counter can only be in one stack, if they don't match then the stacks don't match
+		return stack.stream()
+					.findFirst()						// grab the first counter
+					.flatMap(this::stackContaining)		// find the stack within this stack manager that contains it
+					.filter(s->s instanceof SpaceshipStack ss ? (stack instanceof SpaceshipStack sstack? s.isEquivalent(sstack) : false) : s.isEquivalent(stack));	// see if that stack is equivilent to the stack passed in
+	}
+	
 	/**
 	 * Repreents a stack of counters (and is treated as a counter itself - i.e. it has a location).  
 	 * All counters in a stack share the same location.
@@ -82,39 +124,39 @@ public class StackManager {
 		}
 
 		public Stack of(Counter... counters) {
-			return StackManager.this.of(counters);
+			return getStackMgr().of(counters);
 		}
 
 		public SpaceshipStack of(Spaceship spaceship, Counter... counters) {
-			return StackManager.this.of(spaceship, counters);
+			return getStackMgr().of(spaceship, counters);
 		}
 
 		public Stack of(Collection<Counter> counterCol) {
-			return StackManager.this.of(counterCol);
+			return getStackMgr().of(counterCol);
 		}
 
 		public SpaceshipStack of(Spaceship spaceship, Collection<Counter> counterCol) {
-			return StackManager.this.of(spaceship, counterCol);
+			return getStackMgr().of(spaceship, counterCol);
 		}
 
 		public Stack replace(Counter... counters) {
 			this.clear();
-			return StackManager.this.of(counters);
+			return getStackMgr().of(counters);
 		}
 
 		public SpaceshipStack replace(Spaceship spaceship, Counter... counters) {
 			this.clear();
-			return StackManager.this.of(spaceship, counters);
+			return getStackMgr().of(spaceship, counters);
 		}
 
 		public Stack replace(Collection<Counter> counterCol) {
 			this.clear();
-			return StackManager.this.of(counterCol);
+			return getStackMgr().of(counterCol);
 		}
 
 		public SpaceshipStack replace(Spaceship spaceship, Collection<Counter> counterCol) {
 			this.clear();
-			return StackManager.this.of(spaceship, counterCol);
+			return getStackMgr().of(spaceship, counterCol);
 		}
 
 		
@@ -225,7 +267,13 @@ public class StackManager {
 //		public Stream<Counter> parallelStream() {
 //			return stack.parallelStream();
 //		}
+		private StackManager getStackMgr() {
+			return StackManager.this;
+		}
 		
+		public boolean isEquivalent(Stack stack) {
+			return Set.copyOf(this).equals(Set.copyOf(stack));
+		}
 	}
 
 	public class SpaceshipStack extends Stack {
@@ -272,6 +320,10 @@ public class StackManager {
 		
 		public boolean overLimit(int numChars) {
 			return spaceship.overLimit(numChars);
+		}
+
+		public boolean isEquivalent(SpaceshipStack stack) {
+			return this.spaceship == stack.spaceship && Set.copyOf(this).equals(Set.copyOf(stack));
 		}
 	}
 }

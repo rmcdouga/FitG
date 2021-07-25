@@ -24,8 +24,7 @@ public class Game implements GameState, GameBoard {
 	
 	private final StackManager stackMgr = new StackManager();
 	private final GameBox gameBox = BaseGameBox.create();
-	private final CounterLocations counterLocations = new CounterLocations(stackMgr);
-	private final CounterPlacement counterPlacement = new CounterPlacement(counterLocations, gameBox);
+	private final CounterLocations counterLocations = new CounterLocations(gameBox);
 	
 	private final Scenario scenario;
 	

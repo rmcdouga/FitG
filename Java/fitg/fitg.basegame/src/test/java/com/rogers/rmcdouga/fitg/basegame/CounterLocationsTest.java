@@ -1,5 +1,7 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter.*;
 import static com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet.*;
@@ -9,10 +11,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.rogers.rmcdouga.fitg.basegame.CounterLocations.PlacedCounter;
+import com.rogers.rmcdouga.fitg.basegame.box.BaseGameBox;
+import com.rogers.rmcdouga.fitg.basegame.box.GameBox;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnviron;
 import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
@@ -21,50 +29,57 @@ import com.rogers.rmcdouga.fitg.basegame.units.StackManager.Stack;
 
 class CounterLocationsTest {
 
-	private final StackManager stackMgr = new StackManager();
-	private CounterLocations underTest = new CounterLocations(stackMgr);
+	private final GameBox gameBox = BaseGameBox.create();
+	private CounterLocations underTest = new CounterLocations(gameBox);
+	private final StackManager stackMgr = new StackManager();	// Create my own stack manager
 	private final Stack stack = stackMgr.of(Doctor_Sontag, Drakir_Grebb);
-	private final List<Counter> counters = List.of(Adam_Starlight, Agan_Rafa, stack);
 	private final BaseGameEnviron location = Adare.listEnvirons().get(0);
+	private final List<Counter> countersList = List.of(Adam_Starlight, Agan_Rafa, stack);
+
+	private final List<PlacedCounter<Counter>> counters = countersList.stream()
+																	  .map(c->underTest.placeCounter(location, c))
+																	  .map(Optional::get)
+																	  .toList();
+	// TODO: Alter StackManager to disallow stacks within stacks.
 	
 	@BeforeEach
 	void setup() {
-		counters.forEach(c->underTest.add(c, location));
 	}
 	
 	@Test
 	void testCountersAt() {
 		Collection<Counter> result = underTest.countersAt(location);
-
+		Collection<Counter> expectedResult = toCounter(counters);
+		
 		assertNotNull(result);
 		assertAll(
-				()->assertEquals(counters.size(),result.size()),
-				()->assertTrue(counters.containsAll(result)),
-				()->assertTrue(result.containsAll(counters))
+				()->assertEquals(expectedResult.size(),result.size()),
+				()->assertTrue(expectedResult.containsAll(result)),
+				()->assertTrue(result.containsAll(expectedResult))
 				);
 	}
 
 	@Test
 	void testLocation_present() {
-		Optional<Location> result = underTest.location(Agan_Rafa);
+		Location result = underTest.location(Agan_Rafa);
 		
-		assertTrue(result.isPresent());
-		assertEquals(location, result.get());
+		assertEquals(location, result);
 	}
 
 	@Test
 	void testLocation_notPresent() {
-		Optional<Location> result = underTest.location(Professor_Mareg);
+		NullPointerException ex = assertThrows(NullPointerException.class, ()->underTest.location(Professor_Mareg));
+		String msg = ex.getMessage();
+		assertNotNull(msg);
+		assertThat(msg, allOf(containsString("Couldn't find counter"), containsString(Professor_Mareg.toString())));
 		
-		assertTrue(result.isEmpty());
 	}
 
 	@Test
 	void testLocation_presentInStack() {
-		Optional<Location> result = underTest.location(Doctor_Sontag);
+		Location result = underTest.location(Doctor_Sontag);
 		
-		assertTrue(result.isPresent());
-		assertEquals(location, result.get());
+		assertEquals(location, result);
 	}
 
 	@Test
@@ -74,8 +89,8 @@ class CounterLocationsTest {
 		CounterLocations result = underTest.move(Agan_Rafa, newLocation);
 		assertNotNull(result);
 		assertAll(
-				()->assertEquals(Set.of(Adam_Starlight, stack), Set.copyOf(underTest.countersAt(location))),
-				()->assertEquals(Set.of(Agan_Rafa), Set.copyOf(underTest.countersAt(newLocation)))
+				()->shouldBeEquivilent(Set.of(Adam_Starlight, stack), underTest.countersAt(location)),
+				()->shouldBeEquivilent(Set.of(Agan_Rafa), underTest.countersAt(newLocation))
 				);
 	}
 	
@@ -86,10 +101,10 @@ class CounterLocationsTest {
 		CounterLocations result = underTest.move(stack, newLocation);
 		assertNotNull(result);
 		assertAll(
-				()->assertEquals(Set.of(Adam_Starlight, Agan_Rafa), Set.copyOf(underTest.countersAt(location))),	// any order
-				()->assertEquals(Set.of(stack), Set.copyOf(underTest.countersAt(newLocation))),
-				()->assertEquals(newLocation, underTest.location(stack).get()),
-				()->assertEquals(newLocation, underTest.location(Drakir_Grebb).get())
+				()->shouldBeEquivilent(Set.of(Adam_Starlight, Agan_Rafa), underTest.countersAt(location)),	// any order
+				()->shouldBeEquivilent(Set.of(stack), underTest.countersAt(newLocation)),
+				()->assertEquals(newLocation, underTest.location(stack)),
+				()->assertEquals(newLocation, underTest.location(Drakir_Grebb))
 				);
 	}
 	
@@ -125,10 +140,10 @@ class CounterLocationsTest {
 
 	@Test
 	void testDuplicateAdd() {
-		UnsupportedOperationException ex = assertThrows(UnsupportedOperationException.class, ()->underTest.add(Adam_Starlight, Adare.environ(0)));
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()->underTest.placeCounter(Adare.environ(0), Adam_Starlight));
 		String msg = ex.getMessage();
 		assertNotNull(msg);
-		assertEquals("Counter (Adam_Starlight) is already on the map, use move() instead.", msg);
+		assertThat(msg, allOf(containsString("IN_PLAY"),containsString(Adam_Starlight.toString())));
 	}
 
 	@Test
@@ -147,4 +162,28 @@ class CounterLocationsTest {
 		assertEquals("Couldn't find counter (Ly_Mantok).", msg);
 	}
 
+	private Collection<Counter> toCounter(Collection<PlacedCounter<Counter>> placed) {
+		return placed.stream().map(PlacedCounter::counter).toList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void shouldBeEquivilent(Collection<Counter> expected, Collection<Counter> actual) {
+		Predicate<Counter> isStack = c->c instanceof Stack;
+		Predicate<Counter> notStack = Predicate.not(isStack);
+		Set<Counter> expectedCounters = toStream(expected, notStack).collect(Collectors.toSet());
+		Set<Counter> actualCounters =  toStream(actual, notStack).collect(Collectors.toSet());
+		assertEquals(expectedCounters, actualCounters);
+		List<Stack> expectedStacks = (List<Stack>)(List<?>)toStream(expected, isStack).toList();
+		List<Stack> actualStacks =  (List<Stack>)(List<?>)toStream(actual, isStack).toList();
+		assertEquals(expectedStacks.size(), actualStacks.size());
+		for(int i = 0; i < expectedStacks.size(); i++) {
+			shouldBeEquivilent(expectedStacks.get(i), actualStacks.get(i));
+		}
+	}
+	
+	private static <T> Stream<T> toStream(Collection<T> counters, Predicate<T> filter) {
+		return counters.stream().filter(filter);
+	}
+	
+	
 }
