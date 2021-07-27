@@ -8,12 +8,14 @@ import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.PlaceCountersI
 import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.SetPdbInstructions;
 import com.rogers.rmcdouga.fitg.basegame.box.BaseGameBox;
 import com.rogers.rmcdouga.fitg.basegame.box.GameBox;
+import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyManager;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyType;
 import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
 import com.rogers.rmcdouga.fitg.basegame.map.PdbManager;
 import com.rogers.rmcdouga.fitg.basegame.map.Planet;
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
+import com.rogers.rmcdouga.fitg.basegame.units.Counter;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 
 public class Game implements GameState, GameBoard {
@@ -31,8 +33,12 @@ public class Game implements GameState, GameBoard {
 	private Game(Scenario scenario, Scenario.PlayerDecisions rebelDecisions, Scenario.PlayerDecisions imperialDecisions) {
 		this.scenario = scenario;
 		this.gameBoard = BaseGameGameBoard.create(scenario.createMap(), scenario.type());
-		Collection<SetPdbInstructions> pdbsSetup = scenario.setupPdbs();
-		Collection<PlaceCountersInstruction> countersSetup = scenario.setupCounters(gameBox, stackMgr, rebelDecisions, imperialDecisions);
+		scenario.setupPdbs().forEach(this::setupPdb);
+		scenario.setupCounters(gameBox, stackMgr, rebelDecisions, imperialDecisions).forEach(this::placeCounter);
+	}
+
+	public Collection<Counter> countersAt(Location location) {
+		return counterLocations.countersAt(BaseGameScenario.IN_SPACE);
 	}
 
 	/**
@@ -108,4 +114,21 @@ public class Game implements GameState, GameBoard {
 		return gameBoard.getStarSystems();
 	}
 	
+
+	private void setupPdb(SetPdbInstructions instruction) {
+		switch(instruction.pdb().level()) {		// intentional fall through on the cases...
+		case TWO:
+			increasePdb(instruction.p());
+		case ONE:
+			increasePdb(instruction.p());
+		case ZERO:
+		}
+		if (instruction.pdb().isUp()) {
+			upPdb(instruction.p());
+		}
+	}
+
+	private void placeCounter(PlaceCountersInstruction instruction) {
+		counterLocations.placeCounter(instruction.location(), instruction.counter());
+	}
 }

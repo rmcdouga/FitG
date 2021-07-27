@@ -3,10 +3,17 @@ package com.rogers.rmcdouga.fitg.basegame;
 import static com.rogers.rmcdouga.fitg.basegame.BaseGameScenario.FlightToEgrix;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Collection;
+
 import org.junit.jupiter.api.Test;
 
+import com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnvironType;
+import com.rogers.rmcdouga.fitg.basegame.map.BaseGameLoyaltyType;
+import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
+import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
 import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixImperialStrategy;
 import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixRebelStrategy;
+import com.rogers.rmcdouga.fitg.basegame.units.Counter;
 
 class GameTest {
 
@@ -17,6 +24,17 @@ class GameTest {
 		Game createdGame = Game.createGame(FlightToEgrix, rebelDecisions, imperialDecisions);
 		
 		assertNotNull(createdGame);
+		assertEquals(BaseGameLoyaltyType.Loyal, createdGame.getLoyalty(BaseGamePlanet.Quibron));
+		assertEquals(Pdb.Level.ONE, createdGame.getPdb(BaseGamePlanet.Quibron).level());
+		assertTrue(createdGame.getPdb(BaseGamePlanet.Quibron).isUp());
+		
+		Collection<Counter> countersInSpace = createdGame.countersAt(BaseGameScenario.IN_SPACE);
+		assertNotNull(countersInSpace);
+		assertFalse(countersInSpace.isEmpty());
+		
+		Collection<Counter> countersOnAngoff = createdGame.countersAt(BaseGamePlanet.Angoff.environ(BaseGameEnvironType.Urban).get());
+		assertNotNull(countersOnAngoff);
+		assertFalse(countersOnAngoff.isEmpty());
 	}
 
 }

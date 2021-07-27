@@ -48,7 +48,7 @@ public enum BaseGameScenario implements Scenario {
 			// Player will place these:
 			// Jon_Kidu, Vans_Ka_Tia_A, Imperial_Spaceship
 			// One Line, three Patrol and three Militia
-			Collection<PlaceCountersInstruction> imperialInstructions = imperialDecisions.placeCounters(List.of(stackMgr.of(Jon_Kidu, Vans_Ka_Tia_A, Imperial_Spaceship)), stackMgr);
+			Collection<PlaceCountersInstruction> imperialInstructions = imperialDecisions.placeCounters(List.of(Jon_Kidu, Vans_Ka_Tia_A, Imperial_Spaceship), stackMgr);
 			// Remove remaining Imperial Spaceships from play
 			counterPool.removeFromPlay((ImperialSpaceship)counterPool.getSpaceship(Imperial_Spaceship).get());
 			counterPool.removeFromPlay((ImperialSpaceship)counterPool.getSpaceship(Imperial_Spaceship).get());
