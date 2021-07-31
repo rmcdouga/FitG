@@ -1,26 +1,20 @@
 package com.rogers.rmcdouga.fitg.svgviewer;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.geom.Rectangle2D;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
 import com.rogers.rmcdouga.fitg.basegame.RaceType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameLoyaltyType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 import com.rogers.rmcdouga.fitg.basegame.map.Environ;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.OptionalDouble;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public enum Planet {
 	Mimulus(BaseGamePlanet.Mimulus, 0, 58, 28.8),	// Done
@@ -160,16 +154,11 @@ public enum Planet {
 	}
 
 	private void drawPlanetGuidlines(Graphics2D gc, int radius) {
-//		gc.rotate(Math.PI / 2);		// rotate 90 degrees to the horizontal
-//		gc.rotate(this.loyaltyOffset);	// offset it for this particular planet
-		
 		gc.rotate(Math.toRadians(this.orbitSize));	// rotate past the orbit arc
 		
 		// draw sector lines
 		int halfMarkerSize = marker_size / 2;
 		gc.drawLine(0, -radius - halfMarkerSize, 0, -radius + halfMarkerSize);
-//		double arc_size = Math.PI * 26.6 / radius;		// Pi/12 is perfect size for Akubera 342
-//		double arc_size = this.loyaltySize * (320.0 / radius);		// Pi/12 is perfect size for Akubera 342
 		double arc_size = this.loyaltySize;
 		
 		for (int i = 0; i < 5; i++) {
@@ -182,11 +171,7 @@ public enum Planet {
 			double environSize = Math.toRadians(environSizes.get(i));
 			Environ environ = bgPlanet.environ(i);
 			String environStats = environString(environ);
-//			gc.rotate(environSize / 2);
-//			gc.drawString(environStats, 0, -radius - (halfMarkerSize / 2));
-//			gc.rotate(environSize / 2);
 			writeTextStraightCentred((Graphics2D)gc.create(), -radius - (halfMarkerSize / 2), environSize / 2, environStats);
-//			writeTextAlongCurve((Graphics2D)gc.create(), radius + halfMarkerSize / 2, arc_size, environStats);
 			gc.rotate(environSize);
 			gc.drawLine(0, -radius - halfMarkerSize, 0, -radius + halfMarkerSize);
 		}
@@ -204,33 +189,6 @@ public enum Planet {
 		gc.drawString(string, (int)(-visualBounds.getCenterX()), radius);
 	}
 
-//	private static void writeTextStraight(Graphics2D gc, int radius, double offset, String string) {
-//		gc.rotate(offset);
-//		gc.drawString(string, 0, radius);
-//	}
-//
-//	private static void writeTextAlongCurve(Graphics2D gc, int radius, double offset, String string) {
-//		// Based on https://stackoverflow.com/questions/5159845/curved-text-in-java
-//		gc.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-////		gc.rotate(Math.toRadians(offset));
-//		gc.translate(0,  radius);
-////		Font font = new Font("Serif", Font.PLAIN, 24);
-//		Font font = gc.getFont();
-//		FontRenderContext frc = gc.getFontRenderContext();
-//		
-//		GlyphVector gv = font.createGlyphVector(frc, string);
-//		int length = gv.getNumGlyphs();
-//		for (int i = 0; i < length; i++) {
-//			Point2D p = gv.getGlyphPosition(i);
-////			double theta = (double) i / (double) (length - 1) * Math.PI / 4;
-//			AffineTransform at = AffineTransform.getTranslateInstance(p.getX(), p.getY());
-////			at.rotate(theta);
-//			Shape glyph = gv.getGlyphOutline(i);
-//			Shape transformedGlyph = at.createTransformedShape(glyph);
-//			gc.fill(transformedGlyph);
-//		}	
-//	}
-	
 	private String environString(Environ environ) {
 		StringBuilder bldr = new StringBuilder();
 		bldr.append(environ.getType().getName());
