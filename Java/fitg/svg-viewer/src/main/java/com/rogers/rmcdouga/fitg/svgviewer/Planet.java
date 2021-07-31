@@ -1,10 +1,20 @@
 package com.rogers.rmcdouga.fitg.svgviewer;
 
+import com.rogers.rmcdouga.fitg.basegame.RaceType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameLoyaltyType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
+import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
@@ -29,9 +39,9 @@ public enum Planet {
 	Icid(BaseGamePlanet.Icid, 0, 24.3, 12.2),	// Done
 	Cieson(BaseGamePlanet.Cieson, 0, 58, 28.9), // Done
 	Etreg(BaseGamePlanet.Etreg, -5, 33, 17.4), // Done
-	Quibron(BaseGamePlanet.Quibron, 0, 60, 28.5),// Done
-	Angoff(BaseGamePlanet.Angoff, -12, 35, 17.3), // Done
-	Charkhan(BaseGamePlanet.Charkhan, -10, 25, 12.35),	// Done
+	Quibron(BaseGamePlanet.Quibron, 0, 60, 28.5),
+	Angoff(BaseGamePlanet.Angoff, -12, 35, 17.3, List.of(78.8)),
+	Charkhan(BaseGamePlanet.Charkhan, -10, 25, 12.35, List.of(49.4, 48.5)),
 	Pronox(BaseGamePlanet.Pronox, 70, 47, 23),	// Done, Same as Midest
 	Lysenda(BaseGamePlanet.Lysenda, 55), 	// Done
 	Orning(BaseGamePlanet.Orning, 75, 46.6, 23), // Done
@@ -81,14 +91,14 @@ public enum Planet {
 	private final int diameterCheat;
 	private final double orbitSize;	// Size in degrees.
 	private final double loyaltySize;	// Size in degrees.
-	private final List<Double> environSize;	// Size in degrees.
+	private final List<Double> environSizes;	// Size in degrees.
 
 	private Planet(BaseGamePlanet bgPlanet) {
 		this.bgPlanet = bgPlanet;
 		this.diameterCheat = 0;
 		this.orbitSize = 30;
 		this.loyaltySize = 14.9;
-		this.environSize = List.of();
+		this.environSizes = List.of();
 	}
 
 	private Planet(BaseGamePlanet bgPlanet, int diameterCheat) {
@@ -96,7 +106,7 @@ public enum Planet {
 		this.diameterCheat = diameterCheat;
 		this.orbitSize = 30;
 		this.loyaltySize = 14.9;
-		this.environSize = List.of();
+		this.environSizes = List.of();
 	}
 
 	private Planet(BaseGamePlanet bgPlanet, int diameterCheat, double orbitSize, double loyaltySize) {
@@ -104,8 +114,17 @@ public enum Planet {
 		this.diameterCheat = diameterCheat;
 		this.orbitSize = orbitSize;
 		this.loyaltySize = loyaltySize;
-		this.environSize = List.of();
+		this.environSizes = List.of(360-(orbitSize+(loyaltySize*5)));	// Complete the circle with one environ.
 	}
+
+	private Planet(BaseGamePlanet bgPlanet, int diameterCheat, double orbitSize, double loyaltySize, List<Double> environSizes) {
+		this.bgPlanet = bgPlanet;
+		this.diameterCheat = diameterCheat;
+		this.orbitSize = orbitSize;
+		this.loyaltySize = loyaltySize;
+		this.environSizes = environSizes;
+	}
+
 	public static Stream<Planet> stream() {
 		return Stream.of(values());
 	}
@@ -136,11 +155,11 @@ public enum Planet {
 		
 		// draw markers
 		if (displayGuidelines) {
-			drawLoyaltyGuidlines((Graphics2D)gc.create(), radius);
+			drawPlanetGuidlines((Graphics2D)gc.create(), radius);
 		}
 	}
 
-	private void drawLoyaltyGuidlines(Graphics2D gc, int radius) {
+	private void drawPlanetGuidlines(Graphics2D gc, int radius) {
 //		gc.rotate(Math.PI / 2);		// rotate 90 degrees to the horizontal
 //		gc.rotate(this.loyaltyOffset);	// offset it for this particular planet
 		
@@ -158,7 +177,78 @@ public enum Planet {
 			gc.drawLine(0, -radius - halfMarkerSize, 0, -radius + halfMarkerSize);
 			gc.drawString(Integer.toString(i), 0, -radius);
 		}
+		// Draw environs
+		for (int i = 0; i < environSizes.size(); i++) {
+			double environSize = Math.toRadians(environSizes.get(i));
+			Environ environ = bgPlanet.environ(i);
+			String environStats = environString(environ);
+//			gc.rotate(environSize / 2);
+//			gc.drawString(environStats, 0, -radius - (halfMarkerSize / 2));
+//			gc.rotate(environSize / 2);
+			writeTextStraightCentred((Graphics2D)gc.create(), -radius - (halfMarkerSize / 2), environSize / 2, environStats);
+//			writeTextAlongCurve((Graphics2D)gc.create(), radius + halfMarkerSize / 2, arc_size, environStats);
+			gc.rotate(environSize);
+			gc.drawLine(0, -radius - halfMarkerSize, 0, -radius + halfMarkerSize);
+		}
+		
+		
 	}
+
+	private static void writeTextStraightCentred(Graphics2D gc, int radius, double offset, String string) {
+		gc.rotate(offset);
+		Font font = gc.getFont();
+		FontRenderContext frc = gc.getFontRenderContext();
+		
+		GlyphVector gv = font.createGlyphVector(frc, string);
+		Rectangle2D visualBounds = gv.getVisualBounds();
+		gc.drawString(string, (int)(-visualBounds.getCenterX()), radius);
+	}
+
+//	private static void writeTextStraight(Graphics2D gc, int radius, double offset, String string) {
+//		gc.rotate(offset);
+//		gc.drawString(string, 0, radius);
+//	}
+//
+//	private static void writeTextAlongCurve(Graphics2D gc, int radius, double offset, String string) {
+//		// Based on https://stackoverflow.com/questions/5159845/curved-text-in-java
+//		gc.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+////		gc.rotate(Math.toRadians(offset));
+//		gc.translate(0,  radius);
+////		Font font = new Font("Serif", Font.PLAIN, 24);
+//		Font font = gc.getFont();
+//		FontRenderContext frc = gc.getFontRenderContext();
+//		
+//		GlyphVector gv = font.createGlyphVector(frc, string);
+//		int length = gv.getNumGlyphs();
+//		for (int i = 0; i < length; i++) {
+//			Point2D p = gv.getGlyphPosition(i);
+////			double theta = (double) i / (double) (length - 1) * Math.PI / 4;
+//			AffineTransform at = AffineTransform.getTranslateInstance(p.getX(), p.getY());
+////			at.rotate(theta);
+//			Shape glyph = gv.getGlyphOutline(i);
+//			Shape transformedGlyph = at.createTransformedShape(glyph);
+//			gc.fill(transformedGlyph);
+//		}	
+//	}
+	
+	private String environString(Environ environ) {
+		StringBuilder bldr = new StringBuilder();
+		bldr.append(environ.getType().getName());
+		bldr.append(" Size: ");
+		bldr.append(environ.getSize());
+		for (RaceType race : environ.getRaces()) {
+			bldr.append(" ").append(race.getName());
+			if (race.isStarFaring()) {
+				bldr.append("*");
+			}
+		}
+		environ.getResources().ifPresent(r->bldr.append(" Res: ").append(r).append(environ.isStarResources() ? "*" : ""));
+		environ.getCreature().ifPresent(c->bldr.append(" ").append(c.name()));
+		environ.getSovereign().ifPresent(s->bldr.append(" ").append(s.name()));
+		environ.getCoupRating().ifPresent(c->bldr.append(" Coup:").append(c));
+		return bldr.toString();
+	}
+
 	
 	public Graphics2D translateToOrbit(Graphics2D g2d) {
 		var planetG2d = (Graphics2D)g2d.create();
