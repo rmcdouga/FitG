@@ -234,7 +234,7 @@ public enum BaseGamePlanet implements Planet {
 
 	// Egrix,22
 	Quibron(Egrix, None, Loyal, Unrest, ImperialControlled, true,
-			BaseGameEnviron.liquid(4)
+			BaseGameEnviron.wild(4)
 			   .resources(6)
 			   .starResources()
 			   .races(Saurian)
@@ -249,7 +249,7 @@ public enum BaseGamePlanet implements Planet {
 			   .coupRating(3)
 			   .build()),
 	Charkhan(Egrix, None, Patriotic, Dissent, ImperialControlled,
-			BaseGameEnviron.air(3)
+			BaseGameEnviron.air(5)
 			   .resources(7)
 			   .starResources()
 			   .races(Yester)
