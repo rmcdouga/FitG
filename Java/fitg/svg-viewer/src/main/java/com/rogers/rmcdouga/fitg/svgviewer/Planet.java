@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.function.Predicate;
@@ -17,57 +18,57 @@ import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 
 public enum Planet {
-	Mimulus(BaseGamePlanet.Mimulus, 0, 58, 28.8),	// Done
-	Magro(BaseGamePlanet.Magro, -8, 34, 17.2),	// Done
-	Fliad(BaseGamePlanet.Fliad, 0, 24, 12.25),	// Done
-	Kalgar(BaseGamePlanet.Kalgar, 0, 57.9, 28.85), // Done
-	Bajukai(BaseGamePlanet.Bajukai, -10, 34, 17.2), // Done
-	Tiglyf(BaseGamePlanet.Tiglyf, 3, 58, 29.2),	// Done, Same as Squamot
-	Ownex(BaseGamePlanet.Ownex, 0, 58, 28.8),	// Done
-	Adare(BaseGamePlanet.Adare, 0, 34.1, 17.1),	// Done
-	Mitrith(BaseGamePlanet.Mitrith, 0, 24.5, 12.2),	// Done
-	Jura(BaseGamePlanet.Jura, 70, 47, 23),	// Done, Same as Midest
-	Diomas(BaseGamePlanet.Diomas, 60),		// Done
-	Liomax(BaseGamePlanet.Liomax, 0, 58, 28.8), // Done
-	Orlog(BaseGamePlanet.Orlog, 0, 34, 17.2), // Done
-	Icid(BaseGamePlanet.Icid, 0, 24.3, 12.2),	// Done
-	Cieson(BaseGamePlanet.Cieson, 0, 58, 28.9), // Done
-	Etreg(BaseGamePlanet.Etreg, -5, 33, 17.4), // Done
+	Mimulus(BaseGamePlanet.Mimulus, 0, 58, 28.8),
+	Magro(BaseGamePlanet.Magro, -8, 34, 17.2, List.of(80.0, 80.8)),
+	Fliad(BaseGamePlanet.Fliad, 0, 24, 12.25, List.of(50.0, 48.8)),
+	Kalgar(BaseGamePlanet.Kalgar, 0, 57.9, 28.85),
+	Bajukai(BaseGamePlanet.Bajukai, -10, 34, 17.2),
+	Tiglyf(BaseGamePlanet.Tiglyf, 3, 58, 29.2),
+	Ownex(BaseGamePlanet.Ownex, 0, 58, 28.8),
+	Adare(BaseGamePlanet.Adare, 0, 34.1, 17.1, List.of(80.6, 80.6)),
+	Mitrith(BaseGamePlanet.Mitrith, 0, 24.5, 12.2, List.of(49.3, 49.3)),
+	Jura(BaseGamePlanet.Jura, 70, 47, 23),
+	Diomas(BaseGamePlanet.Diomas, 60, List.of(69.0, 69.0)),
+	Liomax(BaseGamePlanet.Liomax, 0, 58, 28.8),
+	Orlog(BaseGamePlanet.Orlog, 0, 34, 17.2),
+	Icid(BaseGamePlanet.Icid, 0, 24.3, 12.2, List.of(50.0)),
+	Cieson(BaseGamePlanet.Cieson, 0, 58, 28.9),
+	Etreg(BaseGamePlanet.Etreg, -5, 33, 17.4, List.of(80.1, 80.1)),
 	Quibron(BaseGamePlanet.Quibron, 0, 60, 28.5),
 	Angoff(BaseGamePlanet.Angoff, -12, 35, 17.3, List.of(78.8)),
 	Charkhan(BaseGamePlanet.Charkhan, -10, 25, 12.35, List.of(49.4, 48.5)),
-	Pronox(BaseGamePlanet.Pronox, 70, 47, 23),	// Done, Same as Midest
-	Lysenda(BaseGamePlanet.Lysenda, 55), 	// Done
-	Orning(BaseGamePlanet.Orning, 75, 46.6, 23), // Done
-	Chim(BaseGamePlanet.Chim, 70, 47, 23),	// Done, Same as Midest
-	Tamset(BaseGamePlanet.Tamset, 55),	// Done
-	Unarpha(BaseGamePlanet.Unarpha, -6, 58.9, 28.7), // Done
-	Suti(BaseGamePlanet.Suti, -15, 34, 17.3), // Done
-	Tsipa(BaseGamePlanet.Tsipa, -8, 24, 12.3), // was Done
-	Squamot(BaseGamePlanet.Squamot, -10, 58, 29.2),	// Done
-	Midest(BaseGamePlanet.Midest, 70, 47, 23),	// Done
-	Akubera(BaseGamePlanet.Akubera, 55), // Done
-	Mrane(BaseGamePlanet.Mrane, 0, 60, 28.4),	// Done
-	Kelta(BaseGamePlanet.Kelta, -15, 35, 17.3),	// Done
-	Troliso(BaseGamePlanet.Troliso, -3, 58, 28.75),	// Done 
-	Heliax(BaseGamePlanet.Heliax, -15, 33.8, 17.3),	// Done
-	Lonica(BaseGamePlanet.Lonica, 75, 46.1, 23),	// Done
-	Horon(BaseGamePlanet.Horon, 0, 59, 28.7),	// Done
-	Solvia(BaseGamePlanet.Solvia, -15, 34.35, 17.2),	// Done
-	Cercis(BaseGamePlanet.Cercis, -15, 24.6, 12.35),	// Done
-	Rhexia(BaseGamePlanet.Rhexia, -4, 58.5, 28.5),	// Done
-	Tartio(BaseGamePlanet.Tartio, -15, 34.1, 17.2),	// Done
-	Ayod(BaseGamePlanet.Ayod, -8, 59, 29),	// Done
-	Barak(BaseGamePlanet.Barak, -10, 58, 29.2),	// Done
-	Liatris(BaseGamePlanet.Liatris, -20, 34, 17.3),	// Done
-	Xan(BaseGamePlanet.Xan, -10, 24.2, 12.3),	// Done
-	Aras(BaseGamePlanet.Aras, -2, 59.5, 28.4),	// Done
-	Capilax(BaseGamePlanet.Capilax, -15, 34.5, 17.3),	// Done
-	Adrax(BaseGamePlanet.Adrax, -5, 24.6, 12.4),	// Done
-	Scythia(BaseGamePlanet.Scythia, -12, 58, 29),	// Done
-	Annell(BaseGamePlanet.Annell, -5, 58.5, 28.8),	// Done
-	Trov(BaseGamePlanet.Trov, -18, 34, 17.3),	// Done
-	Niconi(BaseGamePlanet.Niconi, -2, 58, 28.6),	// Done
+	Pronox(BaseGamePlanet.Pronox, 70, 47, 23),
+	Lysenda(BaseGamePlanet.Lysenda, 55, List.of(68.8, 68.8, 68.8)),
+	Orning(BaseGamePlanet.Orning, 75, 46.6, 23),
+	Chim(BaseGamePlanet.Chim, 70, 47, 23),
+	Tamset(BaseGamePlanet.Tamset, 55, List.of(68.8, 68.8)),
+	Unarpha(BaseGamePlanet.Unarpha, -6, 58.9, 28.7),
+	Suti(BaseGamePlanet.Suti, -15, 34, 17.3, List.of(79.5, 80.5)),
+	Tsipa(BaseGamePlanet.Tsipa, -8, 24, 12.3, List.of(49.7, 48.9)),
+	Squamot(BaseGamePlanet.Squamot, -10, 58, 29.2),
+	Midest(BaseGamePlanet.Midest, 70, 47, 23),
+	Akubera(BaseGamePlanet.Akubera, 55, List.of(68.8, 68.8, 68.8)),
+	Mrane(BaseGamePlanet.Mrane, 0, 60, 28.4),
+	Kelta(BaseGamePlanet.Kelta, -15, 35, 17.3, List.of(78.8)),
+	Troliso(BaseGamePlanet.Troliso, -3, 58, 28.75),
+	Heliax(BaseGamePlanet.Heliax, -15, 33.8, 17.3, List.of(79.5, 80.7)),
+	Lonica(BaseGamePlanet.Lonica, 75, 46.1, 23),
+	Horon(BaseGamePlanet.Horon, 0, 59, 28.7),
+	Solvia(BaseGamePlanet.Solvia, -15, 34.35, 17.2),
+	Cercis(BaseGamePlanet.Cercis, -15, 24.6, 12.35, List.of(49.2, 48.3)), 
+	Rhexia(BaseGamePlanet.Rhexia, -4, 58.5, 28.5),
+	Tartio(BaseGamePlanet.Tartio, -15, 34.1, 17.2, List.of(80.1, 80.1)),
+	Ayod(BaseGamePlanet.Ayod, -8, 59, 29),
+	Barak(BaseGamePlanet.Barak, -10, 58, 29.2),
+	Liatris(BaseGamePlanet.Liatris, -20, 34, 17.3, List.of(80.4)),
+	Xan(BaseGamePlanet.Xan, -10, 24.2, 12.3, List.of(50.2, 49.0)),
+	Aras(BaseGamePlanet.Aras, -2, 59.5, 28.4),
+	Capilax(BaseGamePlanet.Capilax, -15, 34.5, 17.3, List.of(79.3)),
+	Adrax(BaseGamePlanet.Adrax, -5, 24.6, 12.4, List.of(49.2, 48.8)),
+	Scythia(BaseGamePlanet.Scythia, -12, 58, 29),
+	Annell(BaseGamePlanet.Annell, -5, 58.5, 28.8),
+	Trov(BaseGamePlanet.Trov, -18, 34, 17.3, List.of(80.0, 80.0)),
+	Niconi(BaseGamePlanet.Niconi, -2, 58, 28.6),
 	;
 	
 	private static final java.util.Map<BaseGamePlanet, Planet> planetMap; // initialized in static block
@@ -103,12 +104,24 @@ public enum Planet {
 		this.environSizes = List.of();
 	}
 
+	private Planet(BaseGamePlanet bgPlanet, int diameterCheat, List<Double> environSizes) {
+		this.bgPlanet = bgPlanet;
+		this.diameterCheat = diameterCheat;
+		this.orbitSize = 30;
+		this.loyaltySize = 14.9;
+		this.environSizes = environSizes;
+	}
+
 	private Planet(BaseGamePlanet bgPlanet, int diameterCheat, double orbitSize, double loyaltySize) {
 		this.bgPlanet = bgPlanet;
 		this.diameterCheat = diameterCheat;
 		this.orbitSize = orbitSize;
 		this.loyaltySize = loyaltySize;
-		this.environSizes = List.of(360-(orbitSize+(loyaltySize*5)));	// Complete the circle with one environ.
+		int numEnvirons = bgPlanet.numEnvirons();
+		double envSize = (360-(orbitSize+(loyaltySize*5)))/numEnvirons;
+		Double[] envSizes = new Double[numEnvirons];
+		Arrays.fill(envSizes, envSize);
+		this.environSizes = List.of(envSizes);	// Complete the circle with one environ.
 	}
 
 	private Planet(BaseGamePlanet bgPlanet, int diameterCheat, double orbitSize, double loyaltySize, List<Double> environSizes) {
