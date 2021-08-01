@@ -24,7 +24,6 @@ public enum BaseGamePlanet implements Planet {
 	Mimulus(Tardyn, None, Kayn, Patriotic, Loyal, ImperialControlled,
 			BaseGameEnviron.wild(4)
 						   .resources(4)
-						   .starResources()
 						   .races(Kayn)
 						   .creature(Prox)
 						   .build()),
@@ -166,6 +165,7 @@ public enum BaseGamePlanet implements Planet {
 	Diomas(Bex, Provincial, Patriotic, Patriotic, ImperialControlled,
 			BaseGameEnviron.urban(5)
 			   .resources(7)
+			   .starResources()
 			   .races(Rhone)
 			   .creature(Muggers)
 			   .build(),
@@ -300,7 +300,7 @@ public enum BaseGamePlanet implements Planet {
 
 	//	Gellas,24
 	Orning(Gellas, Provincial, Patriotic, Loyal, ImperialControlled,
-			BaseGameEnviron.liquid(4)
+			BaseGameEnviron.liquid(3)
 			   .resources(3)
 			   .races(Suvan)
 			   .creature(Gilekite)
@@ -344,7 +344,7 @@ public enum BaseGamePlanet implements Planet {
 
 	//	Ribex,32
 	Unarpha(Ribex, None, Saurian, Loyal, Neutral, ImperialControlled,
-			BaseGameEnviron.air(3)
+			BaseGameEnviron.urban(3)
 			   .resources(6)
 			   .starResources()
 			   .races(Saurian)
@@ -359,7 +359,7 @@ public enum BaseGamePlanet implements Planet {
 			   .sovereign(Xela_Grebb)
 			   .build(),
 			BaseGameEnviron.wild(4)
-			   .resources(3)
+			   .resources(2)
 			   .races(Moghas)	// Non-starfaring race
 			   .creature(Chantenes)
 			   .build()),
@@ -643,6 +643,7 @@ public enum BaseGamePlanet implements Planet {
 			   .resources(5)
 			   .races(Kayn)
 			   .creature(Wyths)
+			   .coupRating(2)
 			   .build()),
 	//	Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 
