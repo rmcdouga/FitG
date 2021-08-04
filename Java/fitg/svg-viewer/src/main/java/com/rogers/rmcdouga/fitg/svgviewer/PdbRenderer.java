@@ -13,30 +13,19 @@ import com.rogers.rmcdouga.fitg.basegame.map.BaseGameLoyaltyType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
 import com.rogers.rmcdouga.fitg.basegame.map.PdbManager;
+import com.rogers.rmcdouga.fitg.svgviewer.images.ImageStore;
 
 public final class PdbRenderer extends Marker {
-	private static final Path PDB_UP_IMAGE_FILENAME = Paths.get("Marker_PDB-Up.png");
-	private static final Path PDB_DOWN_IMAGE_FILENAME = Paths.get("Marker_PDB-Down.png");
-	private static final Image pdbUpImage;
-	private static final Image pdbDownImage;
-	static {
-		try {
-			pdbUpImage = ImageIO.read(Objects.requireNonNull(Map.class.getClassLoader().getResourceAsStream(imagePath(PDB_UP_IMAGE_FILENAME).toString())));
-		} catch (IOException e) {
-			throw new IllegalStateException("Error reading file (" + PDB_UP_IMAGE_FILENAME + ").", e);
-		}
-		try {
-			pdbDownImage = ImageIO.read(Objects.requireNonNull(Map.class.getClassLoader().getResourceAsStream(imagePath(PDB_DOWN_IMAGE_FILENAME).toString())));
-		} catch (IOException e) {
-			throw new IllegalStateException("Error reading file (" + PDB_DOWN_IMAGE_FILENAME + ").", e);
-		}
-	}
+	private final Image pdbUpImage;
+	private final Image pdbDownImage;
 	
 	private final PdbManager pdbm;
 	
-	private PdbRenderer(PdbManager pdbm) {
+	private PdbRenderer(PdbManager pdbm, ImageStore is) {
 		super();
 		this.pdbm = pdbm;
+		this.pdbUpImage = is.getImage(Pdb.UP_0);
+		this.pdbDownImage = is.getImage(Pdb.DOWN_0);
 	}
 
 	public void draw(Graphics2D gc, BaseGamePlanet p) {
@@ -54,7 +43,7 @@ public final class PdbRenderer extends Marker {
 		};
 	}
 
-	public static PdbRenderer create(PdbManager pdbm) {
-		return new PdbRenderer(pdbm);
+	public static PdbRenderer create(PdbManager pdbm, ImageStore is) {
+		return new PdbRenderer(pdbm, is);
 	}
 }

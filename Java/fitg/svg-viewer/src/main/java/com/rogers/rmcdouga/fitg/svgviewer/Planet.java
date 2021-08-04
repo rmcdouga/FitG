@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 import com.rogers.rmcdouga.fitg.basegame.RaceType;
@@ -237,6 +238,22 @@ public enum Planet {
 		planetG2d.rotate(Math.toRadians(arc_size));	// rotate past the orbit arc
 		planetG2d.translate(0, -radius());
 		return planetG2d;
+	}
+	
+	public Graphics2D translateToEnviron(Graphics2D g2d, int index) {
+		var planetG2d = (Graphics2D)g2d.create();
+		// rotate past orbit box + other loyalties and to centre of the current loyaltyType
+		double arc_size = this.orbitSize						// rotate past orbit
+						+ (this.loyaltySize * 5)				// past loyalty spaces
+						+ environStream().limit(index).sum()	// past the environ we want
+						- (this.environSizes.get(index) / 2);  	// back up to the middle of the environ we want
+		planetG2d.rotate(Math.toRadians(arc_size));	// rotate past the orbit arc
+		planetG2d.translate(0, -radius());
+		return planetG2d;
+	}
+	
+	private DoubleStream environStream() {
+		return this.environSizes.stream().mapToDouble(Double::doubleValue);
 	}
 	
 	private int planetOrdinal() {

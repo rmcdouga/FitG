@@ -1,37 +1,23 @@
 package com.rogers.rmcdouga.fitg.svgviewer;
 
-import static com.rogers.rmcdouga.fitg.svgviewer.Marker.imagePath;
-
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Objects;
-
-import javax.imageio.ImageIO;
 
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameLoyaltyType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyManager;
+import com.rogers.rmcdouga.fitg.svgviewer.images.ImageStore;
 
 public class LoyaltyRenderer {
 
-	private static final Path LOYALTY_IMAGE_FILENAME = Paths.get("Marker_Loyalty.png");
-	private static final Image loyaltyMarkerImage;
-	static {
-		try {
-			loyaltyMarkerImage = ImageIO.read(Objects.requireNonNull(Map.class.getClassLoader().getResourceAsStream(imagePath(LOYALTY_IMAGE_FILENAME).toString())));
-		} catch (IOException e) {
-			throw new IllegalStateException("Error reading file (" + LOYALTY_IMAGE_FILENAME + ").", e);
-		}
-	}
 
 	private final LoyaltyManager lm;
+	private final Image loyaltyMarkerImage;
 
-	private LoyaltyRenderer(LoyaltyManager lm) {
+	private LoyaltyRenderer(LoyaltyManager lm, ImageStore imageStore) {
 		super();
 		this.lm = lm;
+		this.loyaltyMarkerImage = imageStore.getLoyaltyImage();
 	}
 	
 	public void draw(Graphics2D gc) {
@@ -42,7 +28,7 @@ public class LoyaltyRenderer {
 		return BaseGameLoyaltyType.requireBglt(lm.getLoyalty(p));
 	}
 
-	public static LoyaltyRenderer create(LoyaltyManager lm) {
-		return new LoyaltyRenderer(lm);
+	public static LoyaltyRenderer create(LoyaltyManager lm, ImageStore imageStore) {
+		return new LoyaltyRenderer(lm, imageStore);
 	}
 }

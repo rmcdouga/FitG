@@ -6,6 +6,7 @@ import com.rogers.rmcdouga.fitg.basegame.map.BaseGameLoyaltyType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyManager;
 import com.rogers.rmcdouga.fitg.basegame.map.PdbManager;
+import com.rogers.rmcdouga.fitg.svgviewer.images.ImageStore;
 
 public class LoyaltyTrackMarkerRenderer {
 	private static int MARKER_OFFSET = 10;  	// This is the offset from centre for Loyalty markers (typically up and to the left)
@@ -14,11 +15,11 @@ public class LoyaltyTrackMarkerRenderer {
 	private final PdbRenderer pdbr;
 	private final LoyaltyRenderer loyaltyr;
 
-	private LoyaltyTrackMarkerRenderer(Graphics2D gc, PdbManager pdbm, LoyaltyManager lm) {
+	private LoyaltyTrackMarkerRenderer(Graphics2D gc, PdbManager pdbm, LoyaltyManager lm, ImageStore is) {
 		super();
 		this.gc = gc;
-		this.pdbr = PdbRenderer.create(pdbm);
-		this.loyaltyr = LoyaltyRenderer.create(lm);
+		this.pdbr = PdbRenderer.create(pdbm, is);
+		this.loyaltyr = LoyaltyRenderer.create(lm, is);
 	}
 
 	public void draw(StarSystem ss) {
@@ -45,7 +46,7 @@ public class LoyaltyTrackMarkerRenderer {
 		return result;
 	}
 	
-	public static LoyaltyTrackMarkerRenderer create(Graphics2D gc, PdbManager pdbm, LoyaltyManager lm) {
-		return new LoyaltyTrackMarkerRenderer(gc, pdbm, lm);
+	public static LoyaltyTrackMarkerRenderer create(Graphics2D gc, PdbManager pdbm, LoyaltyManager lm, ImageStore is) {
+		return new LoyaltyTrackMarkerRenderer(gc, pdbm, lm, is);
 	}
 }
