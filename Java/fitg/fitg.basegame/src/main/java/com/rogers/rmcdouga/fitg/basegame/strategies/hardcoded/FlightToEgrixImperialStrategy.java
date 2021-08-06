@@ -1,7 +1,7 @@
 package com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded;
 
 import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter.Jon_Kidu;
-import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter.Vans_Ka_Tia_A;
+import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter.Vans_Ka_Tie_A;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,7 +11,6 @@ import com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnvironType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.strategies.AbstractStrategy;
-import com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
 import com.rogers.rmcdouga.fitg.basegame.units.ImperialSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.Spaceship;
@@ -29,7 +28,7 @@ public class FlightToEgrixImperialStrategy extends AbstractStrategy {
 	public Collection<PlaceCountersInstruction> placeCounters(Collection<Counter> counters, StackManager stackMgr) {
 		Spaceship imperialSpaceship = findImperialSpaceship(counters).orElseThrow(()->new IllegalArgumentException("An Imperial Spaceship should have been provided."));
 		Counter jonKidu = findCounter(counters, Jon_Kidu).orElseThrow(()->new IllegalArgumentException("Jon Kidu should have been provided."));
-		Counter vansKaTiaA = findCounter(counters, Vans_Ka_Tia_A).orElseThrow(()->new IllegalArgumentException("Vans_Ka_Tia_A should have been provided."));
+		Counter vansKaTiaA = findCounter(counters, Vans_Ka_Tie_A).orElseThrow(()->new IllegalArgumentException("Vans_Ka_Tia_A should have been provided."));
 		
 		return List.of(new PlaceCountersInstruction(stackMgr.of(imperialSpaceship, jonKidu, vansKaTiaA), BaseGamePlanet.Angoff.environ(BaseGameEnvironType.Urban).get()));
 	}

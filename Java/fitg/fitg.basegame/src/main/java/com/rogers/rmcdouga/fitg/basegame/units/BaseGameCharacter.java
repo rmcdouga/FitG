@@ -311,7 +311,7 @@ public enum BaseGameCharacter implements Card, Character {
 					""")
 			.build()
 			),
-	Yaro_Latac(Builder.character(16, REBEL, Theshian)
+	Yarro_Latac(Builder.character(16, REBEL, Theshian)
 			.combat(2)
 			.endurance(3)
 			.intelligence(3)
@@ -350,7 +350,7 @@ public enum BaseGameCharacter implements Card, Character {
 			.specialAbility(REVEAL_PLANET_SECRET)
 			.build()
 			),
-	Onesta_Woada(Builder.character(18, REBEL, Henone)
+	Oneste_Woada(Builder.character(18, REBEL, Henone)
 			.combat(0)
 			.endurance(3)
 			.intelligence(3)
@@ -470,7 +470,7 @@ public enum BaseGameCharacter implements Card, Character {
 					""")
 			.build()
 			),
-	Telman(Builder.character(24, IMPERIAL, Rhone)
+	Telmen(Builder.character(24, IMPERIAL, Rhone)
 			.combat(4)
 			.endurance(4)
 			.intelligence(3)
@@ -585,7 +585,7 @@ public enum BaseGameCharacter implements Card, Character {
 			.bonusDraw(ASSASINATION, 1)
 			.build()
 			),
-	Vans_Ka_Tia_A(Builder.character(30, IMPERIAL, Rhone, "Knight of the Empire")
+	Vans_Ka_Tie_A(Builder.character(30, IMPERIAL, Rhone, "Knight of the Empire")
 			.combat(4)
 			.endurance(5)
 			.intelligence(2)
