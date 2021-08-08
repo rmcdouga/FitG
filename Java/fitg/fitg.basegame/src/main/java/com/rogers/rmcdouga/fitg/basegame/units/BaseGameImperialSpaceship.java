@@ -38,4 +38,11 @@ public enum BaseGameImperialSpaceship implements ImperialSpaceship {
 	public int maxPassengers() {
 		return maxPassengers;
 	}
+	
+	public static BaseGameImperialSpaceship of(ImperialSpaceship spaceship) {
+		if (spaceship instanceof BaseGameImperialSpaceship bgss) {
+			return bgss;
+		}
+		throw new IllegalArgumentException("ImperialSpaceship (" + spaceship.toString() + ") is not a BaseGameImperialSpaceship.");
+	}
 }

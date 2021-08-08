@@ -60,4 +60,11 @@ public enum BaseGameRebelSpaceship implements RebelSpaceship {
 	public static Stream<BaseGameRebelSpaceship> stream(Predicate<BaseGameRebelSpaceship> predicate) {
 		return stream().filter(predicate);
 	}
+	
+	public static BaseGameRebelSpaceship of(RebelSpaceship spaceship) {
+		if (spaceship instanceof BaseGameRebelSpaceship bgss) {
+			return bgss;
+		}
+		throw new IllegalArgumentException("RebelSpaceship (" + spaceship.toString() + ") is not a BaseGameRebelSpaceship.");
+	}
 }

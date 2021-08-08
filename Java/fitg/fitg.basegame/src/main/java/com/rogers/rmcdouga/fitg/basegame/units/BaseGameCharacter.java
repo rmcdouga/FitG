@@ -731,7 +731,6 @@ public enum BaseGameCharacter implements Card, Character {
 		return characterData.specialAbilities.contains(specialAbility);
 	}
 
-
 	@Override
 	public String description() {
 		return characterData.description;
@@ -748,6 +747,13 @@ public enum BaseGameCharacter implements Card, Character {
 
 	public static Stream<BaseGameCharacter> stream(Predicate<BaseGameCharacter> predicate) {
 		return BaseGameCharacter.stream().filter(predicate);
+	}
+	
+	public static BaseGameCharacter of(Character character) {
+		if (character instanceof BaseGameCharacter bgc) {
+			return bgc;
+		}
+		throw new IllegalArgumentException("Character (" + character.toString() + ") is not a BaseGameCharacter.");
 	}
 
 	private static class Builder {
