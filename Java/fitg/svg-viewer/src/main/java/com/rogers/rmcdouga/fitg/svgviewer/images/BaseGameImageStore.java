@@ -4,31 +4,29 @@ import java.awt.Image;
 import java.nio.file.Path;
 
 import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
-import com.rogers.rmcdouga.fitg.basegame.units.Character;
+import com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameImperialSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameRebelSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.ImperialMilitaryUnit;
-import com.rogers.rmcdouga.fitg.basegame.units.ImperialSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.RebelMilitaryUnit;
-import com.rogers.rmcdouga.fitg.basegame.units.RebelSpaceship;
 
-public interface ImageStore {
+public interface BaseGameImageStore {
 
 	Image getImage(Pdb pdb);
 
 	Path getImagePath(Pdb pdb);
 
-	Image getImage(Character character);
+	Image getImage(BaseGameCharacter character);
 
-	Path getImagePath(Character character);
+	Path getImagePath(BaseGameCharacter character);
 
-	Image getImage(ImperialSpaceship spaceship);
+	Image getImage(BaseGameImperialSpaceship spaceship);
 
-	Path getImagePath(ImperialSpaceship spaceship);
+	Path getImagePath(BaseGameImperialSpaceship spaceship);
 
-	Image getImage(RebelSpaceship spaceship);
+	Image getImage(BaseGameRebelSpaceship spaceship);
 
-	Path getImagePath(RebelSpaceship spaceship);
+	Path getImagePath(BaseGameRebelSpaceship spaceship);
 
 	Image getImage(RebelMilitaryUnit unit);
 

@@ -15,6 +15,8 @@ import com.rogers.rmcdouga.fitg.basegame.GameBoard;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameStarSystem;
 import com.rogers.rmcdouga.fitg.svgviewer.images.ClassPathImageStore;
 import com.rogers.rmcdouga.fitg.svgviewer.images.ImageStore;
+import com.rogers.rmcdouga.fitg.svgviewer.images.BaseGameImageStore;
+import com.rogers.rmcdouga.fitg.svgviewer.images.BaseGameImageStoreAdapter;
 
 public final class Map {
 	
@@ -33,7 +35,7 @@ public final class Map {
 	}
 	
 	public void draw(Collection<com.rogers.rmcdouga.fitg.basegame.map.StarSystem> starSystems) throws IOException {
-		ImageStore imageStore = new ClassPathImageStore();
+		ImageStore imageStore = BaseGameImageStoreAdapter.wrap(new ClassPathImageStore());
 		Image image = imageStore.getMapImage();
 		g2d.drawImage(image, 0, 0, null);
 

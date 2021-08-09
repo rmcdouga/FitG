@@ -19,7 +19,7 @@ import com.rogers.rmcdouga.fitg.basegame.units.BaseGameRebelSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.ImperialMilitaryUnit;
 import com.rogers.rmcdouga.fitg.basegame.units.RebelMilitaryUnit;
 
-public class ClassPathImageStore implements ImageStore {
+public class ClassPathImageStore implements BaseGameImageStore {
 
 
 	private static final Path IMAGE_PATH = Path.of("images");

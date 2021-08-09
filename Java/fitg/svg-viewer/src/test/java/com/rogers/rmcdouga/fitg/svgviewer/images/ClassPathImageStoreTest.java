@@ -21,7 +21,7 @@ import com.rogers.rmcdouga.fitg.basegame.units.RebelMilitaryUnit;
 
 class ClassPathImageStoreTest {
 
-	private final ImageStore underTest = new ClassPathImageStore();
+	private final BaseGameImageStore underTest = new ClassPathImageStore();
 	
 	@ParameterizedTest
 	@EnumSource

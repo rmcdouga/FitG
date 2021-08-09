@@ -2,12 +2,6 @@ package com.rogers.rmcdouga.fitg.svgviewer;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Objects;
-
-import javax.imageio.ImageIO;
 
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameLoyaltyType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
