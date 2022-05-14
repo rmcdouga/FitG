@@ -41,7 +41,8 @@ class MapTest {
 	@CsvSource(value = {"FlightToEgrix, 3" , /* "GalacticGame, 51" */})
 	void testDrawSVG(BaseGameScenario scenario, int expectedNumStarSystems) throws Exception {
 		var g2 = new SVGGraphics2D(Map.MAP_WIDTH, Map.MAP_HEIGHT);
-		new Map(g2, createGame(scenario)).draw();
+		Game game = createGame(scenario);
+		new Map(g2, game, game).draw();
 		
 		String result = g2.getSVGDocument();
 		
@@ -60,7 +61,8 @@ class MapTest {
 	void testDrawImage(BaseGameScenario scenario) throws Exception {
 		BufferedImage off_Image = new BufferedImage(Map.MAP_WIDTH, Map.MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2 = off_Image.createGraphics();
-		new Map(g2, createGame(scenario)).draw();
+		Game game = createGame(scenario);
+		new Map(g2, game, game).draw();
 		String filename = "FitgMap_" + scenario + ".png";
 		// Compare using image comparison library: https://github.com/romankh3/image-comparison
 		BufferedImage expectedImage = ImageIO.read(TestConstants.EXPECTED_RESULTS_DIR.resolve(filename).toFile());

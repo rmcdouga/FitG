@@ -43,7 +43,8 @@ public class SvgViewerApplication implements CommandLineRunner {
 
 	public String drawMap() throws IOException {
 		var g2 = new SVGGraphics2D(Map.MAP_WIDTH, Map.MAP_HEIGHT);
-		new Map(g2, createGame()).draw();
+		Game game = createGame();
+		new Map(g2, game, game).draw();
 		return g2.getSVGDocument();
 	}
 	

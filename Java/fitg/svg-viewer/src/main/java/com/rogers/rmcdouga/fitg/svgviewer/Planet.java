@@ -9,8 +9,10 @@ import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.rogers.rmcdouga.fitg.basegame.RaceType;
@@ -239,19 +241,31 @@ public enum Planet {
 		planetG2d.translate(0, -radius());
 		return planetG2d;
 	}
+
+	public Graphics2D translateToEnviron(Graphics2D g2d, Environ environ) {
+		int indexOf = this.bgPlanet.indexOf(environ);
+		if (indexOf < 0) {
+			throw new IllegalStateException("Unable to find environ of (" + environ + ") on planet " + this.bgPlanet.getName() + ".");
+		}
+		return translateToEnviron(g2d, indexOf);
+	}
 	
 	public Graphics2D translateToEnviron(Graphics2D g2d, int index) {
 		var planetG2d = (Graphics2D)g2d.create();
 		// rotate past orbit box + other loyalties and to centre of the current loyaltyType
 		double arc_size = this.orbitSize						// rotate past orbit
 						+ (this.loyaltySize * 5)				// past loyalty spaces
-						+ environStream().limit(index).sum()	// past the environ we want
-						- (this.environSizes.get(index) / 2);  	// back up to the middle of the environ we want
-		planetG2d.rotate(Math.toRadians(arc_size));	// rotate past the orbit arc
+						+ environStream().limit(index).sum()	// past the earlier environs
+						+ (this.environSizes.get(index) / 2);  	// to the middle of the environ we want
+		planetG2d.rotate(Math.toRadians(arc_size));	// rotate past the orbit and other environs
 		planetG2d.translate(0, -radius());
 		return planetG2d;
 	}
-	
+
+	public void drawPerEnviron(Graphics2D initGc, BiConsumer<Graphics2D, Environ> consumer) {
+		IntStream.range(0, this.bgPlanet.numEnvirons()).forEach(i->consumer.accept(translateToEnviron(initGc, i), this.bgPlanet.environ(i)));
+	}
+
 	private DoubleStream environStream() {
 		return this.environSizes.stream().mapToDouble(Double::doubleValue);
 	}

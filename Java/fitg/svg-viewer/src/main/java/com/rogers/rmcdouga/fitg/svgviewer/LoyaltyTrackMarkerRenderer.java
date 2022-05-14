@@ -22,11 +22,11 @@ public class LoyaltyTrackMarkerRenderer {
 		this.loyaltyr = LoyaltyRenderer.create(lm, is);
 	}
 
-	public void draw(StarSystem ss) {
-		ss.drawPerPlanet(gc, this::draw);
-	}
-
-	private void draw(Graphics2D gc, Planet p) {
+//	public void draw(StarSystem ss) {
+//		ss.drawPerPlanet(gc, this::draw);
+//	}
+//
+	public void draw(Graphics2D gc, Planet p) {
 		BaseGamePlanet bgPlanet = p.bgPlanet();
 		BaseGameLoyaltyType loyaltyPosition = loyaltyr.position(bgPlanet);
 		BaseGameLoyaltyType pdbPosition = pdbr.position(bgPlanet);

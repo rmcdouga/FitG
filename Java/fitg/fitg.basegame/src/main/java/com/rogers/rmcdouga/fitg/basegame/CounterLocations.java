@@ -20,7 +20,7 @@ import com.rogers.rmcdouga.fitg.basegame.units.StackManager.Stack;
  * This is a data structure that maintains the locations of counters on the map
  *
  */
-public class CounterLocations implements GameState {
+public class CounterLocations implements GameState, CounterLocator {
 	
 	private final HashSetValuedHashMap<Location, Counter> locationMap = new HashSetValuedHashMap<>();
 	private final Map<Counter, Location> counterMap = new HashMap<>();

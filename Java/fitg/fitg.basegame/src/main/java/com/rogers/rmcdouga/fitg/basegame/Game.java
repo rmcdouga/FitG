@@ -18,7 +18,7 @@ import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 
-public class Game implements GameState, GameBoard {
+public class Game implements GameState, GameBoard, CounterLocator {
 	private static final String ACTION_DECK_LABEL = "actionDeck";
 	
 	private final ActionDeck actionDeck = new ActionDeck();
@@ -37,8 +37,9 @@ public class Game implements GameState, GameBoard {
 		scenario.setupCounters(gameBox, stackMgr, rebelDecisions, imperialDecisions).forEach(this::placeCounter);
 	}
 
+	@Override
 	public Collection<Counter> countersAt(Location location) {
-		return counterLocations.countersAt(BaseGameScenario.IN_SPACE);
+		return counterLocations.countersAt(location);
 	}
 
 	/**
