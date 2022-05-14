@@ -31,12 +31,18 @@ tmp/
 *.swp
 *~.nib
 local.properties
+
+# Eclipse properties
 .settings/
 .loadpath
 .recommenders
 .classpath
 .project
 target/
+
+# VsCode
+.vscode/
+
 
 # External tool builders
 .externalToolBuilders/
