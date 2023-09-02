@@ -12,6 +12,8 @@ import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
+import org.springframework.core.io.ClassPathResource;
+
 import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameImperialSpaceship;
@@ -40,7 +42,7 @@ public class ClassPathImageStore implements BaseGameImageStore {
 
 	private static Image readImage(Path imageFilePath) {
 		try {
-			return ImageIO.read(Objects.requireNonNull(ClassPathImageStore.class.getClassLoader().getResourceAsStream(imagePath(imageFilePath).toString())));
+			return ImageIO.read(Objects.requireNonNull(new ClassPathResource(imagePath(imageFilePath).toString()).getInputStream()));
 		} catch (IOException e) {
 			throw new IllegalStateException("Error reading file (" + imageFilePath + ").", e);
 		}

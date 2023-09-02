@@ -12,11 +12,11 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 
-		<junit.version>5.8.2</junit.version>
+		<junit.version>5.10.0</junit.version>
 		<hamcrest.version>2.2</hamcrest.version>
-		<commmons.lang.version>3.9</commmons.lang.version>
-		<commons.io.version>2.7</commons.io.version>
-		<commonmark.version>0.18.1</commonmark.version>
+		<commmons.lang.version>3.13.0</commmons.lang.version>
+		<commons.io.version>2.13.0</commons.io.version>
+		<commonmark.version>0.21.0</commonmark.version>
 		<commons.collections4.version>4.4</commons.collections4.version>
 	</properties>
 
