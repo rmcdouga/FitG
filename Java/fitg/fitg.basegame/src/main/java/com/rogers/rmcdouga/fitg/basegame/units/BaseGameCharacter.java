@@ -24,9 +24,10 @@ import com.rogers.rmcdouga.fitg.basegame.PlayerState.Faction;
 import com.rogers.rmcdouga.fitg.basegame.RaceType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 import com.rogers.rmcdouga.fitg.basegame.map.Planet;
+import com.rogers.rmcdouga.fitg.basegame.utils.Model;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameRaceType;
 
-public enum BaseGameCharacter implements Card, Character {
+public enum BaseGameCharacter implements Card, Character, Model<BaseGameCharacter.CharacterData> {
 	Zina_Adora(Builder.character(1, REBEL, Rhone, "Princess of Adare")
 			.combat(1)
 			.endurance(2)
@@ -646,7 +647,7 @@ public enum BaseGameCharacter implements Card, Character {
 			),
 	;
 
-	private record CharacterData (
+	public record CharacterData (
 			int cardNumber, 
 			Faction allegience,
 			RaceType race,
@@ -669,7 +670,6 @@ public enum BaseGameCharacter implements Card, Character {
 	private BaseGameCharacter(CharacterData characterData) {
 		this.characterData = characterData;
 	}
-	
 
 	@Override
 	public int combat() {
@@ -741,6 +741,11 @@ public enum BaseGameCharacter implements Card, Character {
 		return characterData.cardNumber;
 	}
 
+	@Override
+	public CharacterData model() {
+		return this.characterData;
+	}
+	
 	public static Stream<BaseGameCharacter> stream() {
 		return Stream.of(BaseGameCharacter.values());
 	}
