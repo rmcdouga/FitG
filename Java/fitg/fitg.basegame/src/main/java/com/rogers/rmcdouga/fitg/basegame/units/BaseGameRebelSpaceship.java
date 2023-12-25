@@ -3,7 +3,10 @@ package com.rogers.rmcdouga.fitg.basegame.units;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public enum BaseGameRebelSpaceship implements RebelSpaceship {
+import com.rogers.rmcdouga.fitg.basegame.units.BaseGameRebelSpaceship.BaseGameRebelSpaceshipData;
+import com.rogers.rmcdouga.fitg.basegame.utils.Model;
+
+public enum BaseGameRebelSpaceship implements RebelSpaceship, Model<BaseGameRebelSpaceshipData> {
 	Explorer(33, 2, 2, 4, 8),
 	Galactic_Freighter(34, 0, 1, 0, 16),
 	Interstellar_Sloop(35, 2, 1, 2, 4),
@@ -14,43 +17,41 @@ public enum BaseGameRebelSpaceship implements RebelSpaceship {
 	S_XIII(40, 0, 4, 6, 5),	// See Case 14.58. Province and Galactic Games: Add one to Pilot's Navigation rating for Hyperjump
 	;
 
-	private final int cardNumber;
-	private final int cannons;
-	private final int shields;
-	private final int maneuver;
-	private final int maxPassengers;
+	public record BaseGameRebelSpaceshipData(int cardNumber, int cannons, int shields, int maneuver, int maxPassengers) {};
+	
+	private final BaseGameRebelSpaceshipData baseGameRebelSpaceshipData;
 	
 	private BaseGameRebelSpaceship(int cardNumber, int cannons, int shields, int maneuver, int maxPassengers) {
-		this.cardNumber = cardNumber;
-		this.cannons = cannons;
-		this.shields = shields;
-		this.maneuver = maneuver;
-		this.maxPassengers = maxPassengers;
+		this(new BaseGameRebelSpaceshipData(cardNumber, cannons, shields, maneuver, maxPassengers));
+	}
+
+	private BaseGameRebelSpaceship(BaseGameRebelSpaceshipData baseGameRebelSpaceshipData) {
+		this.baseGameRebelSpaceshipData = baseGameRebelSpaceshipData;
 	}
 
 	@Override
 	public int cardNumber() {
-		return this.cardNumber;
+		return baseGameRebelSpaceshipData.cardNumber;
 	}
 
 	@Override
 	public int cannons() {
-		return this.cannons;
+		return baseGameRebelSpaceshipData.cannons;
 	}
 
 	@Override
 	public int shields() {
-		return this.shields;
+		return baseGameRebelSpaceshipData.shields;
 	}
 
 	@Override
 	public int maneuver() {
-		return this.maneuver;
+		return baseGameRebelSpaceshipData.maneuver;
 	}
 
 	@Override
 	public int maxPassengers() {
-		return this.maxPassengers;
+		return baseGameRebelSpaceshipData.maxPassengers;
 	}
 
 	public static Stream<BaseGameRebelSpaceship> stream() {
@@ -66,5 +67,10 @@ public enum BaseGameRebelSpaceship implements RebelSpaceship {
 			return bgss;
 		}
 		throw new IllegalArgumentException("RebelSpaceship (" + spaceship.toString() + ") is not a BaseGameRebelSpaceship.");
+	}
+
+	@Override
+	public BaseGameRebelSpaceshipData model() {
+		return baseGameRebelSpaceshipData;
 	}
 }

@@ -1,6 +1,9 @@
 package com.rogers.rmcdouga.fitg.basegame.units;
 
-public enum ImperialMilitaryUnit implements Unit {
+import com.rogers.rmcdouga.fitg.basegame.units.ImperialMilitaryUnit.ImperialMilitaryUnitData;
+import com.rogers.rmcdouga.fitg.basegame.utils.Model;
+
+public enum ImperialMilitaryUnit implements Unit, Model<ImperialMilitaryUnitData> {
 	Militia(1, 0, false, 35),
 	Patrol(1, 2, true, 24),
 	Line(3, 2, true, 17),
@@ -10,34 +13,39 @@ public enum ImperialMilitaryUnit implements Unit {
 	SuicideSquad(1, 2, true, 2),
 	;
 	
-	private final int environCombatStrength;
-	private final int spaceCombatStrength;
-	private final boolean isMobile;
-	private final int numUnits;
-
+	public record ImperialMilitaryUnitData(int environCombatStrength, int spaceCombatStrength, boolean isMobile, int numUnits) {};
+	
+	private final ImperialMilitaryUnitData imperialMilitaryUnitData;
+	
 	private ImperialMilitaryUnit(int environCombatStrength, int spaceCombatStrength, boolean isMobile, int numUnits) {
-		this.environCombatStrength = environCombatStrength;
-		this.spaceCombatStrength = spaceCombatStrength;
-		this.isMobile = isMobile;
-		this.numUnits = numUnits;
+		this(new ImperialMilitaryUnitData(environCombatStrength, spaceCombatStrength, isMobile, numUnits));
+	}
+
+	private ImperialMilitaryUnit(ImperialMilitaryUnitData imperialMilitaryUnitData) {
+		this.imperialMilitaryUnitData = imperialMilitaryUnitData;
 	}
 
 	@Override
 	public int environCombatStrength() {
-		return this.environCombatStrength;
+		return imperialMilitaryUnitData.environCombatStrength;
 	}
 
 	@Override
 	public int spaceCombatStrength() {
-		return this.spaceCombatStrength;
+		return imperialMilitaryUnitData.spaceCombatStrength;
 	}
 
 	@Override
 	public boolean isMobile() {
-		return this.isMobile;
+		return imperialMilitaryUnitData.isMobile;
 	}
 
 	public int numUnits() {
-		return numUnits;
+		return imperialMilitaryUnitData.numUnits;
+	}
+
+	@Override
+	public ImperialMilitaryUnitData model() {
+		return imperialMilitaryUnitData;
 	}
 }

@@ -1,6 +1,9 @@
 package com.rogers.rmcdouga.fitg.basegame.units;
 
-public enum RebelMilitaryUnit implements Unit {
+import com.rogers.rmcdouga.fitg.basegame.units.RebelMilitaryUnit.RebelMilitaryUnitData;
+import com.rogers.rmcdouga.fitg.basegame.utils.Model;
+
+public enum RebelMilitaryUnit implements Unit, Model<RebelMilitaryUnitData> {
 	Air_1_0(1, 0, false, 2),
 	Air_2_1(2, 1, true, 2),
 	Air_2_3(2, 3, true, 3),
@@ -29,34 +32,39 @@ public enum RebelMilitaryUnit implements Unit {
 	Wild_4_4_Elite(4, 4, true, 4),
 	;
 	
-	private final int environCombatStrength;
-	private final int spaceCombatStrength;
-	private final boolean isMobile;
-	private final int numUnits;
+	public record RebelMilitaryUnitData(int environCombatStrength, int spaceCombatStrength, boolean isMobile, int numUnits) {};
+	
+	private final RebelMilitaryUnitData rebelMilitaryUnitData;
 
 	private RebelMilitaryUnit(int environCombatStrength, int spaceCombatStrength, boolean isMobile, int numUnits) {
-		this.environCombatStrength = environCombatStrength;
-		this.spaceCombatStrength = spaceCombatStrength;
-		this.isMobile = isMobile;
-		this.numUnits = numUnits;
+		this(new RebelMilitaryUnitData(environCombatStrength, spaceCombatStrength, isMobile, numUnits));
+	}
+
+	private RebelMilitaryUnit(RebelMilitaryUnitData rebelMilitaryUnitData) {
+		this.rebelMilitaryUnitData = rebelMilitaryUnitData;
 	}
 
 	@Override
 	public int environCombatStrength() {
-		return this.environCombatStrength;
+		return rebelMilitaryUnitData.environCombatStrength;
 	}
 
 	@Override
 	public int spaceCombatStrength() {
-		return this.spaceCombatStrength;
+		return rebelMilitaryUnitData.spaceCombatStrength;
 	}
 
 	@Override
 	public boolean isMobile() {
-		return this.isMobile;
+		return rebelMilitaryUnitData.isMobile;
 	}
 
 	public int numUnits() {
-		return numUnits;
+		return rebelMilitaryUnitData.numUnits;
+	}
+
+	@Override
+	public RebelMilitaryUnitData model() {
+		return rebelMilitaryUnitData;
 	}
 }
