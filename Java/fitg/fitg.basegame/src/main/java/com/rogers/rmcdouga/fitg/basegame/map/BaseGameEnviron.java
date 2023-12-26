@@ -8,28 +8,24 @@ import com.rogers.rmcdouga.fitg.basegame.BaseGameCreature;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameRaceType;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameSovereign;
 import com.rogers.rmcdouga.fitg.basegame.RaceType;
+import com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnviron.BaseGameEnvironData;
+import com.rogers.rmcdouga.fitg.basegame.utils.Model;
 
-public class BaseGameEnviron implements Environ {
-	private final EnvironType type;
-	private final int size;
-	private final OptionalInt resources;
-	private final boolean starResources;
-	private final OptionalInt coupRating;
-	private final List<RaceType> races;
-	private final Optional<BaseGameCreature> creature;
-	private final Optional<BaseGameSovereign> sovereign;
+public class BaseGameEnviron implements Environ, Model<BaseGameEnvironData> {
+
+	public record BaseGameEnvironData(EnvironType type, int size, OptionalInt resources, boolean starResources, OptionalInt coupRating,
+		List<RaceType> races, Optional<BaseGameCreature> creature, Optional<BaseGameSovereign> sovereign) {};
 	
+	private  final BaseGameEnvironData baseGameEnvironData;
+	
+	private BaseGameEnviron(BaseGameEnvironData gaseGameEnvironData) {
+		this.baseGameEnvironData = gaseGameEnvironData;
+	}
+
 	private BaseGameEnviron(EnvironType type, int size, OptionalInt resources, boolean starResources, OptionalInt coupRating,
 			List<BaseGameRaceType> races, BaseGameCreature creature, BaseGameSovereign sovereign) {
-		super();
-		this.type = type;
-		this.size = size;
-		this.resources = resources;
-		this.starResources = starResources;
-		this.coupRating = coupRating;
-		this.races = List.copyOf(races);
-		this.creature = Optional.ofNullable(creature);
-		this.sovereign = Optional.ofNullable(sovereign);
+		this(new BaseGameEnvironData(type, size, resources, starResources, coupRating,
+				List.copyOf(races), Optional.ofNullable(creature), Optional.ofNullable(sovereign)));
 	}
 
 	/**
@@ -37,7 +33,7 @@ public class BaseGameEnviron implements Environ {
 	 */
 	@Override
 	public EnvironType getType() {
-		return type;
+		return baseGameEnvironData.type;
 	}
 
 	/**
@@ -45,7 +41,7 @@ public class BaseGameEnviron implements Environ {
 	 */
 	@Override
 	public int getSize() {
-		return size;
+		return baseGameEnvironData.size;
 	}
 
 	/**
@@ -53,7 +49,7 @@ public class BaseGameEnviron implements Environ {
 	 */
 	@Override
 	public OptionalInt getResources() {
-		return resources;
+		return baseGameEnvironData.resources;
 	}
 
 	/**
@@ -61,7 +57,7 @@ public class BaseGameEnviron implements Environ {
 	 */
 	@Override
 	public boolean isStarResources() {
-		return starResources;
+		return baseGameEnvironData.starResources;
 	}
 
 	/**
@@ -69,7 +65,7 @@ public class BaseGameEnviron implements Environ {
 	 */
 	@Override
 	public OptionalInt getCoupRating() {
-		return coupRating;
+		return baseGameEnvironData.coupRating;
 	}
 
 	/**
@@ -77,17 +73,22 @@ public class BaseGameEnviron implements Environ {
 	 */
 	@Override
 	public List<RaceType> getRaces() {
-		return races;
+		return baseGameEnvironData.races;
 	}
 	
 	@Override
 	public Optional<BaseGameCreature> getCreature() {
-		return creature;
+		return baseGameEnvironData.creature;
 	}
 
 	@Override
 	public Optional<BaseGameSovereign> getSovereign() {
-		return sovereign;
+		return baseGameEnvironData.sovereign;
+	}
+
+	@Override
+	public BaseGameEnvironData model() {
+		return baseGameEnvironData;
 	}
 
 	private static BaseGameEnviron of(EnvironType type, int size, OptionalInt resources, boolean starResources, OptionalInt coupRating, List<BaseGameRaceType> races, BaseGameCreature creature, BaseGameSovereign sovereign) {
@@ -130,7 +131,6 @@ public class BaseGameEnviron implements Environ {
 
 		
 		private Builder(EnvironType type, int size) {
-			super();
 			this.type = type;
 			this.size = size;
 		}
@@ -165,6 +165,5 @@ public class BaseGameEnviron implements Environ {
 		public BaseGameEnviron build() {
 			return BaseGameEnviron.of(type, size, resources, starResources, coupRating, races, creature, sovereign);
 		}
-		
 	}
 }
