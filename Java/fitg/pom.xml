@@ -64,7 +64,7 @@
 		<module>fitg.basegame</module>
 		<module>svg-viewer</module>
 		<module>fitg-spring-boot-autoconfigure</module>
-		<module>fitg.cli</module>
 		<module>fitg-spring-boot-starter</module>
+		<module>fitg.cli</module>
 	</modules>
 </project>
