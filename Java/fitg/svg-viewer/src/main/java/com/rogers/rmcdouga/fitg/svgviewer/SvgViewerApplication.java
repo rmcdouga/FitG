@@ -2,6 +2,7 @@ package com.rogers.rmcdouga.fitg.svgviewer;
 
 import static com.rogers.rmcdouga.fitg.basegame.BaseGameScenario.FlightToEgrix;
 
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,16 +14,26 @@ import javax.imageio.ImageIO;
 import org.jfree.svg.SVGGraphics2D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import com.rogers.rmcdouga.fitg.basegame.Game;
 import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixImperialStrategy;
 import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixRebelStrategy;
+import com.rogers.rmcdouga.fitg.renderer.graphics2d.Map;
+import com.rogers.rmcdouga.fitg.renderer.images.BaseGameImageStore;
+import com.rogers.rmcdouga.fitg.renderer.images.BaseGameImageStoreAdapter;
+import com.rogers.rmcdouga.fitg.renderer.images.ImageStore;
+import com.rogers.rmcdouga.fitg.svgviewer.images.ClassPathImageStore;
 
 @SpringBootApplication
-public class SvgViewerApplication implements CommandLineRunner {
+public class SvgViewerApplication implements CommandLineRunner, ApplicationContextAware {
 	private static Logger log = LoggerFactory.getLogger(SvgViewerApplication.class);
 
 	private static final Path MAIN_RESOURCES_DIR = Paths.get("src", "main", "resources");
@@ -41,17 +52,40 @@ public class SvgViewerApplication implements CommandLineRunner {
 		log.info("Mainline complete.");
 	}
 
+	@Bean
+	public static SVGGraphics2D svgGraphics2D() {
+		return new SVGGraphics2D(Map.MAP_WIDTH, Map.MAP_HEIGHT);
+	}
+
+	@Bean
+	public static ImageStore classPathImageStore() {
+		return BaseGameImageStoreAdapter.wrap(new ClassPathImageStore());
+	}
+
+	private ApplicationContext applicationContext;
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+	}
+
+	public ApplicationContext getContext() {
+		return applicationContext;
+	}
+
 	public String drawMap() throws IOException {
-		var g2 = new SVGGraphics2D(Map.MAP_WIDTH, Map.MAP_HEIGHT);
-		Game game = createGame();
-		new Map(g2, game, game).draw();
-		return g2.getSVGDocument();
+		return drawMap(applicationContext.getBean(Map.class), applicationContext.getBean(SVGGraphics2D.class));
+	}
+
+	public String drawMap(Map map, SVGGraphics2D svgGraphics2D) throws IOException {
+		map.draw();
+		return svgGraphics2D.getSVGDocument();
 	}
 	
-	// TODO:  Change this to read a game from a GameState.
-	private static Game createGame() {
-		FlightToEgrixRebelStrategy rebelDecisions = new FlightToEgrixRebelStrategy();
-		FlightToEgrixImperialStrategy imperialDecisions = new FlightToEgrixImperialStrategy();
-		return Game.createGame(FlightToEgrix, rebelDecisions, imperialDecisions);
-	}
+//	// TODO:  Change this to read a game from a GameState.
+//	private static Game createGame() {
+//		FlightToEgrixRebelStrategy rebelDecisions = new FlightToEgrixRebelStrategy();
+//		FlightToEgrixImperialStrategy imperialDecisions = new FlightToEgrixImperialStrategy();
+//		return Game.createGame(FlightToEgrix, rebelDecisions, imperialDecisions);
+//	}
 }

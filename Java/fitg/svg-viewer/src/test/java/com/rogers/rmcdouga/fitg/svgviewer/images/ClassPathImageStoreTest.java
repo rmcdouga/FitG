@@ -18,6 +18,7 @@ import com.rogers.rmcdouga.fitg.basegame.units.BaseGameImperialSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameRebelSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.ImperialMilitaryUnit;
 import com.rogers.rmcdouga.fitg.basegame.units.RebelMilitaryUnit;
+import com.rogers.rmcdouga.fitg.renderer.images.BaseGameImageStore;
 
 class ClassPathImageStoreTest {
 

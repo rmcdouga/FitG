@@ -45,6 +45,11 @@
 			<artifactId>fitg.basegame</artifactId>
 			<version>${fitg-basegame.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.rogers.rmcdouga</groupId>
+			<artifactId>fitg.renderer</artifactId>
+			<version>${fitg-basegame.version}</version>
+		</dependency>
 		<!-- Testing Dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

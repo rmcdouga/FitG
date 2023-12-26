@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.rogers.rmcdouga.fitg.basegame.Game;
+import com.rogers.rmcdouga.fitg.renderer.graphics2d.Map;
 
 @SpringBootTest(classes = {com.rogers.rmcdouga.fitg.spring.GameAutoConfigurationTest.TestApplication.class, GameAutoConfiguration.class})
 class GameAutoConfigurationTest {
