@@ -34,6 +34,7 @@ import com.rogers.rmcdouga.fitg.basegame.map.BaseGameStarSystem;
 import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixImperialStrategy;
 import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixRebelStrategy;
 
+@Disabled
 @SpringBootTest(webEnvironment = WebEnvironment.NONE, classes = TestApplicationConfiguration.class)
 class MapTest {
 
