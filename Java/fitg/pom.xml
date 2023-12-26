@@ -63,5 +63,6 @@
 	<modules>
 		<module>fitg.basegame</module>
 		<module>svg-viewer</module>
+		<module>fitg.cli</module>
 	</modules>
 </project>
