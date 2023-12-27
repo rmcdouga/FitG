@@ -13,17 +13,28 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
+import com.rogers.rmcdouga.fitg.basegame.Game;
 import com.rogers.rmcdouga.fitg.renderer.graphics2d.Map;
 import com.rogers.rmcdouga.fitg.renderer.images.BaseGameImageStoreAdapter;
 import com.rogers.rmcdouga.fitg.renderer.images.ImageStore;
 
-@SpringBootTest(classes = {com.rogers.rmcdouga.fitg.spring.RendererAutoConfigurationTest.TestApplication.class, com.rogers.rmcdouga.fitg.spring.RendererAutoConfigurationTest.LocalTestConfiguration.class, GameAutoConfiguration.class, RendererAutoConfiguration.class})
-class RendererAutoConfigurationTest {
+@SpringBootTest(classes = {com.rogers.rmcdouga.fitg.spring.AutoConfigurationTest.TestApplication.class, 
+						   com.rogers.rmcdouga.fitg.spring.AutoConfigurationTest.LocalTestConfiguration.class, 
+						   GameAutoConfiguration.class, 
+						   RendererAutoConfiguration.class
+						   })
+class AutoConfigurationTest {
 
 	@Test
 	void testMap(@Autowired Map map) {
 		assertNotNull(map);
 	}
+
+	@Test
+	void testGame(@Autowired Game game) {
+		assertNotNull(game);
+	}
+
 
 	@SpringBootApplication
 	public static class TestApplication {
