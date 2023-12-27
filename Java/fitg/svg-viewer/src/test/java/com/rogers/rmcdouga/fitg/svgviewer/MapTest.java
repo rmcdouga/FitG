@@ -2,8 +2,6 @@ package com.rogers.rmcdouga.fitg.svgviewer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.nio.file.Files;
@@ -19,35 +17,33 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.xmlunit.diff.ComparisonResult;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.github.romankh3.image.comparison.ImageComparison;
-import com.github.romankh3.image.comparison.ImageComparisonUtil;
 import com.github.romankh3.image.comparison.model.ImageComparisonResult;
 import com.github.romankh3.image.comparison.model.ImageComparisonState;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameScenario;
-import com.rogers.rmcdouga.fitg.basegame.Game;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameStarSystem;
-import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixImperialStrategy;
-import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixRebelStrategy;
 import com.rogers.rmcdouga.fitg.renderer.graphics2d.Map;
 import com.rogers.rmcdouga.fitg.renderer.images.BaseGameImageStoreAdapter;
 import com.rogers.rmcdouga.fitg.renderer.images.ImageStore;
+import com.rogers.rmcdouga.fitg.svgviewer.images.ClassPathImageStore;
 
 class MapTest {
 
-	@Disabled
 	@SpringBootTest(webEnvironment = WebEnvironment.NONE, 
 			classes = {
 					TestApplicationConfiguration.class, 
 					com.rogers.rmcdouga.fitg.svgviewer.MapTest.SvgTests.LocalTestConfiguration.class 
 					}
 			)
+	@ActiveProfiles("svg")
 	public static class SvgTests {
 		@Autowired Map map;
 		@Autowired Graphics2D g2;
@@ -70,7 +66,8 @@ class MapTest {
 		}
 		
 		@TestConfiguration
-		public class LocalTestConfiguration {
+		@Profile("svg")
+		protected static class LocalTestConfiguration {
 			@Bean
 			public Graphics2D graphics2d() {
 				return new SVGGraphics2D(Map.MAP_WIDTH, Map.MAP_HEIGHT);
@@ -78,22 +75,23 @@ class MapTest {
 
 			@Bean
 			public ImageStore imageStore() {
-				return BaseGameImageStoreAdapter.wrap(null);	// Doesn't need to work for this test so null will do.
+				return BaseGameImageStoreAdapter.wrap(new ClassPathImageStore());
 			}
 		}
 
 	}
 
-	@Disabled
+	@Disabled("Currently fails, will investigate at some point...")
 	@SpringBootTest(webEnvironment = WebEnvironment.NONE, 
 			classes = {
 					TestApplicationConfiguration.class, 
 					com.rogers.rmcdouga.fitg.svgviewer.MapTest.ImageTests.LocalTestConfiguration.class 
 					}
 			)
+	@ActiveProfiles("image")
 	public static class ImageTests {
 		@Autowired Map map;
-		private final BufferedImage off_Image = new BufferedImage(Map.MAP_WIDTH, Map.MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		@Autowired BufferedImage mapImage;
 		
 		@ParameterizedTest
 		@ValueSource(strings = {"FlightToEgrix", "GalacticGame"})
@@ -102,11 +100,11 @@ class MapTest {
 			String filename = "FitgMap_" + scenario + ".png";
 			// Compare using image comparison library: https://github.com/romankh3/image-comparison
 			BufferedImage expectedImage = ImageIO.read(TestConstants.EXPECTED_RESULTS_DIR.resolve(filename).toFile());
-			ImageComparisonResult comparisonResult = new ImageComparison(expectedImage, off_Image).compareImages();
+			ImageComparisonResult comparisonResult = new ImageComparison(expectedImage, mapImage).compareImages();
 			
 			if (ImageComparisonState.MATCH != comparisonResult.getImageComparisonState()) {
 				// write out the actual 
-				ImageIO.write(off_Image, "png", TestConstants.ACTUAL_RESULTS_DIR.resolve(filename).toFile());
+				ImageIO.write(mapImage, "png", TestConstants.ACTUAL_RESULTS_DIR.resolve(filename).toFile());
 				// write out the diff
 				String diffFilename = "FitgMap_" + scenario + "_diff.png";
 				comparisonResult.writeResultTo(TestConstants.ACTUAL_RESULTS_DIR.resolve(diffFilename).toFile());
@@ -117,15 +115,22 @@ class MapTest {
 		}
 
 		@TestConfiguration
-		public class LocalTestConfiguration {
+		@Profile("image")
+		protected static class LocalTestConfiguration {
+
 			@Bean
-			public Graphics2D graphics2d() {
-				return off_Image.createGraphics();
+			BufferedImage mapImage() {
+				return new BufferedImage(Map.MAP_WIDTH, Map.MAP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+			}
+			
+			@Bean
+			public Graphics2D graphics2d(BufferedImage mapImage) {
+				return mapImage.createGraphics();
 			}
 
 			@Bean
 			public ImageStore imageStore() {
-				return BaseGameImageStoreAdapter.wrap(null);	// Doesn't need to work for this test so null will do.
+				return BaseGameImageStoreAdapter.wrap(new ClassPathImageStore());
 			}
 		}
 	}

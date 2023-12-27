@@ -1,15 +1,9 @@
 package com.rogers.rmcdouga.fitg.svgviewer;
 
-import static com.rogers.rmcdouga.fitg.basegame.BaseGameScenario.FlightToEgrix;
-
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import javax.imageio.ImageIO;
 
 import org.jfree.svg.SVGGraphics2D;
 import org.slf4j.Logger;
@@ -21,13 +15,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
-import com.rogers.rmcdouga.fitg.basegame.Game;
-import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixImperialStrategy;
-import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixRebelStrategy;
 import com.rogers.rmcdouga.fitg.renderer.graphics2d.Map;
-import com.rogers.rmcdouga.fitg.renderer.images.BaseGameImageStore;
 import com.rogers.rmcdouga.fitg.renderer.images.BaseGameImageStoreAdapter;
 import com.rogers.rmcdouga.fitg.renderer.images.ImageStore;
 import com.rogers.rmcdouga.fitg.svgviewer.images.ClassPathImageStore;
@@ -53,7 +42,7 @@ public class SvgViewerApplication implements CommandLineRunner, ApplicationConte
 	}
 
 	@Bean
-	public static SVGGraphics2D svgGraphics2D() {
+	public static SVGGraphics2D graphics2d() {
 		return new SVGGraphics2D(Map.MAP_WIDTH, Map.MAP_HEIGHT);
 	}
 
