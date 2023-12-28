@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.rogers.rmcdouga</groupId>
+		<artifactId>fitg</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>fitg.renderer</artifactId>
+	<name>FitG Graphics Rendering Library</name>
+
+	<properties>
+		<!-- Other local projects -->
+		<fitg.basegame.version>0.0.1-SNAPSHOT</fitg.basegame.version>
+		<!-- Test Dependencies -->
+		<javapoet.version>1.13.0</javapoet.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.rogers.rmcdouga</groupId>
+			<artifactId>fitg.basegame</artifactId>
+			<version>${fitg.basegame.version}</version>
+		</dependency>
+		<!-- Test Dependencies -->
+		<dependency>
+			<groupId>com.squareup</groupId>
+			<artifactId>javapoet</artifactId>
+			<version>${javapoet.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>
