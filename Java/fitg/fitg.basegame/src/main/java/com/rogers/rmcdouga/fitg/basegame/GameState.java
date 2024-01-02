@@ -1,10 +1,8 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
-import java.util.Map;
-
-public interface GameState {
+public interface GameState<S extends Record> {
 	
-	public Map<String, Object> getState();
-	public void setState(Map<String, Object> state);
+	public S getState();
+	public void setState(S state);
 
 }

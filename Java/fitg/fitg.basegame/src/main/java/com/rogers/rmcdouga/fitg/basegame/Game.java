@@ -1,9 +1,9 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
+import com.rogers.rmcdouga.fitg.basegame.ActionDeck.ActionDeckState;
+import com.rogers.rmcdouga.fitg.basegame.Game.InternalGameState;
 import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.PlaceCountersInstruction;
 import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.SetPdbInstructions;
 import com.rogers.rmcdouga.fitg.basegame.box.BaseGameBox;
@@ -18,8 +18,7 @@ import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 
-public class Game implements GameState, GameBoard, CounterLocator {
-	private static final String ACTION_DECK_LABEL = "actionDeck";
+public class Game implements GameState<InternalGameState>, GameBoard, CounterLocator {
 	
 	private final ActionDeck actionDeck = new ActionDeck();
 	private final GameBoard gameBoard;
@@ -49,19 +48,16 @@ public class Game implements GameState, GameBoard, CounterLocator {
 		return actionDeck;
 	}
 
+	public record InternalGameState(ActionDeckState actionDeckState) {};
+	
 	@Override
-	public Map<String, Object> getState() {
-		Map<String, Object> state = new HashMap<>();
-		Map<String, Object> actionDeckState = actionDeck.getState();
-		state.put(ACTION_DECK_LABEL, actionDeckState);
-		return state;
+	public InternalGameState getState() {
+		return new InternalGameState(actionDeck.getState());
 	}
 
 	@Override
-	public void setState(Map<String, Object> state) {
-		@SuppressWarnings("unchecked")
-		Map<String, Object> actionDeckState = (Map<String, Object>) state.get(ACTION_DECK_LABEL);
-		actionDeck.setState(actionDeckState);
+	public void setState(InternalGameState state) {
+		actionDeck.setState(state.actionDeckState);
 	}
 
 	public static Game createGame(Scenario scenario, Scenario.PlayerDecisions rebelDecisions, Scenario.PlayerDecisions imperialDecisions) {

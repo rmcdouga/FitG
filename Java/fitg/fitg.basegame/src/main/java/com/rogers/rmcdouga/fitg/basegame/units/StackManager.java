@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.rogers.rmcdouga.fitg.basegame.GameState;
-
+import com.rogers.rmcdouga.fitg.basegame.units.StackManager.Stack.StackState;
 
 public class StackManager {
 
@@ -111,7 +111,7 @@ public class StackManager {
 	 * 
 	 * (Note: This is not a "stack" in the computer science sense (i.e. you can do more than just add and remove from the top.)
 	 */
-	public class Stack implements Collection<Counter>, Counter, GameState {
+	public class Stack implements Collection<Counter>, Counter, GameState<StackState> {
 
 		private final Collection<Counter> stack;
 
@@ -244,14 +244,16 @@ public class StackManager {
 			stack.clear();
 		}
 
+		public record StackState() {};
+		
 		@Override
-		public Map<String, java.lang.Object> getState() {
+		public StackState getState() {
 			// TODO Auto-generated method stub
 			throw new UnsupportedOperationException("Not implemented yet.");
 		}
 
 		@Override
-		public void setState(Map<String, java.lang.Object> state) {
+		public void setState(StackState state) {
 			// TODO Auto-generated method stub
 			throw new UnsupportedOperationException("Not implemented yet.");
 		}

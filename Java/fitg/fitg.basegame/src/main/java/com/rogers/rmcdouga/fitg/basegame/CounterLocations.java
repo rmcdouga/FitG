@@ -15,12 +15,13 @@ import com.rogers.rmcdouga.fitg.basegame.units.Spaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager.SpaceshipStack;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager.Stack;
+import com.rogers.rmcdouga.fitg.basegame.CounterLocations.CounterLocationsState;
 
 /**
  * This is a data structure that maintains the locations of counters on the map
  *
  */
-public class CounterLocations implements GameState, CounterLocator {
+public class CounterLocations implements GameState<CounterLocationsState>, CounterLocator {
 	
 	private final HashSetValuedHashMap<Location, Counter> locationMap = new HashSetValuedHashMap<>();
 	private final Map<Counter, Location> counterMap = new HashMap<>();
@@ -213,14 +214,16 @@ public class CounterLocations implements GameState, CounterLocator {
 		return this;
 	}
 
+	public record CounterLocationsState() {};
+	
 	@Override
-	public Map<String, Object> getState() {
+	public CounterLocationsState getState() {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Not implemented yet.");
 	}
 
 	@Override
-	public void setState(Map<String, Object> state) {
+	public void setState(CounterLocationsState state) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Not implemented yet.");
 	}	

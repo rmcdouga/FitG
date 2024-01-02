@@ -163,7 +163,7 @@ class ActionDeckTest {
 		checkDraw(numDraws, actionDeck);
 		assertEquals(2, actionDeck.numberOfCardsInDiscard(), "Expected 2 cards to be in actionDeck discard initially");
 
-		Map<String, Object> state = actionDeck.getState();
+		var state = actionDeck.getState();
 
 		ActionDeck actionDeck2 = new ActionDeck();
 		assertEquals(0, actionDeck2.numberOfCardsInDiscard(), "Expected no cards to be in actionDeck2 discard initially");
