@@ -2,9 +2,11 @@ package com.rogers.rmcdouga.fitg.basegame;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 
@@ -23,8 +25,8 @@ import com.rogers.rmcdouga.fitg.basegame.CounterLocations.CounterLocationsState;
  */
 public class CounterLocations implements GameState<CounterLocationsState>, CounterLocator {
 	
-	private final HashSetValuedHashMap<Location, Counter> locationMap = new HashSetValuedHashMap<>();
-	private final Map<Counter, Location> counterMap = new HashMap<>();
+	private final HashSetValuedHashMap<Location, Counter> locationMap = new HashSetValuedHashMap<>();	// where counters are located.
+	private final Map<Counter, Location> counterMap = new HashMap<>();	// Counters that are on the map - used to quickly validate before performing operations
 	private final StackManager stackMgr = new StackManager();
 	private final GameBox gameBox;
 
@@ -214,14 +216,35 @@ public class CounterLocations implements GameState<CounterLocationsState>, Count
 		return this;
 	}
 
-	public record CounterLocationsState() {};
-	
+	public record CounterLocationsState(List<CounterLocationState> counterLocations) {};
+	public record CounterLocationState(Location location, List<CounterState> counters) {};
+	public sealed interface CounterState permits UnitState, StackState {
+		default String asString() {
+			return switch(this) {
+			case StackState ss -> ss.counters.toString();
+			case UnitState  us -> us.counter.toString();
+			};
+		}
+	};
+	public record StackState(List<Counter> counters) implements CounterState {};
+	public record UnitState(Counter counter) implements CounterState {};
+
 	@Override
 	public CounterLocationsState getState() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet.");
+		return new CounterLocationsState(locationMap.asMap()
+													.entrySet()
+													.stream()
+													.map(e->new CounterLocationState(e.getKey(), e.getValue().stream().flatMap(c->expandStacks(c)).toList()))
+													.toList());
 	}
 
+	private Stream<CounterState> expandStacks(Counter counter) {
+		return counter instanceof Stack stack
+				? Stream.of(new StackState(stack.stream().toList()))
+				: Stream.of(new UnitState(counter));
+	}
+
+	
 	@Override
 	public void setState(CounterLocationsState state) {
 		// TODO Auto-generated method stub

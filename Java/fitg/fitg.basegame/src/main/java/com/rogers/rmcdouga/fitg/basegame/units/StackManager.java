@@ -115,6 +115,11 @@ public class StackManager {
 
 		private final Collection<Counter> stack;
 
+		@Override
+		public String toString() {
+			return stack.toString();
+		}
+
 		public Stack() {
 			this.stack = new HashSet<>();
 		}

@@ -16,8 +16,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import com.rogers.rmcdouga.fitg.basegame.CounterLocations.CounterLocationState;
+import com.rogers.rmcdouga.fitg.basegame.CounterLocations.CounterLocationsState;
+import com.rogers.rmcdouga.fitg.basegame.CounterLocations.CounterState;
 import com.rogers.rmcdouga.fitg.basegame.CounterLocations.PlacedCounter;
 import com.rogers.rmcdouga.fitg.basegame.box.BaseGameBox;
 import com.rogers.rmcdouga.fitg.basegame.box.GameBox;
@@ -162,6 +166,27 @@ class CounterLocationsTest {
 		assertEquals("Couldn't find counter (Ly_Mantok).", msg);
 	}
 
+	@Test
+	void testGetState() {
+		CounterLocationsState state = underTest.getState();
+		
+		List<CounterLocationState> locationList = state.counterLocations();
+		assertEquals(1, locationList.size());
+		List<String> countersResult = locationList.get(0).counters().stream().map(CounterState::asString).toList();
+		List<String> expectedResult = countersList.stream().map(Counter::toString).toList();
+		assertThat(countersResult, containsInAnyOrder(expectedResult.toArray()));
+	}
+	
+	@Disabled
+	@Test
+	void testSetState() {
+		CounterLocations underTest2 = new CounterLocations(gameBox);
+		
+		CounterLocationsState state = underTest.getState();
+		underTest2.setState(state);
+		assertEquals(underTest, underTest2);
+	}
+	
 	private Collection<Counter> toCounter(Collection<PlacedCounter<Counter>> placed) {
 		return placed.stream().map(PlacedCounter::counter).toList();
 	}
