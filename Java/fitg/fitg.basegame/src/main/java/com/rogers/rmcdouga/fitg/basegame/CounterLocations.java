@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 
+import com.rogers.rmcdouga.fitg.basegame.CounterLocations.CounterLocationsState;
 import com.rogers.rmcdouga.fitg.basegame.box.GameBox;
 import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
@@ -17,7 +17,6 @@ import com.rogers.rmcdouga.fitg.basegame.units.Spaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager.SpaceshipStack;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager.Stack;
-import com.rogers.rmcdouga.fitg.basegame.CounterLocations.CounterLocationsState;
 
 /**
  * This is a data structure that maintains the locations of counters on the map
@@ -221,12 +220,12 @@ public class CounterLocations implements GameState<CounterLocationsState>, Count
 	public sealed interface CounterState permits UnitState, StackState {
 		default String asString() {
 			return switch(this) {
-			case StackState ss -> ss.counters.toString();
+			case StackState ss -> ss.stack.toString();
 			case UnitState  us -> us.counter.toString();
 			};
 		}
 	};
-	public record StackState(List<Counter> counters) implements CounterState {};
+	public record StackState(List<Counter> stack) implements CounterState {};
 	public record UnitState(Counter counter) implements CounterState {};
 
 	@Override
@@ -234,14 +233,14 @@ public class CounterLocations implements GameState<CounterLocationsState>, Count
 		return new CounterLocationsState(locationMap.asMap()
 													.entrySet()
 													.stream()
-													.map(e->new CounterLocationState(e.getKey(), e.getValue().stream().flatMap(c->expandStacks(c)).toList()))
+													.map(e->new CounterLocationState(e.getKey(), e.getValue().stream().map(c->expandStacks(c)).toList()))
 													.toList());
 	}
 
-	private Stream<CounterState> expandStacks(Counter counter) {
-		return counter instanceof Stack stack
-				? Stream.of(new StackState(stack.stream().toList()))
-				: Stream.of(new UnitState(counter));
+	private CounterState expandStacks(Counter counter) {
+		 return counter instanceof Stack stack 
+							? new StackState(stack.stream().toList())
+							: new UnitState(counter);
 	}
 
 	
