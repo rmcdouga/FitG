@@ -28,7 +28,7 @@ class GameTest {
 		assertEquals(Pdb.Level.ONE, createdGame.getPdb(BaseGamePlanet.Quibron).level());
 		assertTrue(createdGame.getPdb(BaseGamePlanet.Quibron).isUp());
 		
-		Collection<Counter> countersInSpace = createdGame.countersAt(BaseGameScenario.IN_SPACE);
+		Collection<Counter> countersInSpace = createdGame.countersAt(BaseGameScenario.ScenarioLocation.IN_SPACE);
 		assertNotNull(countersInSpace);
 		assertFalse(countersInSpace.isEmpty());
 		

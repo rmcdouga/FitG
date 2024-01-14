@@ -43,7 +43,7 @@ public enum BaseGameScenario implements Scenario {
 		public Collection<PlaceCountersInstruction> setupCounters(CounterPool counterPool, StackManager stackMgr, PlayerDecisions rebelDecisons, PlayerDecisions imperialDecisions) {
 			
 			Stack rebels = stackMgr.of(BaseGameRebelSpaceship.Planetary_Privateer, Boccanegra, Doctor_Sontag, Frun_Sentel);
-			Collection<PlaceCountersInstruction> rebelInstructions = List.of(new PlaceCountersInstruction(rebels, IN_SPACE));
+			Collection<PlaceCountersInstruction> rebelInstructions = List.of(new PlaceCountersInstruction(rebels, ScenarioLocation.IN_SPACE));
 
 			// Player will place these:
 			// Jon_Kidu, Vans_Ka_Tia_A, Imperial_Spaceship
@@ -82,7 +82,9 @@ public enum BaseGameScenario implements Scenario {
 
 	;
 	
-	public static final Location IN_SPACE = new Location() {};	// Used by Star System Scenarios 
+	public enum ScenarioLocation implements Location {
+		IN_SPACE;
+	}
 	
 	private final Type type;
 	private final Rules rules;

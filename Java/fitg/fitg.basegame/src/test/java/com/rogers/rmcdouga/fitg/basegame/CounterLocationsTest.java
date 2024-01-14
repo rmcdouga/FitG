@@ -177,7 +177,7 @@ class CounterLocationsTest {
 		assertThat(countersResult, containsInAnyOrder(expectedResult.toArray()));
 	}
 	
-	@Disabled
+	@Disabled("Not implemented sufficiently yet.")
 	@Test
 	void testSetState() {
 		CounterLocations underTest2 = new CounterLocations(gameBox);

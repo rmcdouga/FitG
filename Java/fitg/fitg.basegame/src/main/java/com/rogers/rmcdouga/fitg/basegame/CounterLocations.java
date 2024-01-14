@@ -246,7 +246,23 @@ public class CounterLocations implements GameState<CounterLocationsState>, Count
 	
 	@Override
 	public void setState(CounterLocationsState state) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet.");
-	}	
+		state.counterLocations.forEach(null);
+	}
+	
+	private void setState(CounterLocationState state) {
+		Location location = state.location;
+		List<CounterState> counters = state.counters;
+		
+		CounterState counterState = counters.get(0);
+		switch(counterState) {
+		case StackState ss -> {
+			List<Counter> stack = ss.stack;
+//			this.add(Stack.of(stack), location);
+		}
+		case UnitState  us -> {
+			Counter counter = us.counter;
+		}
+		};
+	
+	}
 }

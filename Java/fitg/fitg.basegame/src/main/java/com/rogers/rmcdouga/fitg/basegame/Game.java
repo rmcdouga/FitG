@@ -3,6 +3,7 @@ package com.rogers.rmcdouga.fitg.basegame;
 import java.util.Collection;
 
 import com.rogers.rmcdouga.fitg.basegame.ActionDeck.ActionDeckState;
+import com.rogers.rmcdouga.fitg.basegame.CounterLocations.CounterLocationsState;
 import com.rogers.rmcdouga.fitg.basegame.Game.InternalGameState;
 import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.PlaceCountersInstruction;
 import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.SetPdbInstructions;
@@ -48,11 +49,11 @@ public class Game implements GameState<InternalGameState>, GameBoard, CounterLoc
 		return actionDeck;
 	}
 
-	public record InternalGameState(ActionDeckState actionDeckState) {};
+	public record InternalGameState(ActionDeckState actionDeckState, CounterLocationsState counterLocationsState) {};
 	
 	@Override
 	public InternalGameState getState() {
-		return new InternalGameState(actionDeck.getState());
+		return new InternalGameState(actionDeck.getState(), counterLocations.getState());
 	}
 
 	@Override
