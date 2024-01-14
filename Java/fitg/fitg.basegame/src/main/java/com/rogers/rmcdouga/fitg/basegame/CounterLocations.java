@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 
 import com.rogers.rmcdouga.fitg.basegame.CounterLocations.CounterLocationsState;
@@ -24,7 +25,7 @@ import com.rogers.rmcdouga.fitg.basegame.units.StackManager.Stack;
  */
 public class CounterLocations implements GameState<CounterLocationsState>, CounterLocator {
 	
-	private final HashSetValuedHashMap<Location, Counter> locationMap = new HashSetValuedHashMap<>();	// where counters are located.
+	private final MultiValuedMap<Location, Counter> locationMap = new HashSetValuedHashMap<>();	// where counters are located.
 	private final Map<Counter, Location> counterMap = new HashMap<>();	// Counters that are on the map - used to quickly validate before performing operations
 	private final StackManager stackMgr = new StackManager();
 	private final GameBox gameBox;
@@ -214,6 +215,17 @@ public class CounterLocations implements GameState<CounterLocationsState>, Count
 		}
 		return this;
 	}
+	
+	public record CounterLocation(Counter counter, Location location) {};
+	public Collection<CounterLocation> counterLocations() {
+		return counterMap.entrySet().stream().map(e->new CounterLocation(e.getKey(), e.getValue())).toList();
+	}
+
+	public record LocationCounterCollection(Location location, Collection<Counter> counters) {};
+	public Collection<LocationCounterCollection> locationCounterList() {
+		return locationMap.asMap().entrySet().stream().map(e->new LocationCounterCollection(e.getKey(), List.copyOf(e.getValue()))).toList();
+	}
+
 
 	public record CounterLocationsState(List<CounterLocationState> counterLocations) {};
 	public record CounterLocationState(Location location, List<CounterState> counters) {};
@@ -224,6 +236,20 @@ public class CounterLocations implements GameState<CounterLocationsState>, Count
 			case UnitState  us -> us.counter.toString();
 			};
 		}
+
+		default Counter toCounter(StackManager stackMgr) {
+			return switch(this) {
+				case StackState ss -> stackMgr.of(ss.stack);
+				case UnitState  us -> us.counter;
+				};
+		}
+
+		static CounterState expandStacks(Counter counter) {
+			 return counter instanceof Stack stack 
+								? new StackState(stack.stream().toList())
+								: new UnitState(counter);
+		}
+
 	};
 	public record StackState(List<Counter> stack) implements CounterState {};
 	public record UnitState(Counter counter) implements CounterState {};
@@ -233,36 +259,20 @@ public class CounterLocations implements GameState<CounterLocationsState>, Count
 		return new CounterLocationsState(locationMap.asMap()
 													.entrySet()
 													.stream()
-													.map(e->new CounterLocationState(e.getKey(), e.getValue().stream().map(c->expandStacks(c)).toList()))
+													.map(e->new CounterLocationState(e.getKey(), e.getValue().stream().map(CounterState::expandStacks).toList()))
 													.toList());
-	}
-
-	private CounterState expandStacks(Counter counter) {
-		 return counter instanceof Stack stack 
-							? new StackState(stack.stream().toList())
-							: new UnitState(counter);
 	}
 
 	
 	@Override
 	public void setState(CounterLocationsState state) {
-		state.counterLocations.forEach(null);
+		state.counterLocations.forEach(cls->setState(cls));
 	}
 	
 	private void setState(CounterLocationState state) {
 		Location location = state.location;
 		List<CounterState> counters = state.counters;
 		
-		CounterState counterState = counters.get(0);
-		switch(counterState) {
-		case StackState ss -> {
-			List<Counter> stack = ss.stack;
-//			this.add(Stack.of(stack), location);
-		}
-		case UnitState  us -> {
-			Counter counter = us.counter;
-		}
-		};
-	
+		counters.forEach(cs->this.add(cs.toCounter(stackMgr), location));
 	}
 }

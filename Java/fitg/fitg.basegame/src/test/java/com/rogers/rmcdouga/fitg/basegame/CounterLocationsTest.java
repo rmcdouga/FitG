@@ -19,9 +19,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import com.rogers.rmcdouga.fitg.basegame.CounterLocations.CounterLocation;
 import com.rogers.rmcdouga.fitg.basegame.CounterLocations.CounterLocationState;
 import com.rogers.rmcdouga.fitg.basegame.CounterLocations.CounterLocationsState;
 import com.rogers.rmcdouga.fitg.basegame.CounterLocations.CounterState;
+import com.rogers.rmcdouga.fitg.basegame.CounterLocations.LocationCounterCollection;
 import com.rogers.rmcdouga.fitg.basegame.CounterLocations.PlacedCounter;
 import com.rogers.rmcdouga.fitg.basegame.box.BaseGameBox;
 import com.rogers.rmcdouga.fitg.basegame.box.GameBox;
@@ -167,6 +169,28 @@ class CounterLocationsTest {
 	}
 
 	@Test
+	void testCounterLocations() {
+		Collection<CounterLocation> counterLocations = underTest.counterLocations();
+		
+		assertEquals(counterLocations.size(), countersList.size());
+		counterLocations.forEach(cl->{
+			assertEquals(location, cl.location());
+			assertThat(cl.counter(), in(countersList));
+		});
+	}
+	
+	@Test
+	void testLocationCounnterCollections() {
+		Collection<LocationCounterCollection> locationCounterList = underTest.locationCounterList();
+		
+		assertEquals(locationCounterList.size(), 1);
+		locationCounterList.forEach(lcl->{
+			assertEquals(location, lcl.location());
+			assertThat(lcl.counters(), containsInAnyOrder(countersList.toArray()));
+		});
+	}
+
+	@Test
 	void testGetState() {
 		CounterLocationsState state = underTest.getState();
 		
@@ -177,14 +201,14 @@ class CounterLocationsTest {
 		assertThat(countersResult, containsInAnyOrder(expectedResult.toArray()));
 	}
 	
-	@Disabled("Not implemented sufficiently yet.")
 	@Test
 	void testSetState() {
 		CounterLocations underTest2 = new CounterLocations(gameBox);
 		
 		CounterLocationsState state = underTest.getState();
 		underTest2.setState(state);
-		assertEquals(underTest, underTest2);
+
+		assertThat(underTest2.counterLocations(), containsInAnyOrder(underTest.counterLocations().toArray()));
 	}
 	
 	private Collection<Counter> toCounter(Collection<PlacedCounter<Counter>> placed) {

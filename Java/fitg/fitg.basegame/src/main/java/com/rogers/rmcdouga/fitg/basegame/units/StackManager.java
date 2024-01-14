@@ -1,5 +1,6 @@
 package com.rogers.rmcdouga.fitg.basegame.units;
 
+import java.util.AbstractCollection;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -7,11 +8,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-
-import com.rogers.rmcdouga.fitg.basegame.GameState;
-import com.rogers.rmcdouga.fitg.basegame.units.StackManager.Stack.StackState;
 
 public class StackManager {
 
@@ -103,7 +102,7 @@ public class StackManager {
 		return stack.stream()
 					.findFirst()						// grab the first counter
 					.flatMap(this::stackContaining)		// find the stack within this stack manager that contains it
-					.filter(s->s instanceof SpaceshipStack ss ? (stack instanceof SpaceshipStack sstack? s.isEquivalent(sstack) : false) : s.isEquivalent(stack));	// see if that stack is equivilent to the stack passed in
+					.filter(s->s instanceof SpaceshipStack ss ? (stack instanceof SpaceshipStack sstack? s.equals(sstack) : false) : s.equals(stack));	// see if that stack is equivilent to the stack passed in
 	}
 	
 	/**
@@ -112,7 +111,7 @@ public class StackManager {
 	 * 
 	 * (Note: This is not a "stack" in the computer science sense (i.e. you can do more than just add and remove from the top.)
 	 */
-	public class Stack implements Collection<Counter>, Counter, GameState<StackState> {
+	public class Stack extends AbstractCollection <Counter> implements Collection<Counter>, Counter {
 
 		private final Collection<Counter> stack;
 
@@ -165,45 +164,15 @@ public class StackManager {
 			return getStackMgr().of(spaceship, counterCol);
 		}
 
-		
-
-//		public void forEach(Consumer<? super Counter> action) {
-//			stack.forEach(action);
-//		}
-	//
-		@Override
-		public int size() {
-			return stack.size();
-		}
-
-		@Override
-		public boolean isEmpty() {
-			return stack.isEmpty();
-		}
-
-		@Override
-		public boolean contains(java.lang.Object o) {
-			return stack.contains(o);
-		}
-
 		@Override
 		public Iterator<Counter> iterator() {
 			return stack.iterator();
 		}
 
 		@Override
-		public java.lang.Object[] toArray() {
-			return stack.toArray();
+		public int size() {
+			return stack.size();
 		}
-
-		@Override
-		public <T> T[] toArray(T[] a) {
-			return stack.toArray(a);
-		}
-
-//		public <T> T[] toArray(IntFunction<T[]> generator) {
-//			return stack.toArray(generator);
-//		}
 
 		@Override
 		public boolean add(Counter e) {
@@ -215,11 +184,6 @@ public class StackManager {
 		public boolean remove(java.lang.Object o) {
 			removeFromStack(this, (Counter)o);
 			return stack.remove(o);
-		}
-
-		@Override
-		public boolean containsAll(Collection<?> c) {
-			return stack.containsAll(c);
 		}
 
 		@Override
@@ -235,10 +199,6 @@ public class StackManager {
 			return stack.removeAll(c);
 		}
 
-//		public boolean removeIf(Predicate<? super Counter> filter) {
-//			return stack.removeIf(filter);
-//		}
-	//
 		@Override
 		public boolean retainAll(Collection<?> c) {
 			throw new UnsupportedOperationException("retainAll() has not been imoplemented for Stack.");
@@ -250,37 +210,22 @@ public class StackManager {
 			stack.clear();
 		}
 
-		public record StackState() {};
-		
-		@Override
-		public StackState getState() {
-			// TODO Auto-generated method stub
-			throw new UnsupportedOperationException("Not implemented yet.");
-		}
-
-		@Override
-		public void setState(StackState state) {
-			// TODO Auto-generated method stub
-			throw new UnsupportedOperationException("Not implemented yet.");
-		}
-
-//		public Spliterator<Counter> spliterator() {
-//			return stack.spliterator();
-//		}
-	//
-//		public Stream<Counter> stream() {
-//			return stack.stream();
-//		}
-	//
-//		public Stream<Counter> parallelStream() {
-//			return stack.parallelStream();
-//		}
 		private StackManager getStackMgr() {
 			return StackManager.this;
 		}
-		
-		public boolean isEquivalent(Stack stack) {
-			return Set.copyOf(this).equals(Set.copyOf(stack));
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + Objects.hash(stack);
+			return result;
+		}
+
+		@Override
+		public boolean equals(java.lang.Object obj) {
+			// Compares contents of stack without regard to whether Stack Managers are the same or not.
+			return obj instanceof Stack other ? Objects.equals(stack, other.stack) : false; 
 		}
 	}
 

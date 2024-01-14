@@ -91,20 +91,20 @@ class StackManagerTest {
 		StackManager other = new StackManager();
 		Stack otherStack = other.of(Drakir_Grebb, Doctor_Sontag);	// different order, order shouldn't matter
 		assertNotSame(stack, otherStack);
-		assertTrue(stack.isEquivalent(otherStack));
-		assertTrue(otherStack.isEquivalent(stack));
-		assertTrue(stack.isEquivalent(stack));
-		assertTrue(otherStack.isEquivalent(otherStack));
+		assertEquals(stack, otherStack);
+		assertEquals(otherStack, stack);
+		assertEquals(stack, stack);
+		assertEquals(otherStack, otherStack);
 	}
 
 	@ParameterizedTest
 	@MethodSource("generateNonEquivalentStacks")
 	void testStack_IsEquivalent_NotEquivilent(Stack otherStack) {
 		assertNotSame(stack, otherStack);
-		assertFalse(stack.isEquivalent(otherStack));
-		assertFalse(otherStack.isEquivalent(stack));
-		assertTrue(stack.isEquivalent(stack));
-		assertTrue(otherStack.isEquivalent(otherStack));
+		assertNotEquals(stack, otherStack);
+		assertNotEquals(otherStack, stack);
+		assertEquals(stack, stack);
+		assertEquals(otherStack, otherStack);
 	}
 	static Stream<Stack> generateNonEquivalentStacks() {
 		StackManager other = new StackManager();
