@@ -6,6 +6,7 @@ import com.rogers.rmcdouga.fitg.basegame.map.BaseGameLoyaltyManager;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePdbManager;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyManager;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyType;
+import com.rogers.rmcdouga.fitg.basegame.map.MapWalker;
 import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
 import com.rogers.rmcdouga.fitg.basegame.map.PdbManager;
 import com.rogers.rmcdouga.fitg.basegame.map.Planet;
@@ -15,12 +16,14 @@ public class BaseGameGameBoard implements GameBoard {
 	private final LoyaltyManager loyaltyManager;
 	private final PdbManager pdbManager;
 	private final Collection<StarSystem> map;
+	private final MapWalker mapWalker;
 
 	// Prevent instantiation by anyone but me.
 	private BaseGameGameBoard(Collection<StarSystem> map, Scenario.Type scenarioType) {
 		this.loyaltyManager = BaseGameLoyaltyManager.create(map, scenarioType);
 		this.pdbManager = BaseGamePdbManager.create();
 		this.map = map;
+		this.mapWalker = new MapWalker(this);
 	}
 
 	@Override
@@ -68,6 +71,11 @@ public class BaseGameGameBoard implements GameBoard {
 		return this.map;
 	}
 
+	@Override
+	public void walk(MapConsumer mapConsumer) {
+		mapWalker.walk(mapConsumer);
+	}
+	
 	public static GameBoard create(Collection<StarSystem> map, Scenario.Type scenarioType) {
 		return new BaseGameGameBoard(map, scenarioType);
 	}

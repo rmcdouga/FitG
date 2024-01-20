@@ -7,11 +7,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.rogers.rmcdouga.fitg.basegame.Game;
-import com.rogers.rmcdouga.fitg.basegame.map.MapWalker.MapConsumer;
+import com.rogers.rmcdouga.fitg.basegame.GameMap.MapConsumer;
 import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixImperialStrategy;
 import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixRebelStrategy;
 
-class MapWalkerTest {
+public class MapWalkerTest {
 
 	private MapWalker underTest;
 
@@ -29,11 +29,7 @@ class MapWalkerTest {
 	
 		underTest.walk(count);
 		
-		assertAll(
-				()->assertEquals(1, count.numStarSystems, "Number of StarSystms different than expected."),
-				()->assertEquals(3, count.numPlanets, "Number of Planets different than expected."),
-				()->assertEquals(4, count.numEnvirone, "Number of Environs different than expected.")
-				);
+		count.assertCounts(1, 3, 4);
 	}
 
 	@Test
@@ -48,11 +44,7 @@ class MapWalkerTest {
 		
 		underTest.walk(MapConsumer.environConsumer(count::environConsumer));
 		
-		assertAll(
-				()->assertEquals(0, count.numStarSystems, "Number of StarSystms different than expected."),
-				()->assertEquals(0, count.numPlanets, "Number of Planets different than expected."),
-				()->assertEquals(4, count.numEnvirone, "Number of Environs different than expected.")
-				);
+		count.assertCounts(0, 0, 4);
 	}
 	
 	@Test
@@ -61,11 +53,7 @@ class MapWalkerTest {
 	
 		underTest.walk(MapConsumer.planetConsumer(count::planetConsumer));
 		
-		assertAll(
-				()->assertEquals(0, count.numStarSystems, "Number of StarSystms different than expected."),
-				()->assertEquals(3, count.numPlanets, "Number of Planets different than expected."),
-				()->assertEquals(0, count.numEnvirone, "Number of Environs different than expected.")
-				);
+		count.assertCounts(0, 3, 0);
 	}
 
 	@Test
@@ -74,17 +62,13 @@ class MapWalkerTest {
 	
 		underTest.walk(MapConsumer.starSystemConsumer(count::starSystemConsumer));
 		
-		assertAll(
-				()->assertEquals(1, count.numStarSystems, "Number of StarSystms different than expected."),
-				()->assertEquals(0, count.numPlanets, "Number of Planets different than expected."),
-				()->assertEquals(0, count.numEnvirone, "Number of Environs different than expected.")
-				);
+		count.assertCounts(1, 0, 0);
 	}
 
-	private static class WalkerCounter implements MapConsumer {
+	public static class WalkerCounter implements MapConsumer {
 		private int numStarSystems;
 		private int numPlanets;
-		private int numEnvirone;
+		private int numEnvirons;
 
 		@Override
 		public void starSystemConsumer(StarSystem starSystem) {
@@ -98,8 +82,15 @@ class MapWalkerTest {
 
 		@Override
 		public void environConsumer(Environ environ) {
-			numEnvirone++;
+			numEnvirons++;
 		}
-		
+
+		public void assertCounts(int expectedStarSystemCount, int expectedPlanetCount, int expectedEnvironCount) {
+			assertAll(
+					()->assertEquals(expectedStarSystemCount, numStarSystems, "Number of StarSystms different than expected."),
+					()->assertEquals(expectedPlanetCount, numPlanets, "Number of Planets different than expected."),
+					()->assertEquals(expectedEnvironCount, numEnvirons, "Number of Environs different than expected.")
+					);
+		}
 	}
 }

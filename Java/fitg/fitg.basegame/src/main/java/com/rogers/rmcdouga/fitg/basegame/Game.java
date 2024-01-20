@@ -12,6 +12,7 @@ import com.rogers.rmcdouga.fitg.basegame.box.GameBox;
 import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyManager;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyType;
+import com.rogers.rmcdouga.fitg.basegame.map.MapWalker;
 import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
 import com.rogers.rmcdouga.fitg.basegame.map.PdbManager;
 import com.rogers.rmcdouga.fitg.basegame.map.Planet;
@@ -128,5 +129,10 @@ public class Game implements GameState<InternalGameState>, GameBoard, CounterLoc
 
 	private void placeCounter(PlaceCountersInstruction instruction) {
 		counterLocations.placeCounter(instruction.location(), instruction.counter());
+	}
+
+	@Override
+	public void walk(MapConsumer mapConsumer) {
+		gameBoard.walk(mapConsumer);
 	}
 }

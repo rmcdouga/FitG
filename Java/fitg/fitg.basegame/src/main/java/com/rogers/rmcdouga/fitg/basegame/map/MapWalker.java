@@ -1,8 +1,7 @@
 package com.rogers.rmcdouga.fitg.basegame.map;
 
-import java.util.function.Consumer;
-
 import com.rogers.rmcdouga.fitg.basegame.GameMap;
+import com.rogers.rmcdouga.fitg.basegame.GameMap.MapConsumer;
 
 /**
  * MapWalker class is used to perform operations on all the entities in a Map.
@@ -16,80 +15,12 @@ import com.rogers.rmcdouga.fitg.basegame.GameMap;
  *  processed, it moves to the next starSystem.
  */
 public class MapWalker {
-	/**
-	 * 
-	 */
-	public interface MapConsumer {
-		default void starSystemConsumer(StarSystem starSystem) {};
-		default void planetConsumer(Planet planet) {};
-		default void environConsumer(Environ environ) {};
-
-		/**
-		 * The consumer which will be called for each entity in the map.
-		 * 
-		 * @param starSystemConsumer
-		 * 		consumer called for each StarSystm
-		 * @param planetConsumer
-		 * 		consumer called for each Planet
-		 * @param environConsumer
-		 * 		consumer called for each Environ
-		 * @return the constructed MapConsumer
-		 */
-		public static MapConsumer consumer(Consumer<StarSystem> starSystemConsumer, Consumer<Planet> planetConsumer, Consumer<Environ> environConsumer) {
-			return new MapConsumer() {
-				
-				@Override
-				public void starSystemConsumer(StarSystem starSystem) {
-					starSystemConsumer.accept(starSystem);
-				}
-				
-				@Override
-				public void planetConsumer(Planet planet) {
-					planetConsumer.accept(planet);
-				}
-				
-				@Override
-				public void environConsumer(Environ environ) {
-					environConsumer.accept(environ);
-				}
-			};
-		}
-
-		/**
-		 * Create a MapConsumer that only processes Environs
-		 * 
-		 * @param environConsumer
-		 * @return
-		 */
-		public static MapConsumer environConsumer(Consumer<Environ> environConsumer) {
-			return consumer(s->{}, p->{}, environConsumer);	
-		}
-		/**
-		 * Create a MapConsumer that only processes Planets
-		 * 
-		 * @param planetConsumer
-		 * @return
-		 */
-		public static MapConsumer planetConsumer(Consumer<Planet> planetConsumer) {
-			return consumer(s->{}, planetConsumer, e->{});	
-		}
-		/**
-		 * Create a MapConsumer that only processes StarSystems
-		 * 
-		 * @param starsystemConsumer
-		 * @return
-		 */
-		public static MapConsumer starSystemConsumer(Consumer<StarSystem> starsystemConsumer) {
-			return consumer(starsystemConsumer, p->{}, e->{});	
-		}
-	}
 
 	private final GameMap map;
 	
 	public MapWalker(GameMap map) {
 		this.map = map;
 	}
-
 	
 	/**
 	 * Walks the map tree from the top (StarSystems) through the Planets and Environs.
