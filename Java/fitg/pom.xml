@@ -15,7 +15,7 @@
 		<junit.version>5.10.1</junit.version>
 		<hamcrest.version>2.2</hamcrest.version>
 		<commmons.lang.version>3.13.0</commmons.lang.version>
-		<commons.io.version>2.13.0</commons.io.version>
+		<commons.io.version>2.14.0</commons.io.version>
 		<commonmark.version>0.21.0</commonmark.version>
 		<commons.collections4.version>4.4</commons.collections4.version>
 	</properties>
