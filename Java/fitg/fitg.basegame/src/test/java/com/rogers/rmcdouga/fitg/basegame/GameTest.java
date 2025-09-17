@@ -15,13 +15,11 @@ import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixImper
 import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixRebelStrategy;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
 
-class GameTest {
+public class GameTest {
 
 	@Test
 	void testCreateGame() {
-		FlightToEgrixRebelStrategy rebelDecisions = new FlightToEgrixRebelStrategy();
-		FlightToEgrixImperialStrategy imperialDecisions = new FlightToEgrixImperialStrategy();
-		Game createdGame = Game.createGame(FlightToEgrix, rebelDecisions, imperialDecisions);
+		Game createdGame = createFlightToEgrixGame();
 		
 		assertNotNull(createdGame);
 		assertEquals(BaseGameLoyaltyType.Loyal, createdGame.getLoyalty(BaseGamePlanet.Quibron));
@@ -35,6 +33,13 @@ class GameTest {
 		Collection<Counter> countersOnAngoff = createdGame.countersAt(BaseGamePlanet.Angoff.environ(BaseGameEnvironType.Urban).get());
 		assertNotNull(countersOnAngoff);
 		assertFalse(countersOnAngoff.isEmpty());
+	}
+
+	public static Game createFlightToEgrixGame() {
+		FlightToEgrixRebelStrategy rebelDecisions = new FlightToEgrixRebelStrategy();
+		FlightToEgrixImperialStrategy imperialDecisions = new FlightToEgrixImperialStrategy();
+		Game createdGame = Game.createGame(FlightToEgrix, rebelDecisions, imperialDecisions);
+		return createdGame;
 	}
 
 }
