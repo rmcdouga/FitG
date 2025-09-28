@@ -19,8 +19,8 @@
 		<java.version>21</java.version>
 
 		<!-- Local dependency versions -->
-		<jfree-svg.version>5.0.6</jfree-svg.version>
-		<jcabi-xml.version>0.29.0</jcabi-xml.version>
+		<jfree-svg.version>5.0.7</jfree-svg.version>
+		<jcabi-xml.version>0.35.0</jcabi-xml.version>
 		<javapoet.version>1.13.0</javapoet.version>
 		<image-comparison.version>4.4.0</image-comparison.version>
 
