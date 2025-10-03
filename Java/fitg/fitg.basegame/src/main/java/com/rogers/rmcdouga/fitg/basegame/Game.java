@@ -8,6 +8,7 @@ import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.PlaceCountersI
 import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.SetPdbInstructions;
 import com.rogers.rmcdouga.fitg.basegame.box.BaseGameBox;
 import com.rogers.rmcdouga.fitg.basegame.box.GameBox;
+import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyManager;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyType;
@@ -115,6 +116,10 @@ public class Game implements GameState, GameBoard, CounterLocator {
 		return gameBoard.getStarSystems();
 	}
 	
+	@Override
+	public Planet getPlanetContaining(Environ environ) {
+		return gameBoard.getPlanetContaining(environ);
+	}
 
 	private void setupPdb(SetPdbInstructions instruction) {
 		switch(instruction.pdb().level()) {		// intentional fall through on the cases...
@@ -132,4 +137,5 @@ public class Game implements GameState, GameBoard, CounterLocator {
 	private void placeCounter(PlaceCountersInstruction instruction) {
 		counterLocations.placeCounter(instruction.location(), instruction.counter());
 	}
+	
 }

@@ -27,4 +27,5 @@ public interface Planet {
 	default public Stream<? extends Environ> streamEnvirons() { return listEnvirons().stream(); }
 	default public Optional<? extends Environ> environ(Environ.EnvironType type) { return streamEnvirons().filter(e->e.getType().equals(type)).findAny(); }
 	default public int indexOf(Environ environ) { return listEnvirons().indexOf(environ); }
+	default public boolean hasEnviron(Environ environ) { return indexOf(environ) >= 0; }
 }
