@@ -138,4 +138,14 @@ public class Game implements GameState, GameBoard, CounterLocator {
 		counterLocations.placeCounter(instruction.location(), instruction.counter());
 	}
 	
+	/**
+	 * Note:  This method does not check to see if the counter can legally move to the destination.
+	 * @return 
+	 */
+	@Override
+	public CounterLocator move(Counter counter, Location destination) {
+		// Move the character to the destination
+		counterLocations.move(counter, destination);
+		return this;
+	}
 }

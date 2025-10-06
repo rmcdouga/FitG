@@ -8,5 +8,6 @@ import com.rogers.rmcdouga.fitg.basegame.units.Counter;
 public interface CounterLocator {
 
 	Collection<Counter> countersAt(Location location);
+	CounterLocator move(Counter counter, Location destination);
 
 }
