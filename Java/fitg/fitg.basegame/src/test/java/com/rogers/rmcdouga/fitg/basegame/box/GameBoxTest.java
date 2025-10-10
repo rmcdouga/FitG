@@ -27,7 +27,14 @@ import com.rogers.rmcdouga.fitg.basegame.units.Unit;
 
 class GameBoxTest {
 	
-	private final static Counter FAKE_COUNTER = new Counter() {};
+	private final static Counter FAKE_COUNTER = new Counter() {
+
+		@Override
+		public String id() {
+			return null;
+		}
+	};
+
 	private final static Spaceship FAKE_SPACESHIP = new Spaceship() {
 		@Override
 		public int cannons() {
