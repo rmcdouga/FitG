@@ -60,15 +60,15 @@ class CounterLocationsTest {
 	}
 
 	@Test
-	void testLocation_present() {
-		Location result = underTest.location(Agan_Rafa);
+	void testLocationOf_present() {
+		Location result = underTest.locationOf(Agan_Rafa);
 		
 		assertEquals(location, result);
 	}
 
 	@Test
-	void testLocation_notPresent() {
-		NullPointerException ex = assertThrows(NullPointerException.class, ()->underTest.location(Professor_Mareg));
+	void testLocationOf_notPresent() {
+		NullPointerException ex = assertThrows(NullPointerException.class, ()->underTest.locationOf(Professor_Mareg));
 		String msg = ex.getMessage();
 		assertNotNull(msg);
 		assertThat(msg, allOf(containsString("Couldn't find counter"), containsString(Professor_Mareg.toString())));
@@ -76,8 +76,8 @@ class CounterLocationsTest {
 	}
 
 	@Test
-	void testLocation_presentInStack() {
-		Location result = underTest.location(Doctor_Sontag);
+	void testLocationOf_presentInStack() {
+		Location result = underTest.locationOf(Doctor_Sontag);
 		
 		assertEquals(location, result);
 	}
@@ -103,8 +103,8 @@ class CounterLocationsTest {
 		assertAll(
 				()->shouldBeEquivilent(Set.of(Adam_Starlight, Agan_Rafa), underTest.countersAt(location)),	// any order
 				()->shouldBeEquivilent(Set.of(stack), underTest.countersAt(newLocation)),
-				()->assertEquals(newLocation, underTest.location(stack)),
-				()->assertEquals(newLocation, underTest.location(Drakir_Grebb))
+				()->assertEquals(newLocation, underTest.locationOf(stack)),
+				()->assertEquals(newLocation, underTest.locationOf(Drakir_Grebb))
 				);
 	}
 	
@@ -184,6 +184,4 @@ class CounterLocationsTest {
 	private static <T> Stream<T> toStream(Collection<T> counters, Predicate<T> filter) {
 		return counters.stream().filter(filter);
 	}
-	
-	
 }

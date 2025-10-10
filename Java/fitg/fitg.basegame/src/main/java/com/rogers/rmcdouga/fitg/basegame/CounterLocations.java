@@ -127,7 +127,7 @@ public class CounterLocations implements GameState, CounterLocator {
 	 * @param counter
 	 * @return
 	 */
-	public  Location location(Counter counterParam) {
+	public  Location locationOf(Counter counterParam) {
 		// If there's a stack containing the counter, then get the stack's location rather than the counter's location.
 		Counter counter = fixIfStack(counterParam);
 		Counter stackOrCounter = stackMgr.stackContaining(counter)
@@ -149,7 +149,7 @@ public class CounterLocations implements GameState, CounterLocator {
 		}
 
 		public Location location() {
-			return getEnclosingInstance().location(counter);
+			return getEnclosingInstance().locationOf(counter);
 		}
 		
 		public PlacedCounter<T> move(Location newLocation) {

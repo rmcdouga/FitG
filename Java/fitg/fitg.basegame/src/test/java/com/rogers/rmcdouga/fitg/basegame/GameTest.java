@@ -38,7 +38,7 @@ public class GameTest {
 		assertFalse(countersOnAngoff.isEmpty());
 	}
 
-	private static Game createFlightToEgrixGame() {
+	public static Game createFlightToEgrixGame() {
 		FlightToEgrixRebelStrategy rebelDecisions = new FlightToEgrixRebelStrategy();
 		FlightToEgrixImperialStrategy imperialDecisions = new FlightToEgrixImperialStrategy();
 		Game createdGame = Game.createGame(FlightToEgrix, rebelDecisions, imperialDecisions);

@@ -148,4 +148,9 @@ public class Game implements GameState, GameBoard, CounterLocator {
 		counterLocations.move(counter, destination);
 		return this;
 	}
+	
+	@Override
+	public Location locationOf(Counter counter) {
+		return counterLocations.locationOf(counter);
+	}
 }
