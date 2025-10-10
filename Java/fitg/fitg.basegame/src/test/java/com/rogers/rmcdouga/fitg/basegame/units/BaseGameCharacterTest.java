@@ -44,6 +44,7 @@ class BaseGameCharacterTest {
 		assertEquals(2, Agan_Rafa.bonusDraws(BaseGameMission.ASSASINATION));
 		assertTrue(Jon_Kidu.isHomePlanet(BaseGamePlanet.Squamot));
 		assertFalse(Jon_Kidu.isHomePlanet(BaseGamePlanet.Orlog));
+		assertEquals("jonkidu", Jon_Kidu.id());
 	}
 	
 	@ParameterizedTest
@@ -132,6 +133,11 @@ class BaseGameCharacterTest {
 			
 			@Override
 			public Faction allegience() {
+				return null;
+			}
+
+			@Override
+			public String id() {
 				return null;
 			}
 		}));

@@ -5,5 +5,5 @@ package com.rogers.rmcdouga.fitg.basegame.units;
  *
  */
 public interface Counter {
-
+	String id();
 }

@@ -192,6 +192,11 @@ class BaseGameCounterPool implements CounterPool {
 			}
 			throw new IllegalArgumentException("Invalid unit supplied (" + unit.getClass().getName() + ").");
 		}
+
+		@Override
+		public String id() {
+			return unitType.id();
+		}
 	}
 
 	private static class GenericImperialSpaceship<T extends ImperialSpaceship> implements ImperialSpaceship {
@@ -232,6 +237,11 @@ class BaseGameCounterPool implements CounterPool {
 			return unitType.overLimit(numChars);
 		}
 		
+		@Override
+		public String id() {
+			return unitType.id();
+		}
+
 		public boolean isAvailable() {	// Is available in the Counter Pool
 			return this.status == Status.AVAILABLE;
 		}

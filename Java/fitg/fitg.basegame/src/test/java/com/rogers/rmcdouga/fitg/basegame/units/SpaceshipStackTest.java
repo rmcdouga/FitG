@@ -16,7 +16,12 @@ class SpaceshipStackTest {
 
 	private static final BaseGameRebelSpaceship TEST_SHIP = Stellar_Courier;
 	private static final int TEST_SHIP_CAPACITY = TEST_SHIP.maxPassengers();
-	private static final Counter fakeCounter = new Counter() {};
+	private static final Counter fakeCounter = new Counter() {
+		@Override
+		public String id() {
+			return null;
+		}
+	};
 
 	private final StackManager stackMgr= new StackManager();
 

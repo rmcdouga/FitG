@@ -159,7 +159,10 @@ public class StackManager {
 			return getStackMgr().of(spaceship, counterCol);
 		}
 
-		
+		@Override
+		public String id() {
+			return ""; // Stacks don't have IDs
+		}
 
 //		public void forEach(Consumer<? super Counter> action) {
 //			stack.forEach(action);
