@@ -128,6 +128,11 @@ class BaseGamePdbManagerTest {
 		public boolean hasSecret() {
 			return false;
 		}
+
+		@Override
+		public InOrbit inOrbit() {
+			return null;
+		}
 	};
 
 }
