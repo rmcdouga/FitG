@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 
@@ -137,6 +138,13 @@ public class CounterLocations implements GameState, CounterLocator {
 		return Objects.requireNonNull(counterMap.get(stackOrCounter), ()->"Couldn't find counter (" + counterParam + ").");
 	}
 
+	@Override
+	public Stream<Location> locationOfByType(Counter counterType) {
+		return counterMap.entrySet().stream()
+									.filter(e->e.getKey().id().equals(counterType.id()))
+									.map(Map.Entry::getValue);
+	}	
+
 	public class PlacedCounter<T extends Counter> {
 		private final T counter;
 
@@ -223,5 +231,5 @@ public class CounterLocations implements GameState, CounterLocator {
 	public void setState(Map<String, Object> state) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Not implemented yet.");
-	}	
+	}
 }

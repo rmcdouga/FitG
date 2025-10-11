@@ -1,6 +1,7 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
 import java.util.Collection;
+import java.util.stream.Stream;
 
 import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
@@ -31,4 +32,12 @@ public interface CounterLocator {
 	 * @return
 	 */
 	Location locationOf(Counter counter);
+
+	/**
+	 * Returns the location of the given counter, or throws an exception if the counter is not currently placed on the board.
+	 * 
+	 * @param counter
+	 * @return
+	 */
+	Stream<Location> locationOfByType(Counter counter);
 }
