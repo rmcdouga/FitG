@@ -90,4 +90,14 @@ class SpaceshipStackTest {
 		assertTrue(underTest.overLimit(TEST_SHIP_CAPACITY + 1));
 	}
 
+	@Test
+	void testStackContaining_Present() {
+		assertTrue(stackMgr.stackContaining(Adam_Starlight).isPresent());
+	}
+	
+	@Test
+	void testStackContaining_NotPresent() {
+		assertFalse(stackMgr.stackContaining(Doctor_Sontag).isPresent());
+	}
+	
 }
