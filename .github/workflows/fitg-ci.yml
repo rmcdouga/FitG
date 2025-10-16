@@ -6,8 +6,8 @@ on:
     - 'fitg/**'
     - '.github/workflows/fitg-ci.yml'
   workflow_dispatch:
- 
- jobs:
+
+jobs:
   build:
     name: Java ${{ matrix.java }} build
     runs-on: ubuntu-latest
