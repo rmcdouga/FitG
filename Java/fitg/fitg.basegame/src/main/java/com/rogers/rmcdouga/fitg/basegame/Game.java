@@ -3,6 +3,7 @@ package com.rogers.rmcdouga.fitg.basegame;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.PlaceCountersInstruction;
@@ -151,12 +152,17 @@ public class Game implements GameState, GameBoard, CounterLocator {
 	}
 	
 	@Override
-	public Location locationOf(Counter counter) {
+	public Optional<Location> locationOf(Counter counter) {
 		return counterLocations.locationOf(counter);
 	}
 
 	@Override
 	public Stream<Location> locationOfByType(Counter counter) {
 		return counterLocations.locationOfByType(counter);
+	}
+
+	@Override
+	public Optional<Counter> stackContaining(Counter counter) {
+		return counterLocations.stackContaining(counter);
 	}
 }

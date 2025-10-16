@@ -6,4 +6,12 @@ package com.rogers.rmcdouga.fitg.basegame.units;
  */
 public interface Counter {
 	String id();
+
+	default boolean isA(Counter counterType) {
+		return this.isA(counterType.id());
+	}
+
+	default boolean isA(String counterTypeStr) {
+		return this.id().equals(counterTypeStr);
+	}
 }

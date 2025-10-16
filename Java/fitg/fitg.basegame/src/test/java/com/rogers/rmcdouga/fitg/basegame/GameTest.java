@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static com.rogers.rmcdouga.fitg.basegame.BaseGameScenario.FlightToEgrix;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -50,10 +51,11 @@ public class GameTest {
 		// Given
 		Collection<Counter> countersInSpace = underTest.countersAt(BaseGameScenario.IN_SPACE);
 		Environ destination = BaseGamePlanet.Charkhan.environ(BaseGameEnvironType.Wild).orElseThrow();	// Empty environ from scenario setup
+		List<Counter> initialCountersAtDest = List.copyOf(underTest.countersAt(destination));
 		// Test preconditions
 		assertAll(
 				()->assertThat(countersInSpace, iterableWithSize(1)),		// Only one counter in space
-				()->assertThat(underTest.countersAt(destination), empty())	// Nothing at destination
+				()->assertThat(initialCountersAtDest, iterableWithSize(2))	// Two counters at destination (the Militia and Patrol)
 				);
 		
 		Counter stack = countersInSpace.stream().findAny().get();
@@ -64,8 +66,8 @@ public class GameTest {
 		// Then
 		Collection<Counter> countersAtDest = underTest.countersAt(destination);
 		assertAll(
-				()->assertThat(countersAtDest, iterableWithSize(1)),
-				()->assertThat(countersAtDest, containsInAnyOrder(stack)),
+				()->assertThat(countersAtDest, iterableWithSize(3)),
+				()->assertThat(countersAtDest, containsInAnyOrder(stack, initialCountersAtDest.get(0), initialCountersAtDest.get(1))),
 				()->assertThat(underTest.countersAt(BaseGameScenario.IN_SPACE), empty())	// No longer at source
 				);
 	}

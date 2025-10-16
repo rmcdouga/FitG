@@ -12,6 +12,7 @@ import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 import com.rogers.rmcdouga.fitg.basegame.box.GameBox;
 import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
+import com.rogers.rmcdouga.fitg.basegame.units.ImperialSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.Spaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager.SpaceshipStack;
@@ -128,20 +129,20 @@ public class CounterLocations implements GameState, CounterLocator {
 	 * @param counter
 	 * @return
 	 */
-	public  Location locationOf(Counter counterParam) {
+	public  Optional<Location> locationOf(Counter counterParam) {
 		// If there's a stack containing the counter, then get the stack's location rather than the counter's location.
 		Counter counter = fixIfStack(counterParam);
 		Counter stackOrCounter = stackMgr.stackContaining(counter)
 										 .map(Counter.class::cast)
 										 .orElse(counter);
 				
-		return Objects.requireNonNull(counterMap.get(stackOrCounter), ()->"Couldn't find counter (" + counterParam + ").");
+		return Optional.ofNullable(counterMap.get(stackOrCounter));
 	}
 
 	@Override
 	public Stream<Location> locationOfByType(Counter counterType) {
 		return counterMap.entrySet().stream()
-									.filter(e->e.getKey().id().equals(counterType.id()))
+									.filter(e->e.getKey().isA(counterType))
 									.map(Map.Entry::getValue);
 	}	
 
@@ -157,7 +158,7 @@ public class CounterLocations implements GameState, CounterLocator {
 		}
 
 		public Location location() {
-			return getEnclosingInstance().locationOf(counter);
+			return getEnclosingInstance().locationOf(counter).orElseThrow(()->new NullPointerException("Couldn't find counter (" + counter + ")."));
 		}
 		
 		public PlacedCounter<T> move(Location newLocation) {
@@ -231,5 +232,10 @@ public class CounterLocations implements GameState, CounterLocator {
 	public void setState(Map<String, Object> state) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Not implemented yet.");
+	}
+
+	@Override
+	public Optional<Counter> stackContaining(Counter counter) {
+		return stackMgr.stackContaining(counter).map(Counter.class::cast);
 	}
 }

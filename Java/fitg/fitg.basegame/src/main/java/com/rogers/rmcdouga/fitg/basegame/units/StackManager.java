@@ -336,6 +336,11 @@ public class StackManager {
 		}
 
 		@Override
+		public String id() {
+			return spaceship instanceof Counter c ? c.id() : "";
+		}
+
+		@Override
 		public boolean isEquivalent(Stack stack) {
 			return stack instanceof SpaceshipStack ss && this.spaceship == ss.spaceship && Set.copyOf(this).equals(Set.copyOf(ss));
 		}

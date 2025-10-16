@@ -13,7 +13,7 @@ public interface Mover {
 	 * @param location - Can be a planet/environ combo or a planet/orbit combo
 	 * @param destination - Can be a planet/environ combo or a planet/orbit combo (are intermediate stars eligible destinations?) 
 	 */
-	default void moveUnit(String unitType, String location, String destination) {};
+	default Mover moveUnit(String unitType, String location, String destination) { return this; };
 
 	/**
 	 * Move a unique unit (e.g. a character)
@@ -21,7 +21,7 @@ public interface Mover {
 	 * @param unitId -
 	 * @param destination
 	 */
-	default void moveUnit(String unitId, String destination) {};
+	default Mover moveUnit(String unitId, String destination) { return this; };
 	
 	void move(BaseGameCharacter character, Location destination);
 	void move(Stack stack, Location destination);

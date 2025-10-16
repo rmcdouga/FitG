@@ -60,23 +60,20 @@ class CounterLocationsTest {
 
 	@Test
 	void testLocationOf_present() {
-		Location result = underTest.locationOf(Agan_Rafa);
+		Location result = underTest.locationOf(Agan_Rafa).orElseThrow();
 		
 		assertEquals(location, result);
 	}
 
 	@Test
 	void testLocationOf_notPresent() {
-		NullPointerException ex = assertThrows(NullPointerException.class, ()->underTest.locationOf(Professor_Mareg));
-		String msg = ex.getMessage();
-		assertNotNull(msg);
-		assertThat(msg, allOf(containsString("Couldn't find counter"), containsString(Professor_Mareg.toString())));
+		assertTrue(underTest.locationOf(Professor_Mareg).isEmpty());
 		
 	}
 
 	@Test
 	void testLocationOf_presentInStack() {
-		Location result = underTest.locationOf(Doctor_Sontag);
+		Location result = underTest.locationOf(Doctor_Sontag).orElseThrow();
 		
 		assertEquals(location, result);
 	}
@@ -102,8 +99,8 @@ class CounterLocationsTest {
 		assertAll(
 				()->shouldBeEquivilent(List.of(Adam_Starlight, Agan_Rafa, Air_1_0, Air_1_0), underTest.countersAt(location)),	// any order
 				()->shouldBeEquivilent(List.of(stack), underTest.countersAt(newLocation)),
-				()->assertEquals(newLocation, underTest.locationOf(stack)),
-				()->assertEquals(newLocation, underTest.locationOf(Drakir_Grebb))
+				()->assertSame(newLocation, underTest.locationOf(stack).orElseThrow()),
+				()->assertSame(newLocation, underTest.locationOf(Drakir_Grebb).orElseThrow())
 				);
 	}
 	
@@ -178,6 +175,22 @@ class CounterLocationsTest {
 		assertThat(result, is(empty()));
 	}
 
+	@Test
+	void testStackContaining_present() {
+		Counter result = underTest.stackContaining(Doctor_Sontag).orElseThrow();
+		
+		if (result instanceof Stack resultStack) {
+			assertTrue(stack.isEquivalent(resultStack));
+		} else {
+			fail("Expected a Stack but got a " + result.getClass().getSimpleName());
+		}
+	}
+	
+	@Test
+	void testStackContaining_notPresent() {
+		assertTrue(underTest.stackContaining(Adam_Starlight).isEmpty());
+	}
+	
 	private Collection<Counter> toCounter(Collection<PlacedCounter<Counter>> placed) {
 		return placed.stream().map(PlacedCounter::counter).toList();
 	}
