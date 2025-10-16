@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Optional;
 
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameImperialSpaceship;
@@ -13,6 +14,7 @@ import com.rogers.rmcdouga.fitg.basegame.units.ImperialMilitaryUnit;
 import com.rogers.rmcdouga.fitg.basegame.units.RebelMilitaryUnit;
 import com.rogers.rmcdouga.fitg.basegame.units.Spaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager.Stack;
+import com.rogers.rmcdouga.fitg.basegame.units.Unit;
 import com.rogers.rmcdouga.fitg.renderer.images.ImageStore;
 
 public abstract class CounterOrStack {
@@ -38,10 +40,29 @@ public abstract class CounterOrStack {
 			return imageStore.getImage(rebelUnit);
 		} else if (counter instanceof ImperialMilitaryUnit impUnit) {
 			return imageStore.getImage(impUnit);
+		} else if (counter instanceof Unit unit) {		// Generic unit - try to find a match in either rebel or imperial units
+			return getRebelUnitImage(unit, imageStore)
+						.or(()->getImpUnitImage(unit, imageStore))
+						.orElseThrow(()->new IllegalStateException("No image found for unit " + unit));
 		}
+		
 		throw new IllegalStateException("Encountered unexpected counter type (" + counter.getClass().getName() + ").");
 	}
-
+	
+	private static Optional<Image> getRebelUnitImage(Unit unit, ImageStore imageStore) {
+		return RebelMilitaryUnit.stream()
+								.filter(u->u.isA(unit))
+								.findFirst()
+								.map(u->imageStore.getImage(u));
+	}
+	
+	private static Optional<Image> getImpUnitImage(Unit unit, ImageStore imageStore) {
+		return ImperialMilitaryUnit.stream()
+								.filter(u->u.isA(unit))
+								.findFirst()
+								.map(u->imageStore.getImage(u));
+	}
+	
 	private static class CounterImpl extends CounterOrStack {
 		private final Image image;
 

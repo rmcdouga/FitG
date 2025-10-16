@@ -1,0 +1,37 @@
+name: FitG CI
+
+on: 
+  push:
+    paths:
+    - 'fitg/**'
+    - '.github/workflows/fitg-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Java ${{ matrix.java }} build
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: true
+      matrix:
+        java: [ 21 ]
+        experimental: [false]
+        include:
+          - java: 25
+            experimental: true
+
+    steps:
+    - uses: actions/checkout@v5
+    - name: Set up JDK ${{ matrix.java }}
+      uses: actions/setup-java@v5
+      with:
+        distribution: 'oracle'
+        java-version: ${{ matrix.java }}
+        cache: 'maven'
+        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+        settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+    - name: Build with Maven
+      run: mvn -B verify --file Java/fitg/pom.xml
+

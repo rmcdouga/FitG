@@ -16,7 +16,12 @@ class SpaceshipStackTest {
 
 	private static final BaseGameRebelSpaceship TEST_SHIP = Stellar_Courier;
 	private static final int TEST_SHIP_CAPACITY = TEST_SHIP.maxPassengers();
-	private static final Counter fakeCounter = new Counter() {};
+	private static final Counter fakeCounter = new Counter() {
+		@Override
+		public String id() {
+			return null;
+		}
+	};
 
 	private final StackManager stackMgr= new StackManager();
 
@@ -85,4 +90,14 @@ class SpaceshipStackTest {
 		assertTrue(underTest.overLimit(TEST_SHIP_CAPACITY + 1));
 	}
 
+	@Test
+	void testStackContaining_Present() {
+		assertTrue(stackMgr.stackContaining(Adam_Starlight).isPresent());
+	}
+	
+	@Test
+	void testStackContaining_NotPresent() {
+		assertFalse(stackMgr.stackContaining(Doctor_Sontag).isPresent());
+	}
+	
 }

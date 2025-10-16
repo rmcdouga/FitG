@@ -39,6 +39,11 @@ class BaseGameImperialSpaceshipTest {
 			public int cannons() {
 				return 0;
 			}
+
+			@Override
+			public String id() {
+				return null;
+			}
 		}));
 		String msg = ex.getMessage();
 		assertNotNull(msg);

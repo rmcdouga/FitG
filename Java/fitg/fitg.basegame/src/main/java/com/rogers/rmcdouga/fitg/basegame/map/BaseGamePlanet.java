@@ -766,8 +766,8 @@ Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 
 	private LoyaltyType currentLoyalty;
 	private BaseGamePlanetaryControlType currentControl;
+	private InOrbit inOrbit = new InOrbitImpl();
 	
-
 	/*
 	Home Race,S,A,Capital,Secret,Environ1,Size,Resources,StarResources,Coup Rating,Races,Creature,Sovereign,Environ2,Size,Resources,StarResources,Coup Rating,Race,Creature,Sovereign,Environ3,Size,Resources,StarResources,Coup Rating,Race,Creature
 	 */
@@ -910,6 +910,11 @@ Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 		return hasSecret;
 	}
 	
+	@Override
+	public InOrbit inOrbit() {
+		return this.inOrbit;
+	}
+
 	private static final List<BaseGamePlanet> planetList = List.of(BaseGamePlanet.values());
 	
 	public static List<BaseGamePlanet> planets() {
@@ -935,5 +940,12 @@ Niconi,551,,2,0,,,Wild,4,5,TRUE,2,Kayns,Wyths,,,,,,,,,,,,,,,,
 			return bgp;
 		}
 		throw new IllegalArgumentException("Planet (" + planet.getName() + ") is not a BaseGamePlanet.");
+	}
+	
+	private class InOrbitImpl implements InOrbit {
+		@Override
+		public Planet planet() {
+			return BaseGamePlanet.this;
+		}
 	}
 }

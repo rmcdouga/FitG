@@ -21,10 +21,17 @@ public interface Planet {
 	public void setCurrentControl(BaseGamePlanetaryControlType currentControl);
 	public BaseGameStarSystem getStarSystem();
 	public boolean hasSecret();
+	public InOrbit inOrbit();
 	
 	default public int numEnvirons() { return listEnvirons().size(); }
 	default public Environ environ(int index) { return listEnvirons().get(index); }
 	default public Stream<? extends Environ> streamEnvirons() { return listEnvirons().stream(); }
 	default public Optional<? extends Environ> environ(Environ.EnvironType type) { return streamEnvirons().filter(e->e.getType().equals(type)).findAny(); }
 	default public int indexOf(Environ environ) { return listEnvirons().indexOf(environ); }
+	default public boolean hasEnviron(Environ environ) { return indexOf(environ) >= 0; }
+	
+	public interface InOrbit extends Location {
+		public Planet planet();
+	}
+
 }

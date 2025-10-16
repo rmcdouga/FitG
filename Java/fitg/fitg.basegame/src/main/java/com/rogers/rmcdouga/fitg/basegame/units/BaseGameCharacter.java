@@ -24,6 +24,7 @@ import com.rogers.rmcdouga.fitg.basegame.PlayerState.Faction;
 import com.rogers.rmcdouga.fitg.basegame.RaceType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 import com.rogers.rmcdouga.fitg.basegame.map.Planet;
+import com.rogers.rmcdouga.fitg.basegame.query.api.CounterFinder;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameRaceType;
 
 public enum BaseGameCharacter implements Card, Character {
@@ -128,7 +129,7 @@ public enum BaseGameCharacter implements Card, Character {
 			.homePlanet(Jura)
 			.description(
 					"""
-					An Imperial Sub-Commander is not supposed to have any out¬side business concerns, but this is a rarely enforced policy. \
+					An Imperial Sub-Commander is not supposed to have any outï¿½side business concerns, but this is a rarely enforced policy. \
 					Ly Mantok would no doubt have gotten away with his corrupt dealings, had not ten thousand Mantok Laser Rifle; \
 					refused to function in the middle of the Battle of Banjukai. When Mantok was formerly dismissed, \
 					he swore that he would go to someone who would appreciate his abilities The Rebels, at the time, \
@@ -170,7 +171,7 @@ public enum BaseGameCharacter implements Card, Character {
 					"""
 					It was quite a long time before the Rebel leaders would allow Ran Jayma, the notorious space pirate, \
 					to take the Rebel oath. But gradually they came to realize that even a pirate could tell right from wrong \
-					and see that the Empire had to be destroyed. Actually, Jayma was only being practical — if the Empire \
+					and see that the Empire had to be destroyed. Actually, Jayma was only being practical ï¿½ if the Empire \
 					kept taxing 90% of everything, there would be that much less for his take.\
 					""")
 			.bonusDraw(ASSASINATION, 1)
@@ -229,7 +230,7 @@ public enum BaseGameCharacter implements Card, Character {
 					"""
 					Since the time of the Kayn Mutiny, the family of Kogus had guarded the royalty of many planets faithfully, \
 					never abandoning their post. And so Kogus had guarded the Queen of Adare, Zina Adora, despite her exile. \
-					There are few who would dare the wrath of Kogus to visit Zina Adora — but Rayner Derban is one of those few.\
+					There are few who would dare the wrath of Kogus to visit Zina Adora ï¿½ but Rayner Derban is one of those few.\
 					""")
 			.specialAbility(INCREASE_ABILTIIES_WITH_ZINA_ADORA)
 			.build()
@@ -244,7 +245,7 @@ public enum BaseGameCharacter implements Card, Character {
 			.homePlanet(Orlog)
 			.description(
 					"""
-					The Planetary Stabilizer was a remarkable device — it could suddenly halt the rotation of a planet, \
+					The Planetary Stabilizer was a remarkable device ï¿½ it could suddenly halt the rotation of a planet, \
 					causing its outer crust to flake off totally and fly into space, utterly destroying the biosphere but \
 					leaving the planet for Imperial terraforming. The inventor of the Stabilizer, Dr. Sontag, became so \
 					disgusted with himself for inventing such a device of mass destruction that he joined the Rebels \
@@ -499,7 +500,7 @@ public enum BaseGameCharacter implements Card, Character {
 			.homePlanet(Chim, Squamot)
 			.description(
 					"""
-					Kidu has both the job of Im¬perial Lieutenant Governor and Head of the Imperial Intelligence Service. \
+					Kidu has both the job of Imï¿½perial Lieutenant Governor and Head of the Imperial Intelligence Service. \
 					In both positions, Jon Kidu is coolly efficient, following his orders to the letter, and letting no \
 					creature, no matter what his allegiance, stand in the way of his actions. As a result, Jon Kidu has \
 					become a name synonymous with fear throughout the entire Empire.\
@@ -635,7 +636,7 @@ public enum BaseGameCharacter implements Card, Character {
 			.description(
 					"""
 					Coreguya was chosen to be the next Emperor by Maxtross II, who is believed in turn to have been influenced by \
-					Redjac, who wanted a weak Emper¬or on the Imperial throne. If so, Redjac could not have made a better choice. \
+					Redjac, who wanted a weak Emperï¿½or on the Imperial throne. If so, Redjac could not have made a better choice. \
 					Despite the immense power wielded by one who sits on the throne at Orlog, \
 					Coreguya has remained content to indulge in the luxuries of the Imperial Palace while allowing all decisions \
 					to fall on Redjac's shoulders.\
@@ -665,9 +666,11 @@ public enum BaseGameCharacter implements Card, Character {
 			) {} ;
 	
 	private final CharacterData characterData;
+	private final String id;
 	
 	private BaseGameCharacter(CharacterData characterData) {
 		this.characterData = characterData;
+		this.id = CounterFinder.normalizeId(this.toString());
 	}
 	
 
@@ -741,6 +744,11 @@ public enum BaseGameCharacter implements Card, Character {
 		return characterData.cardNumber;
 	}
 
+	@Override
+	public String id( ) {
+		return this.id;
+	}
+	
 	public static Stream<BaseGameCharacter> stream() {
 		return Stream.of(BaseGameCharacter.values());
 	}

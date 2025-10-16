@@ -3,11 +3,14 @@ package com.rogers.rmcdouga.fitg.basegame;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.PlaceCountersInstruction;
 import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.SetPdbInstructions;
 import com.rogers.rmcdouga.fitg.basegame.box.BaseGameBox;
 import com.rogers.rmcdouga.fitg.basegame.box.GameBox;
+import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyManager;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyType;
@@ -115,6 +118,10 @@ public class Game implements GameState, GameBoard, CounterLocator {
 		return gameBoard.getStarSystems();
 	}
 	
+	@Override
+	public Planet getPlanetContaining(Environ environ) {
+		return gameBoard.getPlanetContaining(environ);
+	}
 
 	private void setupPdb(SetPdbInstructions instruction) {
 		switch(instruction.pdb().level()) {		// intentional fall through on the cases...
@@ -131,5 +138,31 @@ public class Game implements GameState, GameBoard, CounterLocator {
 
 	private void placeCounter(PlaceCountersInstruction instruction) {
 		counterLocations.placeCounter(instruction.location(), instruction.counter());
+	}
+	
+	/**
+	 * Note:  This method does not check to see if the counter can legally move to the destination.
+	 * @return 
+	 */
+	@Override
+	public CounterLocator move(Counter counter, Location destination) {
+		// Move the character to the destination
+		counterLocations.move(counter, destination);
+		return this;
+	}
+	
+	@Override
+	public Optional<Location> locationOf(Counter counter) {
+		return counterLocations.locationOf(counter);
+	}
+
+	@Override
+	public Stream<Location> locationOfByType(Counter counter) {
+		return counterLocations.locationOfByType(counter);
+	}
+
+	@Override
+	public Optional<Counter> stackContaining(Counter counter) {
+		return counterLocations.stackContaining(counter);
 	}
 }

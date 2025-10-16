@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameLoyaltyManager;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePdbManager;
+import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyManager;
 import com.rogers.rmcdouga.fitg.basegame.map.LoyaltyType;
 import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
@@ -66,6 +67,15 @@ public class BaseGameGameBoard implements GameBoard {
 	@Override
 	public Collection<StarSystem> getStarSystems() {
 		return this.map;
+	}
+	
+	@Override
+	public Planet getPlanetContaining(Environ environ) {
+		return map.stream()
+				   .flatMap(s->s.streamPlanets())
+				   .filter(p->p.hasEnviron(environ))
+				   .findFirst()
+				   .orElseThrow(()->new IllegalArgumentException("Environ " + environ + " is not contained in any planet on this map"));
 	}
 
 	public static GameBoard create(Collection<StarSystem> map, Scenario.Type scenarioType) {

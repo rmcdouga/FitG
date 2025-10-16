@@ -12,7 +12,6 @@ import com.rogers.rmcdouga.fitg.basegame.units.BaseGameImperialSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.ImperialMilitaryUnit;
 import com.rogers.rmcdouga.fitg.basegame.units.ImperialSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.RebelMilitaryUnit;
-import com.rogers.rmcdouga.fitg.basegame.units.Spaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.Unit;
 
 class BaseGameCounterPoolTest {
@@ -32,6 +31,11 @@ class BaseGameCounterPoolTest {
 		@Override
 		public boolean isMobile() {
 			return false;
+		}
+
+		@Override
+		public String id() {
+			return null;
 		}
 	};
 
@@ -55,6 +59,11 @@ class BaseGameCounterPoolTest {
 		@Override
 		public int cannons() {
 			return 0;
+		}
+
+		@Override
+		public String id() {
+			return null;
 		}
 	};
 

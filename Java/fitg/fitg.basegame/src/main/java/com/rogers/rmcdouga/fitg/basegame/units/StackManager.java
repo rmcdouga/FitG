@@ -32,7 +32,9 @@ public class StackManager {
 		if (spaceship.overLimit(counterCol.size())) {
 			throw new IllegalArgumentException("Can't add " + counterCol.size() + " characters to " + spaceship + ".  It has a limit of " + spaceship.maxPassengers() + " characters.");
 		}
-		return new SpaceshipStack(spaceship, counterCol);
+		SpaceshipStack spaceshipStack = new SpaceshipStack(spaceship, counterCol);
+		trackStack(spaceshipStack);
+		return spaceshipStack;
 	}
 
 	public Optional<Stack> stackContaining(Counter counter) {
@@ -100,9 +102,16 @@ public class StackManager {
 		// find the stack that the first counter is in and compare it to the stack provided.
 		// since a counter can only be in one stack, if they don't match then the stacks don't match
 		return stack.stream()
-					.findFirst()						// grab the first counter
-					.flatMap(this::stackContaining)		// find the stack within this stack manager that contains it
-					.filter(s->s instanceof SpaceshipStack ss ? (stack instanceof SpaceshipStack sstack? s.isEquivalent(sstack) : false) : s.isEquivalent(stack));	// see if that stack is equivilent to the stack passed in
+					.findFirst()								// grab the first counter
+					.flatMap(this::stackContaining)				// find the stack within this stack manager that contains it
+					.filter(s->areEquivalentStacks(s, stack));	// see if that stack is equivilent to the stack passed in
+	}
+	
+	private static boolean areEquivalentStacks(Stack stack1, Stack stack2) {
+		return switch(stack1) {
+			case SpaceshipStack ss1 -> stack2 instanceof SpaceshipStack ss2 && ss1.isEquivalent(ss2);
+			default -> stack1.isEquivalent(stack2);
+		};
 	}
 	
 	/**
@@ -159,7 +168,10 @@ public class StackManager {
 			return getStackMgr().of(spaceship, counterCol);
 		}
 
-		
+		@Override
+		public String id() {
+			return ""; // Stacks don't have IDs
+		}
 
 //		public void forEach(Consumer<? super Counter> action) {
 //			stack.forEach(action);
@@ -272,7 +284,8 @@ public class StackManager {
 		}
 		
 		public boolean isEquivalent(Stack stack) {
-			return Set.copyOf(this).equals(Set.copyOf(stack));
+			// I'd prefer if this routine did not have to know about SpaceshipStack, but I don't see another way.
+			return !(stack instanceof SpaceshipStack) && Set.copyOf(this).equals(Set.copyOf(stack));
 		}
 	}
 
@@ -322,8 +335,14 @@ public class StackManager {
 			return spaceship.overLimit(numChars);
 		}
 
-		public boolean isEquivalent(SpaceshipStack stack) {
-			return this.spaceship == stack.spaceship && Set.copyOf(this).equals(Set.copyOf(stack));
+		@Override
+		public String id() {
+			return spaceship instanceof Counter c ? c.id() : "";
+		}
+
+		@Override
+		public boolean isEquivalent(Stack stack) {
+			return stack instanceof SpaceshipStack ss && this.spaceship == ss.spaceship && Set.copyOf(this).equals(Set.copyOf(ss));
 		}
 	}
 }

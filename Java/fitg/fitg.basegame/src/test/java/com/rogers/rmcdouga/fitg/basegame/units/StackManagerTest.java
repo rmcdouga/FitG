@@ -112,7 +112,8 @@ class StackManagerTest {
 				other.of(Adam_Starlight, Agan_Rafa),					// disjoint
 				other.of(Doctor_Sontag),								// subset
 				other.of(Doctor_Sontag, Drakir_Grebb, Adam_Starlight),	// superset
-				other.of()												// empty
+				other.of(),												// empty
+				other.of(BaseGameRebelSpaceship.Explorer, Drakir_Grebb, Doctor_Sontag)	// Spaceship stack
 				);
 	}
 }

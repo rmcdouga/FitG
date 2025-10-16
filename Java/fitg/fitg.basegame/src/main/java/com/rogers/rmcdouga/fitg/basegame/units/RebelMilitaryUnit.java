@@ -1,5 +1,10 @@
 package com.rogers.rmcdouga.fitg.basegame.units;
 
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import com.rogers.rmcdouga.fitg.basegame.query.api.CounterFinder;
+
 public enum RebelMilitaryUnit implements Unit {
 	Air_1_0(1, 0, false, 2),
 	Air_2_1(2, 1, true, 2),
@@ -33,12 +38,14 @@ public enum RebelMilitaryUnit implements Unit {
 	private final int spaceCombatStrength;
 	private final boolean isMobile;
 	private final int numUnits;
+	private final String id;
 
 	private RebelMilitaryUnit(int environCombatStrength, int spaceCombatStrength, boolean isMobile, int numUnits) {
 		this.environCombatStrength = environCombatStrength;
 		this.spaceCombatStrength = spaceCombatStrength;
 		this.isMobile = isMobile;
 		this.numUnits = numUnits;
+		this.id = CounterFinder.normalizeId(this.toString());
 	}
 
 	@Override
@@ -56,7 +63,20 @@ public enum RebelMilitaryUnit implements Unit {
 		return this.isMobile;
 	}
 
+	@Override
+	public String id( ) {
+		return this.id;
+	}
+
 	public int numUnits() {
 		return numUnits;
+	}	
+	
+	public static Stream<RebelMilitaryUnit> stream() {
+		return Stream.of(RebelMilitaryUnit.values());
+	}
+
+	public static Stream<RebelMilitaryUnit> stream(Predicate<RebelMilitaryUnit> predicate) {
+		return RebelMilitaryUnit.stream().filter(predicate);
 	}
 }

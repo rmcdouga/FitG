@@ -1,36 +1,40 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
-import static com.rogers.rmcdouga.fitg.basegame.BaseGameScenario.FlightToEgrix;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static com.rogers.rmcdouga.fitg.basegame.BaseGameScenario.FlightToEgrix;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnvironType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameLoyaltyType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
+import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
 import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixImperialStrategy;
 import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixRebelStrategy;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
 
 public class GameTest {
+	Game underTest = createFlightToEgrixGame();
 
 	@Test
 	void testCreateGame() {
-		Game createdGame = createFlightToEgrixGame();
 		
-		assertNotNull(createdGame);
-		assertEquals(BaseGameLoyaltyType.Loyal, createdGame.getLoyalty(BaseGamePlanet.Quibron));
-		assertEquals(Pdb.Level.ONE, createdGame.getPdb(BaseGamePlanet.Quibron).level());
-		assertTrue(createdGame.getPdb(BaseGamePlanet.Quibron).isUp());
+		assertNotNull(underTest);
+		assertEquals(BaseGameLoyaltyType.Loyal, underTest.getLoyalty(BaseGamePlanet.Quibron));
+		assertEquals(Pdb.Level.ONE, underTest.getPdb(BaseGamePlanet.Quibron).level());
+		assertTrue(underTest.getPdb(BaseGamePlanet.Quibron).isUp());
 		
-		Collection<Counter> countersInSpace = createdGame.countersAt(BaseGameScenario.IN_SPACE);
+		Collection<Counter> countersInSpace = underTest.countersAt(BaseGameScenario.IN_SPACE);
 		assertNotNull(countersInSpace);
 		assertFalse(countersInSpace.isEmpty());
 		
-		Collection<Counter> countersOnAngoff = createdGame.countersAt(BaseGamePlanet.Angoff.environ(BaseGameEnvironType.Urban).get());
+		Collection<Counter> countersOnAngoff = underTest.countersAt(BaseGamePlanet.Angoff.environ(BaseGameEnvironType.Urban).get());
 		assertNotNull(countersOnAngoff);
 		assertFalse(countersOnAngoff.isEmpty());
 	}
@@ -42,4 +46,29 @@ public class GameTest {
 		return createdGame;
 	}
 
+	@Test
+	void testMoveCounterLocation() {
+		// Given
+		Collection<Counter> countersInSpace = underTest.countersAt(BaseGameScenario.IN_SPACE);
+		Environ destination = BaseGamePlanet.Charkhan.environ(BaseGameEnvironType.Wild).orElseThrow();	// Empty environ from scenario setup
+		List<Counter> initialCountersAtDest = List.copyOf(underTest.countersAt(destination));
+		// Test preconditions
+		assertAll(
+				()->assertThat(countersInSpace, iterableWithSize(1)),		// Only one counter in space
+				()->assertThat(initialCountersAtDest, iterableWithSize(2))	// Two counters at destination (the Militia and Patrol)
+				);
+		
+		Counter stack = countersInSpace.stream().findAny().get();
+		
+		// When
+		underTest.move(stack, destination);
+		
+		// Then
+		Collection<Counter> countersAtDest = underTest.countersAt(destination);
+		assertAll(
+				()->assertThat(countersAtDest, iterableWithSize(3)),
+				()->assertThat(countersAtDest, containsInAnyOrder(stack, initialCountersAtDest.get(0), initialCountersAtDest.get(1))),
+				()->assertThat(underTest.countersAt(BaseGameScenario.IN_SPACE), empty())	// No longer at source
+				);
+	}
 }

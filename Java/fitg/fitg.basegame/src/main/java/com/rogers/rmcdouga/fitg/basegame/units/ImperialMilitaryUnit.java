@@ -1,5 +1,10 @@
 package com.rogers.rmcdouga.fitg.basegame.units;
 
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import com.rogers.rmcdouga.fitg.basegame.query.api.CounterFinder;
+
 public enum ImperialMilitaryUnit implements Unit {
 	Militia(1, 0, false, 35),
 	Patrol(1, 2, true, 24),
@@ -14,12 +19,15 @@ public enum ImperialMilitaryUnit implements Unit {
 	private final int spaceCombatStrength;
 	private final boolean isMobile;
 	private final int numUnits;
+	private final String id;
+
 
 	private ImperialMilitaryUnit(int environCombatStrength, int spaceCombatStrength, boolean isMobile, int numUnits) {
 		this.environCombatStrength = environCombatStrength;
 		this.spaceCombatStrength = spaceCombatStrength;
 		this.isMobile = isMobile;
 		this.numUnits = numUnits;
+		this.id = CounterFinder.normalizeId(this.toString());
 	}
 
 	@Override
@@ -37,7 +45,20 @@ public enum ImperialMilitaryUnit implements Unit {
 		return this.isMobile;
 	}
 
+	@Override
+	public String id( ) {
+		return this.id;
+	}
+
 	public int numUnits() {
 		return numUnits;
+	}
+	
+	public static Stream<ImperialMilitaryUnit> stream() {
+		return Stream.of(ImperialMilitaryUnit.values());
+	}
+
+	public static Stream<ImperialMilitaryUnit> stream(Predicate<ImperialMilitaryUnit> predicate) {
+		return ImperialMilitaryUnit.stream().filter(predicate);
 	}
 }

@@ -4,6 +4,7 @@ import static com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet.*;
 import static com.rogers.rmcdouga.fitg.basegame.map.BaseGameStarSystem.*;
 import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter.*;
 import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameImperialSpaceship.*;
+import static com.rogers.rmcdouga.fitg.basegame.units.ImperialMilitaryUnit.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,7 +49,7 @@ public enum BaseGameScenario implements Scenario {
 			// Player will place these:
 			// Jon_Kidu, Vans_Ka_Tia_A, Imperial_Spaceship
 			// One Line, three Patrol and three Militia
-			Collection<PlaceCountersInstruction> imperialInstructions = imperialDecisions.placeCounters(List.of(Jon_Kidu, Vans_Ka_Tie_A, Imperial_Spaceship), stackMgr);
+			Collection<PlaceCountersInstruction> imperialInstructions = imperialDecisions.placeCounters(List.of(Jon_Kidu, Vans_Ka_Tie_A, Imperial_Spaceship, Line, Patrol, Patrol, Patrol, Militia, Militia, Militia), stackMgr);
 			// Remove remaining Imperial Spaceships from play
 			counterPool.removeFromPlay((ImperialSpaceship)counterPool.getSpaceship(Imperial_Spaceship).get());
 			counterPool.removeFromPlay((ImperialSpaceship)counterPool.getSpaceship(Imperial_Spaceship).get());
