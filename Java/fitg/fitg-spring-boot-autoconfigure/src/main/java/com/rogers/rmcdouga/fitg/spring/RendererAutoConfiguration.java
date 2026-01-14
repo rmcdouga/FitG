@@ -3,6 +3,7 @@ package com.rogers.rmcdouga.fitg.spring;
 import java.awt.Graphics2D;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
@@ -15,6 +16,7 @@ import com.rogers.rmcdouga.fitg.renderer.images.ImageStore;
 public class RendererAutoConfiguration {
 
 	@ConditionalOnMissingBean
+	@ConditionalOnBean({Graphics2D.class})
 	@Bean
 	public Map mapRenderer(Graphics2D g2d, ImageStore imageStore, GameBoard gameBoard, CounterLocator counterLocator) {
 		return new Map(g2d, imageStore, gameBoard, counterLocator);
