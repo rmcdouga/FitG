@@ -11,6 +11,7 @@
 	</parent>
 	<groupId>io.github.rmcdouga.fitg</groupId>
 	<artifactId>tui4j-viewer</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>tui4j-viewer</name>
 	<description>TUI4J Viewer for Freedom In The Galaxy Game</description>
 
