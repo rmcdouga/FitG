@@ -50,7 +50,7 @@ class AutoConfigurationTest {
 	}
 
 	@Test
-	void testCounterFinder(@Autowired PlanetFinder planetFinder) {
+	void testPlanetFinder(@Autowired PlanetFinder planetFinder) {
 		assertNotNull(planetFinder);
 	}
 
