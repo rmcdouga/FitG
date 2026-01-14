@@ -1,2 +1,3 @@
 com.rogers.rmcdouga.fitg.spring.GameAutoConfiguration
 com.rogers.rmcdouga.fitg.spring.RendererAutoConfiguration
+com.rogers.rmcdouga.fitg.spring.QueryAutoConfiguration
