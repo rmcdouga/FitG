@@ -14,6 +14,9 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import com.rogers.rmcdouga.fitg.basegame.Game;
+import com.rogers.rmcdouga.fitg.basegame.query.api.CounterFinder;
+import com.rogers.rmcdouga.fitg.basegame.query.api.LocationFinder;
+import com.rogers.rmcdouga.fitg.basegame.query.api.PlanetFinder;
 import com.rogers.rmcdouga.fitg.renderer.graphics2d.Map;
 import com.rogers.rmcdouga.fitg.renderer.images.BaseGameImageStoreAdapter;
 import com.rogers.rmcdouga.fitg.renderer.images.ImageStore;
@@ -21,7 +24,8 @@ import com.rogers.rmcdouga.fitg.renderer.images.ImageStore;
 @SpringBootTest(classes = {com.rogers.rmcdouga.fitg.spring.AutoConfigurationTest.TestApplication.class, 
 						   com.rogers.rmcdouga.fitg.spring.AutoConfigurationTest.LocalTestConfiguration.class, 
 						   GameAutoConfiguration.class, 
-						   RendererAutoConfiguration.class
+						   RendererAutoConfiguration.class,
+						   QueryAutoConfiguration.class
 						   })
 class AutoConfigurationTest {
 
@@ -33,6 +37,21 @@ class AutoConfigurationTest {
 	@Test
 	void testGame(@Autowired Game game) {
 		assertNotNull(game);
+	}
+
+	@Test
+	void testCounterFinder(@Autowired CounterFinder counterFinder) {
+		assertNotNull(counterFinder);
+	}
+
+	@Test
+	void testLocationCounterFinder(@Autowired LocationFinder locationFinder) {
+		assertNotNull(locationFinder);
+	}
+
+	@Test
+	void testCounterFinder(@Autowired PlanetFinder planetFinder) {
+		assertNotNull(planetFinder);
 	}
 
 
