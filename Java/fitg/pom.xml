@@ -16,7 +16,7 @@
 		<hamcrest.version>3.0</hamcrest.version>
 		<commmons.lang.version>3.20.0</commmons.lang.version>
 		<commons.io.version>2.21.0</commons.io.version>
-		<commonmark.version>0.27.0</commonmark.version>
+		<commonmark.version>0.27.1</commonmark.version>
 		<commons.collections4.version>4.5.0</commons.collections4.version>
 	</properties>
 
