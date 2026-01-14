@@ -67,5 +67,6 @@
 		<module>fitg-spring-boot-starter</module>
 		<module>fitg.cli</module>
 		<module>fitg.renderer</module>
+		<module>tui4j-viewer</module>
 	</modules>
 </project>

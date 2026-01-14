@@ -1,0 +1,61 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>4.0.0</version>
+		<relativePath />
+		<!-- lookup parent from repository -->
+	</parent>
+	<groupId>io.github.rmcdouga.fitg</groupId>
+	<artifactId>tui4j-viewer</artifactId>
+	<name>tui4j-viewer</name>
+	<description>TUI4J Viewer for Freedom In The Galaxy Game</description>
+
+	<properties>
+		<!-- Spring dependency versions -->
+		<java.version>25</java.version>
+
+		<!-- Local dependency versions -->
+		<tui4j.version>0.2.5</tui4j.version>
+
+		<!-- Other local projects -->
+		<fitg.basegame.version>0.0.1-SNAPSHOT</fitg.basegame.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.rogers.rmcdouga</groupId>
+			<artifactId>fitg-spring-boot-starter</artifactId>
+			<version>${fitg.basegame.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.williamcallahan</groupId>
+			<artifactId>tui4j</artifactId>
+			<version>${tui4j.version}</version>
+		</dependency>
+		
+		<!-- Testing Dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
