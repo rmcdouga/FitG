@@ -20,7 +20,7 @@ public class Tui4jCommandLineRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         new Program(tui4jApplication)
-                .withAltScreen()
+//                .withAltScreen()
                 .run();
     }
 }

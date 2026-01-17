@@ -13,6 +13,10 @@ import io.github.rmcdouga.fitg.tui4jviewer.view.MainView;
 @SpringBootApplication
 public class Tui4jViewerApplication {
 	
+	public Tui4jViewerApplication(GitConfig gitConfig) {
+		gitConfig.logGitInformation();
+	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(Tui4jViewerApplication.class, args);
 	}
