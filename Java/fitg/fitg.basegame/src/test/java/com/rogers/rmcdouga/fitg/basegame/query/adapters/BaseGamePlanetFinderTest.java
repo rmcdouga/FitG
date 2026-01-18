@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.rogers.rmcdouga.fitg.basegame.GameTest;
@@ -12,18 +13,20 @@ import com.rogers.rmcdouga.fitg.basegame.query.api.PlanetFinder;
 
 class BaseGamePlanetFinderTest {
 
-	private final PlanetFinder planetFinder = new BaseGamePlanetFinder(GameTest.createFlightToEgrixGame());
+	private final PlanetFinder planetFinder = new BaseGamePlanetFinder(GameTest.createGalacticGame());
 
-	@Test
-	void testFindByName() {
-		var planet = planetFinder.findByName("Angoff").orElseThrow();
-		assertSame(BaseGamePlanet.Angoff, planet);
+	@ParameterizedTest
+	@EnumSource(BaseGamePlanet.class)
+	void testFindByName(BaseGamePlanet expectedPlanet) {
+		var planet = planetFinder.findByName(expectedPlanet.getName().toUpperCase()).orElseThrow();
+		assertSame(expectedPlanet, planet);
 	}
 
-	@Test
-	void testFindById() {
-		var planet = planetFinder.findById(221).orElseThrow();
-		assertSame(BaseGamePlanet.Quibron, planet);
+	@ParameterizedTest
+	@EnumSource(BaseGamePlanet.class)
+	void testFindById(BaseGamePlanet expectedPlanet) {
+		var planet = planetFinder.findById(expectedPlanet.getId()).orElseThrow();
+		assertSame(expectedPlanet, planet);
 	}
 
 	@Test
@@ -32,7 +35,7 @@ class BaseGamePlanetFinderTest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(ints = {99, 399, 999})
+	@ValueSource(ints = {99, 110, 399, 999})
 	void testFindById_Failure(int badId) {
 		assertTrue(planetFinder.findById(badId).isEmpty());
 	}
