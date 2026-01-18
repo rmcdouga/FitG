@@ -8,12 +8,20 @@ import com.rogers.rmcdouga.fitg.basegame.Game;
 import com.rogers.rmcdouga.fitg.basegame.query.adapters.BaseGameCounterFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.adapters.BaseGameLocationFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.adapters.BaseGamePlanetFinder;
+import com.rogers.rmcdouga.fitg.basegame.query.adapters.BaseGameStarSystemFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.api.CounterFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.api.LocationFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.api.PlanetFinder;
+import com.rogers.rmcdouga.fitg.basegame.query.api.StarSystemFinder;
 
 @AutoConfiguration
 public class QueryAutoConfiguration {
+
+	@ConditionalOnMissingBean
+	@Bean
+	public StarSystemFinder starSystemFinder(Game game) {
+		return new BaseGameStarSystemFinder(game);
+	}
 
 	@ConditionalOnMissingBean
 	@Bean
