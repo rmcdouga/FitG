@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.0</version>
+		<version>4.0.1</version>
 		<relativePath />
 		<!-- lookup parent from repository -->
 	</parent>
@@ -21,6 +21,7 @@
 
 		<!-- Local dependency versions -->
 		<tui4j.version>0.2.5</tui4j.version>
+		<jemoji.version>1.7.5</jemoji.version>
 
 		<!-- Other local projects -->
 		<fitg.basegame.version>0.0.1-SNAPSHOT</fitg.basegame.version>
@@ -41,7 +42,12 @@
 			<artifactId>tui4j</artifactId>
 			<version>${tui4j.version}</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>net.fellbaum</groupId>
+			<artifactId>jemoji</artifactId>
+			<version>${jemoji.version}</version>
+		</dependency>
+
 		<!-- Testing Dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

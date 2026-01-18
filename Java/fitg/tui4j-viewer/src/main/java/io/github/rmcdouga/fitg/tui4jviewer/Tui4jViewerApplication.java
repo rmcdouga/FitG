@@ -1,11 +1,13 @@
 package io.github.rmcdouga.fitg.tui4jviewer;
 
+import static com.rogers.rmcdouga.fitg.basegame.BaseGameScenario.GalacticGame;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import com.rogers.rmcdouga.fitg.basegame.BaseGameScenario;
 import com.rogers.rmcdouga.fitg.basegame.Game;
-import com.rogers.rmcdouga.fitg.basegame.query.adapters.BaseGamePlanetFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.api.PlanetFinder;
 
 import io.github.rmcdouga.fitg.tui4jviewer.view.MainView;
@@ -20,6 +22,11 @@ public class Tui4jViewerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(Tui4jViewerApplication.class, args);
 	}
+
+	@Bean
+	public BaseGameScenario scenario() {
+		return GalacticGame;
+	}	
 
 	@Bean
 	public Tui4jCommandLineRunner tui4jCommandLineRunner(MainView mainView) {
