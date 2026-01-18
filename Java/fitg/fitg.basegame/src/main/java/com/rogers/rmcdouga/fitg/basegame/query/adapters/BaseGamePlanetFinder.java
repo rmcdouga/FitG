@@ -25,7 +25,7 @@ public class BaseGamePlanetFinder implements PlanetFinder {
 
 	@Override
 	public Optional<Planet> findById(int id) {
-		if (id < 100 || id > 551) {	// Shortcut if outside valid range
+		if (id < 111 || id > 551) {	// Shortcut if outside valid range
 			return Optional.empty();
 		}
 		int starSystemId = id / 10;

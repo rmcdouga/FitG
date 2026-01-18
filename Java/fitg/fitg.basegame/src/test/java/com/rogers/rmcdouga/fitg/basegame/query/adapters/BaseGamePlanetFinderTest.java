@@ -32,7 +32,7 @@ class BaseGamePlanetFinderTest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(ints = {99, 399, 999})
+	@ValueSource(ints = {99, 110, 399, 999})
 	void testFindById_Failure(int badId) {
 		assertTrue(planetFinder.findById(badId).isEmpty());
 	}
