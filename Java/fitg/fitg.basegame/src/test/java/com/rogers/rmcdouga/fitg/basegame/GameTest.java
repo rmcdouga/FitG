@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static com.rogers.rmcdouga.fitg.basegame.BaseGameScenario.FlightToEgrix;
+import static com.rogers.rmcdouga.fitg.basegame.BaseGameScenario.GalacticGame;
 
 import java.util.Collection;
 import java.util.List;
@@ -43,6 +44,13 @@ public class GameTest {
 		FlightToEgrixRebelStrategy rebelDecisions = new FlightToEgrixRebelStrategy();
 		FlightToEgrixImperialStrategy imperialDecisions = new FlightToEgrixImperialStrategy();
 		Game createdGame = Game.createGame(FlightToEgrix, rebelDecisions, imperialDecisions);
+		return createdGame;
+	}
+
+	public static Game createGalacticGame() {
+		FlightToEgrixRebelStrategy rebelDecisions = new FlightToEgrixRebelStrategy();			// TODO: Create Galactic Rebel Strategy
+		FlightToEgrixImperialStrategy imperialDecisions = new FlightToEgrixImperialStrategy();	// TODO: Create Galactic Imperial Strategy
+		Game createdGame = Game.createGame(GalacticGame, rebelDecisions, imperialDecisions);
 		return createdGame;
 	}
 
