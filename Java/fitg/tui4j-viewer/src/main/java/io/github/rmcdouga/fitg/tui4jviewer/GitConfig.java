@@ -10,7 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 
 @Configuration
 public class GitConfig {
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	private static final Logger log = LoggerFactory.getLogger(GitConfig.class);
 
 	@Value("${git.build.time}")
     private String commitBuildTime;
