@@ -118,6 +118,13 @@ public class BaseGameEnviron implements Environ {
 		return new Builder(BaseGameEnvironType.Subterranian, size);
 	}
 	
+	public static BaseGameEnviron requireBgEnviron(Environ environ) {
+		if (environ instanceof BaseGameEnviron bge) {
+			return bge;
+		}
+		throw new IllegalArgumentException("Environ (" + environ.getType().getName() + ") is not a BaseGameEnviron.");
+	}
+	
 	public static class Builder {
 		private EnvironType type;
 		private int size;

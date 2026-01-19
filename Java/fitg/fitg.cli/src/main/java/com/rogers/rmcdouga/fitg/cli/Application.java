@@ -2,7 +2,7 @@ package com.rogers.rmcdouga.fitg.cli;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.shell.command.annotation.EnableCommand;
+import org.springframework.shell.core.command.annotation.EnableCommand;
 
 @SpringBootApplication
 @EnableCommand(GameCommands.class)
