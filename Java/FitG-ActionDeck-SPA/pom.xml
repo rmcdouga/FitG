@@ -15,7 +15,7 @@
     <java.version>1.8</java.version>
     <flavour.version>0.2.1</flavour.version>
     <teavm.version>0.13.0</teavm.version>
-    <jackson.version>2.20</jackson.version>
+    <jackson.version>2.21</jackson.version>
   </properties>
 
   <dependencies>
