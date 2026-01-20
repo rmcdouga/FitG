@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import com.rogers.rmcdouga.fitg.basegame.BaseGameScenario;
 import com.rogers.rmcdouga.fitg.basegame.Game;
 import com.rogers.rmcdouga.fitg.basegame.query.api.PlanetFinder;
+import com.rogers.rmcdouga.fitg.basegame.query.api.StarSystemFinder;
 
 import io.github.rmcdouga.fitg.tui4jviewer.view.MainView;
 
@@ -34,7 +35,7 @@ public class Tui4jViewerApplication {
 	}
 	
 	@Bean
-	public MainView mainView(Game game, PlanetFinder planetFinder) {
-		return new MainView(game, planetFinder);
+	public MainView mainView(Game game, StarSystemFinder starSystemFinder, PlanetFinder planetFinder) {
+		return new MainView(game, starSystemFinder, planetFinder);
 	}
 }
