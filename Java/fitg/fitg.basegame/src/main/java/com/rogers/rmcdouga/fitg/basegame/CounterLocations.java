@@ -78,7 +78,7 @@ public class CounterLocations implements GameState, CounterLocator {
 	/**
 	 * Moves an existing counter to a new location
 	 * 
-	 * @param counter
+	 * @param counterParam
 	 * @param newLocation
 	 * @return
 	 */
@@ -126,7 +126,7 @@ public class CounterLocations implements GameState, CounterLocator {
 	 * This routine is a "deep" search which means that if a counter is in a stack, then this routine returns
 	 * the stack's location.
 	 * 
-	 * @param counter
+	 * @param counterParam
 	 * @return
 	 */
 	public  Optional<Location> locationOf(Counter counterParam) {
@@ -206,7 +206,7 @@ public class CounterLocations implements GameState, CounterLocator {
 	/**
 	 * Remove the counter from the map.
 	 * 
-	 * @param counter
+	 * @param counterParam
 	 * @return
 	 */
 	public CounterLocations remove(Counter counterParam) {
