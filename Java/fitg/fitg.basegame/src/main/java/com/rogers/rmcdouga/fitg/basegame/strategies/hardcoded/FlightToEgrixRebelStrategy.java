@@ -11,12 +11,12 @@ public class FlightToEgrixRebelStrategy extends AbstractStrategy {
 
 	@Override
 	public Collection<SetPdbInstructions> setPdbs(Collection<StarSystem> map) {
-		throw new UnsupportedOperationException("Rebels have not decisions to be made in FlightToEgeix scenario");
+		throw new UnsupportedOperationException("Rebels have no decisions to be made in FlightToEgrix scenario");
 	}
 
 	@Override
 	public Collection<PlaceCountersInstruction> placeCounters(Collection<Counter> counters, StackManager stackMgr) {
-		throw new UnsupportedOperationException("Rebels have not decisions to be made in FlightToEgeix scenario");
+		throw new UnsupportedOperationException("Rebels have no decisions to be made in FlightToEgrix scenario");
 	}
 
 }
