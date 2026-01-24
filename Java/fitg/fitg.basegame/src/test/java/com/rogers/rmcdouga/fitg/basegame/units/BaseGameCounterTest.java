@@ -92,7 +92,7 @@ class BaseGameCounterTest {
 		UnsupportedOperationException ex = assertThrows(UnsupportedOperationException.class,  ()->BaseGameCounter.isFactionCounter(faction, Adam_Starlight));
 		String msg = ex.getMessage();
 		assertNotNull(msg);
-		assertThat(msg, containsString("IsFactionCounter should not be called this faction: " + faction));
+		assertThat(msg, containsString("IsFactionCounter should not be called for this faction: " + faction));
 	}
 	
 }

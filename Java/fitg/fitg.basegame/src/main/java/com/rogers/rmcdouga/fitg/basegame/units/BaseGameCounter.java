@@ -12,40 +12,21 @@ public class BaseGameCounter {
 	}
 
 	public static boolean isFactionCounter(Faction faction, Counter counter) {
-		return switch (faction) {
-			case REBEL -> isRebelCounter(counter);
-			case IMPERIAL -> isImperialCounter(counter);
-			// There are no ADMIN Counters and Counters should not be NEUTRAL if they are on the map (I think)
-			case ADMIN, NEUTRAL -> throw new UnsupportedOperationException("IsFactionCounter should not be called this faction: " + faction);
-		};
+		// There are no ADMIN Counters and Counters should not be NEUTRAL if they are on the map (I think)
+		if (faction == Faction.ADMIN || faction == Faction.NEUTRAL) {
+			throw new UnsupportedOperationException("IsFactionCounter should not be called for this faction: " + faction);
+		}
+		return factionOfCounter(counter) == faction;
 	}
 
 	public static Faction factionOfCounter(Counter counter) {
-		if (isRebelCounter(counter)) {
-			return Faction.REBEL;
-		} else if (isImperialCounter(counter)) {
-			return Faction.IMPERIAL;
-		} else {
-			throw new IllegalArgumentException("Counter does not belong to REBEL or IMPERIAL faction: " + counter);
-		}
-	}
-	
-	private static boolean isRebelCounter(Counter counter) {
 		return switch (counter) {
-			 case BaseGameCharacter character when character.allegience() == Faction.REBEL -> true;
-			 case RebelMilitaryUnit _ -> true;
-			 case Stack stack -> containsFactionCounters(Faction.REBEL, stack);
-			default -> false;
-		};
-	}
-
-	private static boolean isImperialCounter(Counter counter) {
-		return switch (counter) {
-			case BaseGameCharacter character when character.allegience() == Faction.IMPERIAL -> true;
-			case ImperialMilitaryUnit _ -> true;
-			case BaseGameImperialSpaceship _ -> true;
-			case Stack stack -> containsFactionCounters(Faction.IMPERIAL, stack);
-			default -> false;
+		 case BaseGameCharacter character -> character.allegience();
+		 case RebelMilitaryUnit _ -> Faction.REBEL;
+		 case ImperialMilitaryUnit _ -> Faction.IMPERIAL;
+		 case BaseGameImperialSpaceship _ -> Faction.IMPERIAL;
+		 case Stack stack -> stack.stream().findAny().map(c->factionOfCounter(c)).orElseThrow(()-> new IllegalArgumentException("Cannot determine faction of an empty Stack"));
+		 default -> throw new IllegalArgumentException("Cannot determine faction of counter: " + counter);
 		};
 	}
 }
