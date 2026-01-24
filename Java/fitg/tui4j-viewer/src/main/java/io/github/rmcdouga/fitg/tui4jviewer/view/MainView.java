@@ -1,5 +1,8 @@
 package io.github.rmcdouga.fitg.tui4jviewer.view;
 
+import static io.github.rmcdouga.fitg.tui4jviewer.view.BaseGameCounterRenderer.renderCounters;
+import static io.github.rmcdouga.fitg.tui4jviewer.view.BaseGameEnvironRenderer.renderEnviron;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +38,7 @@ public class MainView  implements Model {
 	private final Game game;
 	private final StarSystemFinder starSystemFinder;
 	private final PlanetFinder planetFinder;
+	private ZoomLevel currentZoomLevel = ZoomLevel.PLANETARY;
 
 	public MainView(Game game, StarSystemFinder starSystemFinder, PlanetFinder planetFinder) {
 		this.game = game;
@@ -99,7 +103,9 @@ public class MainView  implements Model {
 		return formatPlanet(planetFinder.findById(Id).orElseThrow());
 	}
 	
-	private static String formatPlanet(Planet planet) {
+	private String formatPlanet(Planet planet) {
+		log.atInfo().addArgument(planet.getName()).log("Formatting planet: {}");
+		log.atInfo().addArgument(game.getPdb(planet).toString()).log("  Pdb: {}");
 		StringBuilder sb = new StringBuilder();
 		sb.append(SELECTION.render("Planet: "));
 		sb.append(String.format("%s (ID: %d) in %s - ", planet.getName(), planet.getId(), planet.getStarSystem().getName()));
@@ -107,10 +113,11 @@ public class MainView  implements Model {
 		return sb.toString();
 	}
 
-	private static String formatEnvirons(List<? extends Environ> environs) {
+	private String formatEnvirons(List<? extends Environ> environs) {
 		// TODO: How to show couunters, stacks, etc.?
 		return environs.stream()
-				.map(BaseGameEnvironRenderer::renderEnviron)
+				.map(e->renderEnviron(currentZoomLevel, e) + " " + renderCounters(currentZoomLevel, game.countersAt(e)))
 				.collect(Collectors.joining("|", "|", "|"));
 	}
-		}
+	
+}

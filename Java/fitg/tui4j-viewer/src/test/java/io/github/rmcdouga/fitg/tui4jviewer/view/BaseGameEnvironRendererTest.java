@@ -55,7 +55,7 @@ class BaseGameEnvironRendererTest {
 	@ParameterizedTest
 	@FieldSource("allEnvirons")
 	void testRenderEnvironEnviron(Environ environ) {
-		String result = BaseGameEnvironRenderer.renderEnviron(environ);
+		String result = BaseGameEnvironRenderer.renderEnviron(ZoomLevel.PLANETARY, environ);
 		assertAll(
 				()->assertThat(result, is(not(emptyString()))),
 				()->assertThat(result, containsString(Integer.toString(environ.getSize()))),

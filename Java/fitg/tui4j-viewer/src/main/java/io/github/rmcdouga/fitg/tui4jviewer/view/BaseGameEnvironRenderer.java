@@ -70,13 +70,14 @@ public class BaseGameEnvironRenderer {
 		}
 	};
 
-	static String renderEnviron(Environ environ) {
-		return renderEnviron(BaseGameEnviron.requireBgEnviron(environ));
+	static String renderEnviron(ZoomLevel zoomLevel, Environ environ) {
+		return renderEnviron(zoomLevel, BaseGameEnviron.requireBgEnviron(environ));
 	}
 
-	static String renderEnviron(BaseGameEnviron environ) {
+	static String renderEnviron(ZoomLevel zoomLevel, BaseGameEnviron environ) {
 		BaseGameEnvironType bgEnvironType = BaseGameEnvironType.requireBgEnvironType(environ.getType());
 		BaseGameEnvironTypeRenderer renderer = BaseGameEnvironTypeRenderer.from(bgEnvironType);
+		
 		return renderer.style.render("%s %s".formatted(renderer.symbol, environ.getSize()));
 	}
 }
