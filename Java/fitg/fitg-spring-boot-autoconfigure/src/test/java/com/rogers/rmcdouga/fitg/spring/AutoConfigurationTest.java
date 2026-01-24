@@ -14,9 +14,12 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import com.rogers.rmcdouga.fitg.basegame.Game;
+import com.rogers.rmcdouga.fitg.basegame.Scenario;
 import com.rogers.rmcdouga.fitg.basegame.query.api.CounterFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.api.LocationFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.api.PlanetFinder;
+import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixImperialStrategy;
+import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixRebelStrategy;
 import com.rogers.rmcdouga.fitg.renderer.graphics2d.Map;
 import com.rogers.rmcdouga.fitg.renderer.images.BaseGameImageStoreAdapter;
 import com.rogers.rmcdouga.fitg.renderer.images.ImageStore;
@@ -37,6 +40,18 @@ class AutoConfigurationTest {
 	@Test
 	void testGame(@Autowired Game game) {
 		assertNotNull(game);
+	}
+
+	@Test
+	void testRebelDecisions(@Autowired Scenario.PlayerDecisions rebelDecisions) {
+		assertNotNull(rebelDecisions);
+		assertEquals(FlightToEgrixRebelStrategy.class, rebelDecisions.getClass());
+	}
+
+	@Test
+	void testImperialDecisions(@Autowired Scenario.PlayerDecisions imperialDecisions) {
+		assertNotNull(imperialDecisions);
+		assertEquals(FlightToEgrixImperialStrategy.class, imperialDecisions.getClass());
 	}
 
 	@Test
