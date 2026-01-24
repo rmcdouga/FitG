@@ -14,7 +14,7 @@
 	<name>FitG Spring Boot Starter</name>
 
 	<properties>
-		<java.version>21</java.version>
+		<java.version>25</java.version>
 		<fitg.spring.boot.autoconfigure.version>0.0.1-SNAPSHOT</fitg.spring.boot.autoconfigure.version>
 	</properties>
 	
