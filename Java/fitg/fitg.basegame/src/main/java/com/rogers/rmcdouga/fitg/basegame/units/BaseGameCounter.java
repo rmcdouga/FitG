@@ -20,6 +20,16 @@ public class BaseGameCounter {
 		};
 	}
 
+	public static Faction factionOfCounter(Counter counter) {
+		if (isRebelCounter(counter)) {
+			return Faction.REBEL;
+		} else if (isImperialCounter(counter)) {
+			return Faction.IMPERIAL;
+		} else {
+			throw new IllegalArgumentException("Counter does not belong to REBEL or IMPERIAL faction: " + counter);
+		}
+	}
+	
 	private static boolean isRebelCounter(Counter counter) {
 		return switch (counter) {
 			 case BaseGameCharacter character when character.allegience() == Faction.REBEL -> true;

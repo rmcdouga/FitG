@@ -43,7 +43,13 @@ class BaseGameCounterTest {
 			new TestCounter(stackMgr.of((Spaceship)Imperial_Spaceship, Barca), IMPERIAL)					// Imperial Spaceship Stack
 			);
 	
-	
+
+	@ParameterizedTest
+	@FieldSource("TEST_COUNTERS")
+	void testFactionOfCounter(TestCounter testCounter) {
+		assertEquals(testCounter.faction,  BaseGameCounter.factionOfCounter(testCounter.counter));
+	}
+
 	@ParameterizedTest
 	@FieldSource("TEST_COUNTERS")
 	void testIsFactionCounter(TestCounter testCounter) {
