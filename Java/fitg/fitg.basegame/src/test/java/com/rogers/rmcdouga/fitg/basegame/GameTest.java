@@ -16,6 +16,7 @@ import com.rogers.rmcdouga.fitg.basegame.map.BaseGameLoyaltyType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
+import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.DoNothingStrategy;
 import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixImperialStrategy;
 import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixRebelStrategy;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
@@ -41,15 +42,15 @@ public class GameTest {
 	}
 
 	public static Game createFlightToEgrixGame() {
-		FlightToEgrixRebelStrategy rebelDecisions = new FlightToEgrixRebelStrategy();
-		FlightToEgrixImperialStrategy imperialDecisions = new FlightToEgrixImperialStrategy();
+		Scenario.PlayerDecisions rebelDecisions = new FlightToEgrixRebelStrategy();
+		Scenario.PlayerDecisions imperialDecisions = new FlightToEgrixImperialStrategy();
 		Game createdGame = Game.createGame(FlightToEgrix, rebelDecisions, imperialDecisions);
 		return createdGame;
 	}
 
 	public static Game createGalacticGame() {
-		FlightToEgrixRebelStrategy rebelDecisions = new FlightToEgrixRebelStrategy();			// TODO: Create Galactic Rebel Strategy
-		FlightToEgrixImperialStrategy imperialDecisions = new FlightToEgrixImperialStrategy();	// TODO: Create Galactic Imperial Strategy
+		Scenario.PlayerDecisions rebelDecisions = new DoNothingStrategy();					// TODO: Create Galactic Rebel Strategy
+		Scenario.PlayerDecisions imperialDecisions = new FlightToEgrixImperialStrategy();	// TODO: Create Galactic Imperial Strategy
 		Game createdGame = Game.createGame(GalacticGame, rebelDecisions, imperialDecisions);
 		return createdGame;
 	}
