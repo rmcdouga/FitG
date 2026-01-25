@@ -9,18 +9,8 @@ import com.rogers.rmcdouga.fitg.basegame.units.BaseGameCounter;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
 import com.rogers.rmcdouga.fitg.basegame.units.RebelMilitaryUnit;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager.Stack;
-import com.williamcallahan.tui4j.compat.bubbletea.lipgloss.Style;
-import com.williamcallahan.tui4j.compat.bubbletea.lipgloss.color.Color;
 
 public class BaseGameCounterRenderer {
-	// Use some colors to represent different faction types.
-	// Colors chosen from ANSI 256 color chart: https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
-	// Better examples here: https://hexdocs.pm/color_palette/ansi_color_codes.html
-	private static final Color COLOR_STRONG_YELLOW = Color.color("#d7d700");	// ANSI Yellow #184
-	private static final Color COLOR_STRONG_RED = Color.color("#d70000"); 		// ANSI Red #160
-
-	private final static Style STYLE_IMPERIAL = Style.newStyle().foreground(COLOR_STRONG_YELLOW);
-	private final static Style STYLE_REBEL = Style.newStyle().foreground(COLOR_STRONG_RED);
 
 	// BaseGameCharacterRenderer would go here.
 	// BaseGameImperialSpaceshipRenderer would go here.
@@ -42,10 +32,10 @@ public class BaseGameCounterRenderer {
 	private static String renderCounters_System(Collection<Counter> counters) {
 		StringBuilder sb = new StringBuilder();
 		if (containsImperialCounters(counters)) {
-			sb.append(STYLE_IMPERIAL.render("I"));
+			sb.append(ColorsAndStyles.STYLE_IMPERIAL.render("I"));
 		}
 		if (containsRebelCounters(counters)) {
-			sb.append(STYLE_REBEL.render("R"));
+			sb.append(ColorsAndStyles.STYLE_REBEL.render("R"));
 		}
 		return sb.toString();
 	}

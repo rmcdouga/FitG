@@ -1,16 +1,9 @@
 package io.github.rmcdouga.fitg.tui4jviewer.view;
 
-import static io.github.rmcdouga.fitg.tui4jviewer.view.BaseGameCounterRenderer.renderCounters;
-import static io.github.rmcdouga.fitg.tui4jviewer.view.BaseGameEnvironRenderer.renderEnviron;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.rogers.rmcdouga.fitg.basegame.Game;
-import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 import com.rogers.rmcdouga.fitg.basegame.map.Planet;
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.query.api.PlanetFinder;
@@ -37,12 +30,14 @@ public class MainView  implements Model {
 	private final Game game;
 	private final StarSystemFinder starSystemFinder;
 	private final PlanetFinder planetFinder;
+	private final BaseGamePlanetRenderer planetRenderer;;
 	private ZoomLevel currentZoomLevel = ZoomLevel.PLANETARY;
 
 	public MainView(Game game, StarSystemFinder starSystemFinder, PlanetFinder planetFinder) {
 		this.game = game;
 		this.starSystemFinder = starSystemFinder;
 		this.planetFinder = planetFinder;
+		this.planetRenderer = new BaseGamePlanetRenderer(game);
 	}
 
 	@Override
@@ -88,7 +83,7 @@ public class MainView  implements Model {
 		sb.append(String.format("%s (ID: %d) - ", starSystem.getName(), starSystem.getId()));
 		for (Planet planet : starSystem.listPlanets()) {
 			sb.append("\n");
-			sb.append(indent(formatPlanet(planet), 2));
+			sb.append(indent(planetRenderer.renderPlanet(currentZoomLevel, planet), 2));
 		}
 		return sb.toString();
 	}
@@ -97,26 +92,4 @@ public class MainView  implements Model {
 		String indent = " ".repeat(spaces);
 		return indent + str.replace("\n", "\n" + indent);
 	}
-	
-	private String formatPlanet(int Id) {
-		return formatPlanet(planetFinder.findById(Id).orElseThrow());
-	}
-	
-	private String formatPlanet(Planet planet) {
-		log.atInfo().addArgument(planet.getName()).log("Formatting planet: {}");
-		log.atInfo().addArgument(game.getPdb(planet).toString()).log("  Pdb: {}");
-		StringBuilder sb = new StringBuilder();
-		sb.append(SELECTION.render("Planet: "));
-		sb.append(String.format("%s (ID: %d) PDB is %s ", planet.getName(), planet.getId(), game.getPdb(planet)));
-		sb.append(String.format("%s", formatEnvirons(planet.listEnvirons())));
-		return sb.toString();
-	}
-
-	private String formatEnvirons(List<? extends Environ> environs) {
-		// TODO: How to show couunters, stacks, etc.?
-		return environs.stream()
-				.map(e->renderEnviron(currentZoomLevel, e) + " " + renderCounters(currentZoomLevel, game.countersAt(e)))
-				.collect(Collectors.joining("|", "|", "|"));
-	}
-	
 }
