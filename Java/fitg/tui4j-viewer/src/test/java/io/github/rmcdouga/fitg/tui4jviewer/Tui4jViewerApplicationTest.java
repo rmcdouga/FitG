@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
-@Disabled("Currently fails due to TUI4J trying to access the terminal after context load")
+@Disabled("Currently hangs waiting for keypress after context load")
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 class Tui4jViewerApplicationTest {
 

@@ -27,7 +27,6 @@ import com.williamcallahan.tui4j.compat.bubbletea.message.QuitMessage;
 import com.williamcallahan.tui4j.compat.bubbletea.message.WindowSizeMessage;
 
 public class MainView  implements Model {
-
 	private static final Logger log = LoggerFactory.getLogger(MainView.class);
 	
 	
@@ -108,7 +107,7 @@ public class MainView  implements Model {
 		log.atInfo().addArgument(game.getPdb(planet).toString()).log("  Pdb: {}");
 		StringBuilder sb = new StringBuilder();
 		sb.append(SELECTION.render("Planet: "));
-		sb.append(String.format("%s (ID: %d) in %s - ", planet.getName(), planet.getId(), planet.getStarSystem().getName()));
+		sb.append(String.format("%s (ID: %d) PDB is %s ", planet.getName(), planet.getId(), game.getPdb(planet)));
 		sb.append(String.format("%s", formatEnvirons(planet.listEnvirons())));
 		return sb.toString();
 	}
