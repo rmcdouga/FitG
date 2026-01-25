@@ -14,6 +14,7 @@ public class ColorsAndStyles {
 	private static final Color COLOR_SEA_GREEN = Color.color("#87af87"); // ANSI Sea Green #108
 	private static final Color COLOR_PASTEL_GREEN = Color.color("#87d787"); // ANSI Pastel Green #114
 	private static final Color COLOR_VIVID_ORANGE = Color.color("#ff5f00"); // ANSI Vivid Orange #202
+	private static final Color COLOR_WHITE = Color.color("#ffffff"); // ANSI White #15
 	
 	// Use some colors to represent different faction types.
 	private static final Color COLOR_STRONG_YELLOW = Color.color("#d7d700");	// ANSI Yellow #184
@@ -30,5 +31,6 @@ public class ColorsAndStyles {
 	// Faction Styles
 	final static Style STYLE_IMPERIAL = Style.newStyle().foreground(COLOR_STRONG_YELLOW);
 	final static Style STYLE_REBEL = Style.newStyle().foreground(COLOR_STRONG_RED);
+	final static Style STYLE_NEUTRAL = Style.newStyle().foreground(COLOR_WHITE);
 
 }
