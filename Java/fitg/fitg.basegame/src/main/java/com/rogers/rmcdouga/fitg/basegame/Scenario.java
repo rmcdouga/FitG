@@ -14,7 +14,7 @@ import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 
 public interface Scenario {
 	public Collection<StarSystem> createMap();
-	public Collection<SetPdbInstructions> setupPdbs();
+	public Collection<SetPdbInstructions> setupPdbs(PlayerDecisions rebelDecisons, PlayerDecisions imperialDecisions);
 	public Collection<PlaceCountersInstruction> setupCounters(CounterPool counterPool, StackManager stackMgr, PlayerDecisions rebelDecisons, PlayerDecisions imperialDecisions);
 	
 	public Type type();
@@ -25,7 +25,14 @@ public interface Scenario {
 		public record SetPdbInstructions(Planet p, Pdb pdb) {};
 		public record PlaceCountersInstruction(Counter counter, Location location) {};
 		
+		/**
+		 * Generates a set of instructions for the initial PDB levels and status
+		 * 
+		 * @param map - Star Systems to be used to set PDBs
+		 * @return
+		 */
 		Collection<SetPdbInstructions> setPdbs(Collection<StarSystem> map);
+
 		/**
 		 * Generates a set of instructions for the initial placement of counters
 		 * 

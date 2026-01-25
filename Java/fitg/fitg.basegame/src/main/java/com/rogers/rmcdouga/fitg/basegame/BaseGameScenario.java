@@ -19,7 +19,6 @@ import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameRebelSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.ImperialSpaceship;
-import com.rogers.rmcdouga.fitg.basegame.units.Spaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager.Stack;
 
@@ -32,7 +31,7 @@ public enum BaseGameScenario implements Scenario {
 		}
 
 		@Override
-		public Collection<SetPdbInstructions> setupPdbs() {
+		public Collection<SetPdbInstructions> setupPdbs(PlayerDecisions rebelDecisons, PlayerDecisions imperialDecisions) {
 			return List.of(
 					new SetPdbInstructions(Quibron, Pdb.UP_1),	// Level 1 at Quibron
 					new SetPdbInstructions(Angoff, Pdb.UP_2),	// Level 2 at Angoff
@@ -63,13 +62,14 @@ public enum BaseGameScenario implements Scenario {
 
 		@Override
 		public Collection<StarSystem> createMap() {
-			return List.of(BaseGameStarSystem.values());
+			return ALL_STAR_SYSTEMS;
 		}
 
 		@Override
-		public Collection<SetPdbInstructions> setupPdbs() {
-			// TODO Auto-generated method stub
-			return List.of();
+		public Collection<SetPdbInstructions> setupPdbs(PlayerDecisions rebelDecisons, PlayerDecisions imperialDecisions) {
+			return Stream.of(rebelDecisons.setPdbs(ALL_STAR_SYSTEMS), imperialDecisions.setPdbs(ALL_STAR_SYSTEMS))
+						 .flatMap(Collection::stream)
+						 .toList();
 		}
 		
 		@Override
@@ -79,10 +79,10 @@ public enum BaseGameScenario implements Scenario {
 			return List.of();
 		}
 		
-	}
-
-	;
+	};
 	
+	private static final List<StarSystem> ALL_STAR_SYSTEMS = List.of(BaseGameStarSystem.values());
+
 	public static final Location IN_SPACE = new Location() {};	// Used by Star System Scenarios 
 	
 	private final Type type;

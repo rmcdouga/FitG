@@ -36,7 +36,7 @@ public class Game implements GameState, GameBoard, CounterLocator {
 	private Game(Scenario scenario, Scenario.PlayerDecisions rebelDecisions, Scenario.PlayerDecisions imperialDecisions) {
 		this.scenario = scenario;
 		this.gameBoard = BaseGameGameBoard.create(scenario.createMap(), scenario.type());
-		scenario.setupPdbs().forEach(this::setupPdb);
+		scenario.setupPdbs(rebelDecisions, imperialDecisions).forEach(this::setupPdb);	// Set up PDBs per scenario
 		scenario.setupCounters(gameBox, stackMgr, rebelDecisions, imperialDecisions).forEach(this::placeCounter);
 	}
 
@@ -122,6 +122,14 @@ public class Game implements GameState, GameBoard, CounterLocator {
 	public Planet getPlanetContaining(Environ environ) {
 		return gameBoard.getPlanetContaining(environ);
 	}
+
+//	private void setupPdbs(Scenario.PlayerDecisions rebelDecisions, Scenario.PlayerDecisions imperialDecisions) {
+//		Collection<StarSystem> starSystems = getStarSystems();
+//		rebelDecisions.setPdbs(starSystems).stream()
+//										   .forEach(this::setupPdb);
+//		imperialDecisions.setPdbs(starSystems).stream()
+//		   									  .forEach(this::setupPdb);
+//	}
 
 	private void setupPdb(SetPdbInstructions instruction) {
 		switch(instruction.pdb().level()) {		// intentional fall through on the cases...
