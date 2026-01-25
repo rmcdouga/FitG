@@ -74,9 +74,10 @@ public enum BaseGameScenario implements Scenario {
 		
 		@Override
 		public Collection<PlaceCountersInstruction> setupCounters(CounterPool counterPool, StackManager stackMgr, PlayerDecisions rebelDecisons, PlayerDecisions imperialDecisions) {
-			// TODO:  Set up Counter Locations
-			
-			return List.of();
+			// The PlayerDecision interface is not sufficiently robust to handle Galactic setup directly.
+			// for now, delegate to the Flight to Egrix setup.
+			// TODO: Create proper Galactic setup logic.
+			return FlightToEgrix.setupCounters(counterPool, stackMgr, rebelDecisons, imperialDecisions);
 		}
 		
 	};
