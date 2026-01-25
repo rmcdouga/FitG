@@ -50,6 +50,19 @@ class BaseGameScenarioTest {
 		assertEquals(Quibron.environ(0), location.get());
 	}
 
+	// For now, we will reuse the Flight to Egrix player decisions for Galactic Game
+	@Test
+	void testGalacticGame_setupCounters() {
+		Collection<PlaceCountersInstruction> result = GalacticGame.setupCounters(counterPool, stackMgr, fteRebelDecisions, fteImperialDecisions );
+		assertNotNull(result);
+		Optional<Location> location = result.stream()
+											.filter(i->contains(i, Jon_Kidu))
+											.findAny()
+											.map(PlaceCountersInstruction::location);
+		assertTrue(location.isPresent());
+		assertEquals(Quibron.environ(0), location.get());
+	}
+
 	@Test
 	void testFlightToEgrixGame_simpleProperties() {
 		assertAll(
