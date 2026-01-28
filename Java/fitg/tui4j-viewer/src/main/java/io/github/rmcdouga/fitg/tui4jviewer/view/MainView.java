@@ -9,15 +9,15 @@ import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.query.api.PlanetFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.api.StarSystemFinder;
 import com.williamcallahan.tui4j.compat.bubbletea.Command;
+import com.williamcallahan.tui4j.compat.bubbletea.KeyPressMessage;
 import com.williamcallahan.tui4j.compat.bubbletea.Message;
 import com.williamcallahan.tui4j.compat.bubbletea.Model;
+import com.williamcallahan.tui4j.compat.bubbletea.QuitMessage;
 import com.williamcallahan.tui4j.compat.bubbletea.UpdateResult;
-import com.williamcallahan.tui4j.compat.bubbletea.lipgloss.Style;
-import com.williamcallahan.tui4j.compat.bubbletea.lipgloss.color.Color;
-import com.williamcallahan.tui4j.compat.bubbletea.lipgloss.color.NoColor;
-import com.williamcallahan.tui4j.compat.bubbletea.message.KeyPressMessage;
-import com.williamcallahan.tui4j.compat.bubbletea.message.QuitMessage;
-import com.williamcallahan.tui4j.compat.bubbletea.message.WindowSizeMessage;
+import com.williamcallahan.tui4j.compat.bubbletea.WindowSizeMessage;
+import com.williamcallahan.tui4j.compat.lipgloss.Style;
+import com.williamcallahan.tui4j.compat.lipgloss.color.Color;
+import com.williamcallahan.tui4j.compat.lipgloss.color.NoColor;
 
 public class MainView  implements Model {
 	private static final Logger log = LoggerFactory.getLogger(MainView.class);
