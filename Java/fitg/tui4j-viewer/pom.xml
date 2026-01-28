@@ -20,7 +20,7 @@
 		<java.version>25</java.version>
 
 		<!-- Local dependency versions -->
-		<tui4j.version>0.2.5</tui4j.version>
+		<tui4j.version>0.3.0</tui4j.version>
 		<jemoji.version>1.7.5</jemoji.version>
 
 		<!-- Other local projects -->

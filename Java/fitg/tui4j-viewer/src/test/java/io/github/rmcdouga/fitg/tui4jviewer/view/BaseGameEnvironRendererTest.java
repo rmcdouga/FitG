@@ -14,8 +14,10 @@ import org.junit.jupiter.params.provider.FieldSource;
 
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnviron;
 import com.rogers.rmcdouga.fitg.basegame.map.Environ;
-import com.williamcallahan.tui4j.compat.bubbletea.lipgloss.Renderer;
-import com.williamcallahan.tui4j.compat.bubbletea.lipgloss.color.TerminalColor;
+import com.williamcallahan.tui4j.compat.lipgloss.Renderer;
+import com.williamcallahan.tui4j.compat.lipgloss.color.TerminalColor;
+//import com.williamcallahan.tui4j.term.TerminalInfo;
+//import com.williamcallahan.tui4j.term.TerminalInfoProvider;
 import com.williamcallahan.tui4j.term.TerminalInfo;
 import com.williamcallahan.tui4j.term.TerminalInfoProvider;
 
@@ -69,14 +71,14 @@ class BaseGameEnvironRendererTest {
 			@Override
 			public TerminalInfo provide() {
 				return new TerminalInfo(false, new TerminalColor() {
-					
-					@Override
-					public AttributedStyle applyAsForeground(AttributedStyle style, Renderer renderer) {
-						throw new UnsupportedOperationException();
-					}
-					
+
 					@Override
 					public AttributedStyle applyAsBackground(AttributedStyle style, Renderer renderer) {
+						throw new UnsupportedOperationException();
+					}
+
+					@Override
+					public AttributedStyle applyAsForeground(AttributedStyle style, Renderer renderer) {
 						throw new UnsupportedOperationException();
 					}
 				});
