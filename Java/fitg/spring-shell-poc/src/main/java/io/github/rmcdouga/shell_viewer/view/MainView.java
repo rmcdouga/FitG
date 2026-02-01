@@ -49,7 +49,7 @@ public class MainView {
 		sb.append("StarSystem: ");
 		sb.append(String.format("%s (ID: %d) - ", starSystem.getName(), starSystem.getId()));
 		for (Planet planet : starSystem.listPlanets()) {
-			sb.append("\n");
+			sb.append("\n  ");
 			sb.append(planetRenderer.renderPlanet(currentZoomLevel, planet));
 		}
 		return sb.toAttributedString();

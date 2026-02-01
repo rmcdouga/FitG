@@ -4,6 +4,7 @@ package io.github.rmcdouga.shell_viewer.view;
 import java.util.List;
 
 import org.jline.utils.AttributedString;
+import org.jline.utils.AttributedStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,13 +65,21 @@ public class BaseGamePlanetRenderer {
 		var formattedEnvirons = AttributedString.join(bar, ()->environs.stream()
 													  					.map(e->renderEnviron(zoomLevel, e))
 													  					.iterator());
-		return AttributedString.join(bar, formattedEnvirons, bar);
+		return concat(bar, formattedEnvirons, bar);
 	}
 
 	private AttributedString renderEnviron(ZoomLevel zoomLevel, Environ environ) {
 		return AttributedString.join(new AttributedString(" "), 
 									BaseGameEnvironRenderer.renderEnviron(zoomLevel, environ), 
 									BaseGameCounterRenderer.renderCounters(zoomLevel, game.countersAt(environ)));
+	}
+	
+	private AttributedString concat(AttributedString... parts) {
+		AttributedStringBuilder result = new AttributedStringBuilder();
+		for (AttributedString part : parts) {
+			result.append(part);
+		}
+		return result.toAttributedString();
 	}
 	
 }
