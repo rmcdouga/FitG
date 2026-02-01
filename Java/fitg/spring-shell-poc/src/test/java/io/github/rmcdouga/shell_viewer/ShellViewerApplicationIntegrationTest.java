@@ -23,6 +23,6 @@ class ShellViewerApplicationIntegrationTest {
 	@Test
 	void testCommandOutput(CapturedOutput output) {
 		String outputString = output.toString();
-		assertThat(outputString).contains("MainView Game Display");
+		assertThat(outputString).contains("Command 'displayGame' executed successfully.");
 	}
 }

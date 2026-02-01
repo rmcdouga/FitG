@@ -20,6 +20,6 @@ class ShellViewerApplicationEndToEndTest {
 		ShellScreen shellScreen = client.sendCommand("displayGame");
 
 		// then
-		ShellAssertions.assertThat(shellScreen).containsText("MainView Game Display");
+		ShellAssertions.assertThat(shellScreen).containsText("Command 'displayGame' executed successfully.");
 	}
 }

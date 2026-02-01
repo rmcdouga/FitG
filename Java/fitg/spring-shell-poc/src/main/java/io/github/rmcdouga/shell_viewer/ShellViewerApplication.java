@@ -3,6 +3,7 @@ package io.github.rmcdouga.shell_viewer;
 import java.util.Collection;
 import java.util.List;
 
+import org.jline.terminal.Terminal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.shell.core.command.Command;
 
+import com.rogers.rmcdouga.fitg.basegame.BaseGameScenario;
 import com.rogers.rmcdouga.fitg.basegame.Game;
 import com.rogers.rmcdouga.fitg.basegame.Scenario;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
@@ -38,14 +40,13 @@ public class ShellViewerApplication {
 //	}
 	
 	@Bean
-	Command displayGame(MainView mainView) {
+	Command displayGame(MainView mainView, Terminal terminal) {
 	    return Command.builder()
 	            .name("displayGame")
 	            .execute(context -> {
 	            	log.info("Executing displayGame command");
 //	            	System.out.println(mainView.displayGame());
-	                context.outputWriter().println(mainView.displayGame());
-	                context.outputWriter().flush();
+	                mainView.displayGame(terminal);
 	                return  "Command 'displayGame' executed successfully.";
 	            });
 	}
@@ -54,6 +55,11 @@ public class ShellViewerApplication {
 	public MainView mainView(Game game, StarSystemFinder starSystemFinder, PlanetFinder planetFinder) {
 		return new MainView(game, starSystemFinder, planetFinder);
 	}
+	
+	@Bean
+	public BaseGameScenario scenario() {
+		return BaseGameScenario.GalacticGame;	// Set to galactic game to get a full map
+	}	
 	
 	@Bean(name = "rebelDecisions")
 	public Scenario.PlayerDecisions rebelDecisions() {
