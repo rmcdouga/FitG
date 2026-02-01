@@ -46,6 +46,7 @@ public class ShellViewerApplication {
 //	            	System.out.println(mainView.displayGame());
 	                context.outputWriter().println(mainView.displayGame());
 	                context.outputWriter().flush();
+	                return  "Command 'displayGame' executed successfully.";
 	            });
 	}
 

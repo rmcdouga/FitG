@@ -12,7 +12,7 @@ public class MainView {
 
 	public String displayGame() {
 		// TODO Auto-generated method stub
-		return "Game Display";
+		return "MainView Game Display";
 	}
 
 }

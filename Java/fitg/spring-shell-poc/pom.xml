@@ -30,7 +30,7 @@
 		<java.version>25</java.version>
 		
 		<!-- Spring Dependency versions-->
-		<spring-shell.version>4.0.0</spring-shell.version>
+		<spring-shell.version>4.0.1</spring-shell.version>
 		
 		<!-- Local dependency versions -->
 		<fitg.basegame.version>0.0.1-SNAPSHOT</fitg.basegame.version>
