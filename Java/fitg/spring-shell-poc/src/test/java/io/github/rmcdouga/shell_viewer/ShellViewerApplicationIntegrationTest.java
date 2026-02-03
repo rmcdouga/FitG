@@ -23,6 +23,7 @@ class ShellViewerApplicationIntegrationTest {
 	@Test
 	void testCommandOutput(CapturedOutput output) {
 		String outputString = output.toString();
-		assertThat(outputString).contains("Command 'displayGame' executed successfully.");
+		assertThat(outputString).contains("Quibron");
+		// outputString.lines().forEach(System.out::println);
 	}
 }

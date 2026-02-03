@@ -1,6 +1,5 @@
 package io.github.rmcdouga.shell_viewer.view;
 
-import org.jline.terminal.Terminal;
 import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStringBuilder;
 
@@ -15,7 +14,7 @@ public class MainView {
 	private final Game game;
 	private final StarSystemFinder starSystemFinder;
 	private final PlanetFinder planetFinder;
-	private final BaseGamePlanetRenderer planetRenderer;;
+	private final BaseGamePlanetRenderer planetRenderer;
 	private ZoomLevel currentZoomLevel = ZoomLevel.PLANETARY;
 
 	public MainView(Game game, StarSystemFinder starSystemFinder, PlanetFinder planetFinder) {
@@ -25,8 +24,8 @@ public class MainView {
 		this.planetRenderer = new BaseGamePlanetRenderer(game);
 	}
 
-	public void displayGame(Terminal terminal) {
-		view().println(terminal);
+	public AttributedString displayGame() {
+		return view();
 	}
 
 	public AttributedString view() {
@@ -53,10 +52,5 @@ public class MainView {
 			sb.append(planetRenderer.renderPlanet(currentZoomLevel, planet));
 		}
 		return sb.toAttributedString();
-	}
-
-	private static String indent(String str, int spaces) {
-		String indent = " ".repeat(spaces);
-		return indent + str.replace("\n", "\n" + indent);
 	}
 }

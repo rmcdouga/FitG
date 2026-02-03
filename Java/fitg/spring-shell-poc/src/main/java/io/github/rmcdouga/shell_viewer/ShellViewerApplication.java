@@ -1,9 +1,16 @@
 package io.github.rmcdouga.shell_viewer;
 
+import java.io.PrintStream;
+import java.lang.foreign.Arena;
+import java.lang.foreign.FunctionDescriptor;
+import java.lang.foreign.Linker;
+import java.lang.foreign.SymbolLookup;
+import java.lang.foreign.ValueLayout;
+import java.lang.invoke.MethodHandle;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
-import org.jline.terminal.Terminal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -30,9 +37,33 @@ import io.github.rmcdouga.shell_viewer.view.MainView;
 public class ShellViewerApplication {
 	private static final Logger log = LoggerFactory.getLogger(ShellViewerApplication.class);
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Throwable {
+		if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+			log.debug("Running on Windows OS - setting console code page to UTF-8");
+			setConsoleCodePage();
+			System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
+		} else {
+			log.debug("Not running on Windows OS - no need to set console code page");
+		}
+		// Change System.out to use UTF-8
+
 		SpringApplication.run(ShellViewerApplication.class, args);
 	}
+	
+	static void setConsoleCodePage() throws Throwable {
+		Linker linker = Linker.nativeLinker();
+        SymbolLookup kernel32 = SymbolLookup.libraryLookup("kernel32.dll", Arena.global());
+
+        // Define function signatures: BOOL SetConsoleCP(UINT wCodePageID)
+        FunctionDescriptor desc = FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.JAVA_INT);
+        MethodHandle setConsoleCP = linker.downcallHandle(kernel32.find("SetConsoleCP").get(), desc);
+        MethodHandle setConsoleOutputCP = linker.downcallHandle(kernel32.find("SetConsoleOutputCP").get(), desc);
+
+        // Set Code Page to 65001 (UTF-8)
+        int cpUtf8 = 65001;
+        setConsoleCP.invoke(cpUtf8);
+        setConsoleOutputCP.invoke(cpUtf8);
+ 	}
 	
 //	@Command
 //	public void displayGame(MainView mainView) {
@@ -40,15 +71,13 @@ public class ShellViewerApplication {
 //	}
 	
 	@Bean
-	Command displayGame(MainView mainView, Terminal terminal) {
+	Command displayGame(MainView mainView) {
 	    return Command.builder()
 	            .name("displayGame")
-	            .execute(context -> {
+	            .execute(_ -> {
 	            	log.info("Executing displayGame command");
-//	            	System.out.println(mainView.displayGame());
-	                mainView.displayGame(terminal);
-	                return  "Command 'displayGame' executed successfully.";
-	            });
+	            	return mainView.displayGame().toAnsi();
+	           });
 	}
 
 	@Bean
