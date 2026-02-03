@@ -1,5 +1,7 @@
 package io.github.rmcdouga.shell_viewer.view;
 
+import static com.rogers.rmcdouga.fitg.basegame.units.BaseGameCounter.factionOfCounter;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -9,6 +11,7 @@ import java.util.stream.Stream;
 
 import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStringBuilder;
+import org.jline.utils.AttributedStyle;
 
 import com.rogers.rmcdouga.fitg.basegame.PlayerState.Faction;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter;
@@ -178,7 +181,7 @@ public class BaseGameCounterRenderer {
 	// Planetary level rendering shows full details of each counter.
 	private static AttributedString renderCounter_Planetary(Counter counter) {
 		
-		return RENDERERS_MAP.getOrDefault(counter.id(), ()->new AttributedString("*" + counter.id())).render();
+		return RENDERERS_MAP.getOrDefault(counter.id(), ()->new AttributedString("*" + counter.id(), styleFor(factionOfCounter(counter)))).render();
 		// TODO: Implement rendering for each counter type.
 //		
 //		return switch (counter) {
@@ -192,4 +195,13 @@ public class BaseGameCounterRenderer {
 //			default -> counter.id();
 //		};
 	}
+
+	private static AttributedStyle styleFor(Faction faction) {
+		return switch (faction) {
+			case IMPERIAL -> ColorsAndStyles.STYLE_IMPERIAL;
+			case REBEL -> ColorsAndStyles.STYLE_REBEL;
+			default -> ColorsAndStyles.STYLE_NEUTRAL;
+		};
+	}
+	
 }
