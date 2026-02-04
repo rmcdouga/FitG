@@ -38,14 +38,14 @@ public class ShellViewerApplication {
 	private static final Logger log = LoggerFactory.getLogger(ShellViewerApplication.class);
 	
 	public static void main(String[] args) throws Throwable {
-		if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-			log.debug("Running on Windows OS - setting console code page to UTF-8");
-			setConsoleCodePage();
-			System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
-		} else {
-			log.debug("Not running on Windows OS - no need to set console code page");
-		}
-		// Change System.out to use UTF-8
+//		if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+//			// Change System.out to use UTF-8
+//			log.debug("Running on Windows OS - setting console code page to UTF-8");
+//			setConsoleCodePage();
+//			System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
+//		} else {
+//			log.debug("Not running on Windows OS - no need to set console code page");
+//		}
 
 		SpringApplication.run(ShellViewerApplication.class, args);
 	}
