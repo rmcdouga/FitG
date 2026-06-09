@@ -1,10 +1,13 @@
 package com.rogers.rmcdouga.fitg.basegame;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.PlaceCountersInstruction;
 import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.SetPdbInstructions;
 import com.rogers.rmcdouga.fitg.basegame.box.CounterPool;
+import com.rogers.rmcdouga.fitg.basegame.command.adapters.Command.MoveCommand;
+import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.map.Pdb;
 import com.rogers.rmcdouga.fitg.basegame.map.Planet;
@@ -41,6 +44,27 @@ public interface Scenario {
 		 * @return 
 		 */
 		Collection<PlaceCountersInstruction> placeCounters(Collection<Counter> counters, StackManager stackMgr);
+
+		/**
+		 * Generates a collection of movement commands during the Movement Segment of this player's turn.
+		 * 
+		 * @return Movement commands to be actioned during the Movement Segment of this player's turn.
+		 */
+		Collection<MoveCommand> movementSegment();
+		
+		/**
+		 * Maybe generates a Move command as a reaction to an opponents detected characters or military units. 
+		 * 
+		 * This is called once per environ containing an opponents detected character or military unit, 
+		 * and is called after the opponent has made their move.  It allows the non-phasing player to
+		 * move one character or unit (optionally with their leader) from an environ on the same planet
+		 * to the environ in question.
+		 * 
+		 * @param environ - the environ containing the opponents detected character or military unit
+		 * @return An optional MoveCommand.  If the player does not want to move, then an empty 
+		 * Optional should be returned.
+		 */
+		Optional<MoveCommand> reactionMove(Environ environ);
 	}
 	
 	public enum Type {
