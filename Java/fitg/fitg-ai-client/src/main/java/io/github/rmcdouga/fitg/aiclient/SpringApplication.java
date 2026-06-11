@@ -21,9 +21,13 @@ public class SpringApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void handleAppStart() {
-		log.info("Application started - launching JavaFX application");
-		MainApplication.launchApplication();
-		log.info("JavaFX application has exited");
+		Thread.ofPlatform()
+			  .name("JavaFX Application Thread")
+			  .start(() -> {
+				  log.info("Starting JavaFX application...");
+				  MainApplication.launch(MainApplication.class);
+				  log.info("JavaFX application has exited");
+			  });
 	}
 
 	public static void main(String[] args) {

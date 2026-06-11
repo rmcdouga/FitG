@@ -59,6 +59,7 @@ public class MainApplication extends Application {
         stage.getIcons().add(new Image("/icon/icon.png"));
         stage.setOnCloseRequest(_ -> {
             SpringApplication.exit(ContextUtil.getApplicationContext());
+            stage.close();
         });
        stage.show();
     }
