@@ -22,7 +22,7 @@ public class SpringApplication {
 	@EventListener(ApplicationReadyEvent.class)
 	public void handleAppStart() {
 		Thread.ofPlatform()
-			  .name("JavaFX Application Thread")
+			  .name("JavaFX-App")
 			  .start(() -> {
 				  log.info("Starting JavaFX application...");
 				  MainApplication.launch(MainApplication.class);

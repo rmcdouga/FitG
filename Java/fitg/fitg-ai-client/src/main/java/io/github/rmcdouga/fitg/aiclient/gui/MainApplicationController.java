@@ -11,6 +11,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.util.MimeTypeUtils;
@@ -23,12 +26,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class MainApplicationController implements Initializable {
 
-    private final Logger log = Logger.getLogger(MainApplicationController.class.getName());
+    private final Logger log = LoggerFactory.getLogger(MainApplicationController.class);
 
     @FXML
     public TextArea textAreaAiResponse;
@@ -45,7 +46,7 @@ public class MainApplicationController implements Initializable {
     }
 
     private void setupGui() {
-        log.log(Level.INFO, "GenuineCoder Desktop AI Assistant Loaded!");
+        log.atInfo().log("FitG Desktop AI Assistant Loaded!");
     }
 
     @FXML
@@ -67,7 +68,7 @@ public class MainApplicationController implements Initializable {
     }
 
     private void processTextWithImagePrompt(String textPrompt, Image image) {
-        log.log(Level.INFO, "Processing LLM input with text and image");
+        log.atInfo().log("Processing LLM input with text and image");
         var chatClient = ContextUtil.getApplicationContext().getBean(ChatClient.class);
         var byteArrayOutputStream = convertJavaFxImageIntoPng(image);
 
@@ -99,7 +100,7 @@ public class MainApplicationController implements Initializable {
     }
 
     private void processTextOnlyPrompt(String textPrompt) {
-        log.log(Level.INFO, "Processing LLM input with text only");
+        log.atInfo().log("Processing LLM input with text only");
         var chatClient = ContextUtil.getApplicationContext().getBean(ChatClient.class);
         chatClient.prompt()
                 .user(textPrompt)
@@ -115,16 +116,16 @@ public class MainApplicationController implements Initializable {
     public void handleButtonImagePickerAction(ActionEvent actionEvent) {
         var clipboard = Clipboard.getSystemClipboard();
         if (clipboard == null) {
-            log.log(Level.INFO, "Clipboard is null!");
+            log.atInfo().log("Clipboard is null!");
             return;
         }
         if (!clipboard.hasImage()) {
-            log.log(Level.INFO, "Clipboard has no image!");
+            log.atInfo().log("Clipboard has no image!");
             return;
         }
         var image = clipboard.getImage();
         imageView.setImage(image);
-        log.log(Level.INFO, "Image loaded successfully!");
+        log.atInfo().log("Image loaded successfully!");
         imageView.setVisible(true);
     }
 }
