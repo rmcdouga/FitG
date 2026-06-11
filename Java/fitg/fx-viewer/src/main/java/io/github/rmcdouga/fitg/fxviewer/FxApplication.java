@@ -17,9 +17,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 
-public class FxApplication extends Application{
+public class FxApplication extends Application {
 	private ConfigurableApplicationContext applicationContext;
-	private static Stage stage;
+	private Stage stage;
 	private final Canvas mapCanvas = new Canvas(Map.MAP_WIDTH, Map.MAP_HEIGHT);
 	
 	ApplicationContextInitializer<ConfigurableApplicationContext> initializer = context -> {
@@ -47,14 +47,14 @@ public class FxApplication extends Application{
 	public void start(Stage primaryStage) throws Exception {
 		stage = primaryStage;
 		
-		 primaryStage.setTitle("Hello World!");
-            // Draw the map on the canvas
-            applicationContext.getBean(Map.class).draw();
-            
-	        ScrollPane root = new ScrollPane();
-	        root.setContent(mapCanvas);
-	        primaryStage.setScene(new Scene(root, Map.MAP_WIDTH, Map.MAP_HEIGHT));
-	        primaryStage.show();
+		primaryStage.setTitle("Hello World!");
+		// Draw the map on the canvas
+		applicationContext.getBean(Map.class).draw();
+
+		ScrollPane root = new ScrollPane();
+		root.setContent(mapCanvas);
+		primaryStage.setScene(new Scene(root, Map.MAP_WIDTH, Map.MAP_HEIGHT));
+		primaryStage.show();
 	}
 
 }

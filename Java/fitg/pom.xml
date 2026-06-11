@@ -144,5 +144,6 @@
 		<module>fitg.cli</module>
 		<module>fitg.renderer</module>
 		<module>fx-viewer</module>
+		<module>fitg-ai-client</module>
 	</modules>
 </project>
