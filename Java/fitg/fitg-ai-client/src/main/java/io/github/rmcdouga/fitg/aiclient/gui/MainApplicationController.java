@@ -59,6 +59,7 @@ public class MainApplicationController implements Initializable {
         imageView.setVisible(false);
         imageView.setImage(null);
         textAreaAiResponse.setText("");
+        textAreaInput.clear();
         progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
         if (image == null) {
             processTextOnlyPrompt(textPrompt);
