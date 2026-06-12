@@ -23,6 +23,7 @@
 		<javafx.version>26.0.1</javafx.version>
 		<javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
 		<ikonli.libs.version>12.4.0</ikonli.libs.version>
+		<testfx.version>4.0.18</testfx.version>
 
 		<!-- Other local prjects -->
 		<fitg.basegame.version>0.0.1-SNAPSHOT</fitg.basegame.version>
@@ -96,6 +97,18 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>testfx-core</artifactId>
+            <version>${testfx.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>testfx-junit5</artifactId>
+            <version>${testfx.version}</version>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 
 	<build>
