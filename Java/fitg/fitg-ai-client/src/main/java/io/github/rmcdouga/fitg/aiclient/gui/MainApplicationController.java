@@ -1,30 +1,30 @@
 package io.github.rmcdouga.fitg.aiclient.gui;
 
-import io.github.rmcdouga.fitg.aiclient.ContextUtil;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+
 import javax.imageio.ImageIO;
-import javafx.application.Platform;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.Clipboard;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.util.MimeTypeUtils;
 
-public class MainApplicationController implements Initializable {
+import io.github.rmcdouga.fitg.aiclient.ContextUtil;
+import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
+
+public class MainApplicationController {
 
     private static final Logger log = LoggerFactory.getLogger(MainApplicationController.class);
 
@@ -37,8 +37,7 @@ public class MainApplicationController implements Initializable {
     @FXML
     public ImageView imageView;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize() {
         setupGui();
     }
 
