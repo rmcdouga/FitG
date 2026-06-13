@@ -1,4 +1,4 @@
-package io.github.rmcdouga.fitg.aiclient.gui;
+package io.github.rmcdouga.fitg.aiclient;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,12 +15,10 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import io.github.rmcdouga.fitg.aiclient.ContextUtil;
-
 import java.awt.Graphics2D;
 import java.util.Objects;
 
-public class MainApplication extends Application {
+public class FitGClientFxApplication extends Application {
 	private ConfigurableApplicationContext applicationContext;
 	private Stage mainStage;
 
@@ -51,7 +49,7 @@ public class MainApplication extends Application {
     	this.mainStage = stage;
     	
         Parent parent = FXMLLoader.load(
-                Objects.requireNonNull(MainApplication.class.getResource("/fxml/mainwindow.fxml"))
+                Objects.requireNonNull(FitGClientFxApplication.class.getResource("/fxml/mainwindow.fxml"))
         		);
         Scene scene = new Scene(parent);
         stage.setTitle("FitG AI Client");
@@ -65,7 +63,7 @@ public class MainApplication extends Application {
     }
 
     public static void launchApplication() {
-        MainApplication.launch(MainApplication.class, "");
+        FitGClientFxApplication.launch(FitGClientFxApplication.class, "");
     }
 
 }
