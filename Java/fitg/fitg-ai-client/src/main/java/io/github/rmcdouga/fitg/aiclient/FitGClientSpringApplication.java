@@ -22,6 +22,8 @@ public class FitGClientSpringApplication {
 	       Application.launch(FitGClientFxApplication.class, args);
 	}
 	
+	// Application Beans
+	
 	@Bean
 	static ImageStore classPathImageStore() {
 		return BaseGameImageStoreAdapter.wrap(new ClassPathImageStore());
