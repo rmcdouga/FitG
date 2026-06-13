@@ -12,7 +12,6 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.util.MimeTypeUtils;
 
-import io.github.rmcdouga.fitg.aiclient.ContextUtil;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -37,7 +36,14 @@ public class MainApplicationController {
     @FXML
     public ImageView imageView;
 
-    public void initialize() {
+    private final ChatClient chatClient;
+    
+    public MainApplicationController(ChatClient chatClient) {
+		this.chatClient = chatClient;
+		super();
+	}
+
+	public void initialize() {
         setupGui();
     }
 
@@ -66,7 +72,6 @@ public class MainApplicationController {
 
     private void processTextWithImagePrompt(String textPrompt, Image image) {
         log.atInfo().log("Processing LLM input with text and image");
-        var chatClient = ContextUtil.getApplicationContext().getBean(ChatClient.class);
         var byteArrayOutputStream = convertJavaFxImageIntoPng(image);
 
         chatClient.prompt()
@@ -95,7 +100,6 @@ public class MainApplicationController {
 
     private void processTextOnlyPrompt(String textPrompt) {
         log.atInfo().log("Processing LLM input with text only");
-        var chatClient = ContextUtil.getApplicationContext().getBean(ChatClient.class);
         chatClient.prompt()
                 .user(textPrompt)
                 .stream()
