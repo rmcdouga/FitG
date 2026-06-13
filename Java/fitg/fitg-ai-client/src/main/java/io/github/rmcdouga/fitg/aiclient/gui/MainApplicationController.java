@@ -1,5 +1,12 @@
 package io.github.rmcdouga.fitg.aiclient.gui;
 
+import io.github.rmcdouga.fitg.aiclient.ContextUtil;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import javax.imageio.ImageIO;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -11,25 +18,15 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.util.MimeTypeUtils;
 
-import io.github.rmcdouga.fitg.aiclient.ContextUtil;
-
-import javax.imageio.ImageIO;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 public class MainApplicationController implements Initializable {
 
-    private final Logger log = LoggerFactory.getLogger(MainApplicationController.class);
+    private static final Logger log = LoggerFactory.getLogger(MainApplicationController.class);
 
     @FXML
     public TextArea textAreaAiResponse;
@@ -53,7 +50,7 @@ public class MainApplicationController implements Initializable {
     public void handleButtonSendAction(ActionEvent actionEvent) {
         var textPrompt = textAreaInput.getText();
         var image = imageView.getImage();
-        if (textPrompt == null || textPrompt.isEmpty()) {
+        if (textPrompt == null || textPrompt.isBlank()) {
             return;
         }
         imageView.setVisible(false);
@@ -74,29 +71,26 @@ public class MainApplicationController implements Initializable {
         var byteArrayOutputStream = convertJavaFxImageIntoPng(image);
 
         chatClient.prompt()
-                .user(promptUserSpec -> {
-                    promptUserSpec
-                            .text(textPrompt)
-                            .media(MimeTypeUtils.IMAGE_PNG, new InputStreamResource(
-                                    new ByteArrayInputStream(byteArrayOutputStream.toByteArray())
-                            ));
-                })
+                .user(promptUserSpec -> promptUserSpec
+                        .text(textPrompt)
+                        .media(MimeTypeUtils.IMAGE_PNG, new InputStreamResource(
+                                new ByteArrayInputStream(byteArrayOutputStream.toByteArray())
+                        )))
                 .stream()
                 .content()
-                .doOnComplete(() -> Platform.runLater(() -> progressBar.setProgress(0)))
-                .subscribe(token -> {
-                    Platform.runLater(() -> textAreaAiResponse.appendText(token));
-                });
+                .doOnComplete(this::markPromptComplete)
+                .doOnError(this::handlePromptError)
+                .subscribe(this::appendTokenToResponse);
     }
 
     private ByteArrayOutputStream convertJavaFxImageIntoPng(Image image) {
         try {
             var bufferedImage = SwingFXUtils.fromFXImage(image, null);
-            ByteArrayOutputStream bao = new ByteArrayOutputStream();
+            var bao = new ByteArrayOutputStream();
             ImageIO.write(bufferedImage, "png", bao);
             return bao;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("Unable to convert JavaFX image to PNG", e);
         }
     }
 
@@ -107,10 +101,27 @@ public class MainApplicationController implements Initializable {
                 .user(textPrompt)
                 .stream()
                 .content()
-                .doOnComplete(() -> Platform.runLater(() -> progressBar.setProgress(0)))
-                .subscribe(token -> {
-                    Platform.runLater(() -> textAreaAiResponse.appendText(token));
-                });
+                .doOnComplete(this::markPromptComplete)
+                .doOnError(this::handlePromptError)
+                .subscribe(this::appendTokenToResponse);
+    }
+
+    private void appendTokenToResponse(String token) {
+        Platform.runLater(() -> textAreaAiResponse.appendText(token));
+    }
+
+    private void markPromptComplete() {
+        Platform.runLater(() -> progressBar.setProgress(0));
+    }
+
+    private void handlePromptError(Throwable error) {
+        log.atError().setCause(error).log("Error while streaming AI response");
+        Platform.runLater(this::showPromptError);
+    }
+
+    private void showPromptError() {
+        progressBar.setProgress(0);
+        textAreaAiResponse.appendText(System.lineSeparator() + "[Error receiving response]");
     }
 
     @FXML
