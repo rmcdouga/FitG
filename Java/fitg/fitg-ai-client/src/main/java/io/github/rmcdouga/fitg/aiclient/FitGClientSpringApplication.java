@@ -2,7 +2,6 @@ package io.github.rmcdouga.fitg.aiclient;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
@@ -11,7 +10,9 @@ import com.rogers.rmcdouga.fitg.renderer.images.BaseGameImageStoreAdapter;
 import com.rogers.rmcdouga.fitg.renderer.images.ImageStore;
 
 import io.github.rmcdouga.fitg.aiclient.gui.MainApplicationController;
+import io.github.rmcdouga.fitg.aiclient.gui.ports.ChatClient;
 import io.github.rmcdouga.fitg.aiclient.images.ClassPathImageStore;
+import io.github.rmcdouga.fitg.aiclient.spring.gui.adapters.SpringChatClient;
 import javafx.application.Application;
 
 @SpringBootApplication
@@ -30,8 +31,8 @@ public class FitGClientSpringApplication {
 	}
 
     @Bean
-    static ChatClient chatClient(ChatClient.Builder chatClientBuilder) {
-        return chatClientBuilder.build();
+    static ChatClient chatClient(org.springframework.ai.chat.client.ChatClient.Builder chatClientBuilder) {
+        return new SpringChatClient(chatClientBuilder.build());
     }
     
     @Bean

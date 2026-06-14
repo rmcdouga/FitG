@@ -1,6 +1,5 @@
 package io.github.rmcdouga.fitg.aiclient.gui;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -8,10 +7,8 @@ import javax.imageio.ImageIO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.util.MimeTypeUtils;
 
+import io.github.rmcdouga.fitg.aiclient.gui.ports.ChatClient;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -72,20 +69,15 @@ public class MainApplicationController {
 
     private void processTextWithImagePrompt(String textPrompt, Image image) {
         log.atInfo().log("Processing LLM input with text and image");
-        var byteArrayOutputStream = convertJavaFxImageIntoPng(image);
-
         chatClient.prompt()
-                .user(promptUserSpec -> promptUserSpec
-                        .text(textPrompt)
-                        .media(MimeTypeUtils.IMAGE_PNG, new InputStreamResource(
-                                new ByteArrayInputStream(byteArrayOutputStream.toByteArray())
-                        )))
-                .stream()
-                .content()
-                .doOnComplete(this::markPromptComplete)
-                .doOnError(this::handlePromptError)
-                .subscribe(this::appendTokenToResponse);
+		  .text(textPrompt)
+		  .media(convertJavaFxImageIntoPng(image).toByteArray())
+		  .onComplete(this::markPromptComplete)
+		  .onError(this::handlePromptError)
+		  .onContent(this::appendTokenToResponse)
+		  .send();
     }
+
 
     private ByteArrayOutputStream convertJavaFxImageIntoPng(Image image) {
         try {
@@ -101,12 +93,11 @@ public class MainApplicationController {
     private void processTextOnlyPrompt(String textPrompt) {
         log.atInfo().log("Processing LLM input with text only");
         chatClient.prompt()
-                .user(textPrompt)
-                .stream()
-                .content()
-                .doOnComplete(this::markPromptComplete)
-                .doOnError(this::handlePromptError)
-                .subscribe(this::appendTokenToResponse);
+        		  .text(textPrompt)
+        		  .onComplete(this::markPromptComplete)
+        		  .onError(this::handlePromptError)
+        		  .onContent(this::appendTokenToResponse)
+        		  .send();
     }
 
     private void appendTokenToResponse(String token) {
