@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.function.Consumer;
 
+import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
@@ -23,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
+@ExtendWith(SoftAssertionsExtension.class)
 class MainApplicationControllerTest {
 
     private final StubChatClient chatClient = new StubChatClient();
@@ -34,6 +37,7 @@ class MainApplicationControllerTest {
 
     @Start
     public void start(Stage stage) {
+    	// Emulate the FXML loading and wiring process
         underTest = new MainApplicationController(chatClient);
         responseArea = new TextArea();
         responseArea.setId("textAreaAiResponse");
@@ -59,26 +63,26 @@ class MainApplicationControllerTest {
     }
 
     @Test
-    void sendButtonStreamsTextOnlyResponseOnHappyPath(FxRobot robot) {
+    void sendButtonStreamsTextOnlyResponseOnHappyPath(FxRobot robot, SoftAssertions softly) {
 
         robot.interact(() -> inputArea.setText("Plan next move"));
         WaitForAsyncUtils.waitForFxEvents();
         robot.interact(() -> robot.lookup("#sendButton").queryButton().fire());
         WaitForAsyncUtils.waitForFxEvents();
 
-        assertThat(chatClient.textPrompt).isEqualTo("Plan next move");
-        assertThat(chatClient.mediaPromptCalls).isZero();
-        assertThat(chatClient.textOnlyPromptCalls).isEqualTo(1);
-        assertThat(chatClient.media).isNull();
-        assertThat(inputArea.getText()).isEmpty();
-        assertThat(responseArea.getText()).isEqualTo("Ready.");
-        assertThat(progressBar.getProgress()).isZero();
-        assertThat(imageView.isVisible()).isFalse();
-        assertThat(imageView.getImage()).isNull();
+        softly.assertThat(chatClient.textPrompt).isEqualTo("Plan next move");
+        softly.assertThat(chatClient.mediaPromptCalls).isZero();
+        softly.assertThat(chatClient.textOnlyPromptCalls).isEqualTo(1);
+        softly.assertThat(chatClient.media).isNull();
+        softly.assertThat(inputArea.getText()).isEmpty();
+        softly.assertThat(responseArea.getText()).isEqualTo("Ready.");
+        softly.assertThat(progressBar.getProgress()).isZero();
+        softly.assertThat(imageView.isVisible()).isFalse();
+        softly.assertThat(imageView.getImage()).isNull();
     }
 
     @Test
-    void sendButtonStreamsTextAndImageResponseOnHappyPath(FxRobot robot) {
+    void sendButtonStreamsTextAndImageResponseOnHappyPath(FxRobot robot, SoftAssertions softly) {
         var image = new WritableImage(2, 2);
         image.getPixelWriter().setColor(0, 0, Color.BLUE);
 
@@ -91,16 +95,16 @@ class MainApplicationControllerTest {
         robot.interact(() -> robot.lookup("#sendButton").queryButton().fire());
         WaitForAsyncUtils.waitForFxEvents();
 
-        assertThat(chatClient.textPrompt).isEqualTo("Plan next move with image");
-        assertThat(chatClient.mediaPromptCalls).isEqualTo(1);
-        assertThat(chatClient.textOnlyPromptCalls).isZero();
-        assertThat(chatClient.media).isNotNull();
-        assertThat(chatClient.media).isNotEmpty();
-        assertThat(inputArea.getText()).isEmpty();
-        assertThat(responseArea.getText()).isEqualTo("Ready.");
-        assertThat(progressBar.getProgress()).isZero();
-        assertThat(imageView.isVisible()).isFalse();
-        assertThat(imageView.getImage()).isNull();
+        softly.assertThat(chatClient.textPrompt).isEqualTo("Plan next move with image");
+        softly.assertThat(chatClient.mediaPromptCalls).isEqualTo(1);
+        softly.assertThat(chatClient.textOnlyPromptCalls).isZero();
+        softly.assertThat(chatClient.media).isNotNull();
+        softly.assertThat(chatClient.media).isNotEmpty();
+        softly.assertThat(inputArea.getText()).isEmpty();
+        softly.assertThat(responseArea.getText()).isEqualTo("Ready.");
+        softly.assertThat(progressBar.getProgress()).isZero();
+        softly.assertThat(imageView.isVisible()).isFalse();
+        softly.assertThat(imageView.getImage()).isNull();
     }
 
     private static class StubChatClient implements ChatClient {

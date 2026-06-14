@@ -1,12 +1,12 @@
 package io.github.rmcdouga.fitg.aiclient.gui;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
+import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
@@ -20,10 +20,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 
 @ExtendWith(ApplicationExtension.class)
+@ExtendWith(SoftAssertionsExtension.class)
 class MainWindowFxmlWiringTest {
 
     @Test
-    void mainWindowFxmlLoadsAndWiresController(FxRobot robot) {
+    void mainWindowFxmlLoadsAndWiresController(FxRobot robot, SoftAssertions softly) {
         var rootRef = new AtomicReference<Parent>();
         var controllerRef = new AtomicReference<Object>();
 
@@ -47,11 +48,11 @@ class MainWindowFxmlWiringTest {
             }
         });
 
-        assertThat(controllerRef.get()).isInstanceOf(MainApplicationController.class);
-        assertThat(rootRef.get().lookup("#textAreaAiResponse")).isInstanceOf(TextArea.class);
-        assertThat(rootRef.get().lookup("#textAreaInput")).isInstanceOf(TextArea.class);
-        assertThat(rootRef.get().lookup("#progressBar")).isInstanceOf(ProgressBar.class);
-        assertThat(rootRef.get().lookup("#imageView")).isInstanceOf(ImageView.class);
+        softly.assertThat(controllerRef.get()).isInstanceOf(MainApplicationController.class);
+        softly.assertThat(rootRef.get().lookup("#textAreaAiResponse")).isInstanceOf(TextArea.class);
+        softly.assertThat(rootRef.get().lookup("#textAreaInput")).isInstanceOf(TextArea.class);
+        softly.assertThat(rootRef.get().lookup("#progressBar")).isInstanceOf(ProgressBar.class);
+        softly.assertThat(rootRef.get().lookup("#imageView")).isInstanceOf(ImageView.class);
     }
 
     private static class StubChatClient implements ChatClient {
