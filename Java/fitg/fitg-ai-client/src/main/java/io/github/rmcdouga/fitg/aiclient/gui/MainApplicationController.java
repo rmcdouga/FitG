@@ -70,13 +70,13 @@ public class MainApplicationController {
     private void processTextWithImagePrompt(String textPrompt, Image image) {
         log.atInfo().log("Processing LLM input with text and image");
         chatClient.prompt()
-		  .text(textPrompt)
-		  .media(convertJavaFxImageIntoPng(image).toByteArray())
-		  .onComplete(this::markPromptComplete)
-		  .onError(this::handlePromptError)
-		  .onContent(this::appendTokenToResponse)
-		  .send();
-    }
+		  		  .text(textPrompt)
+		  		  .media(convertJavaFxImageIntoPng(image).toByteArray())
+		  		  .onComplete(this::markPromptComplete)
+		  		  .onError(this::handlePromptError)
+		  		  .onContent(this::appendTokenToResponse)
+		  		  .send();
+	}
 
 
     private ByteArrayOutputStream convertJavaFxImageIntoPng(Image image) {
