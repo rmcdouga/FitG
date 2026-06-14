@@ -17,13 +17,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
 class MainApplicationControllerTest {
 
-    private final StubChatClient chatClient = new StubChatClient();;
+    private final StubChatClient chatClient = new StubChatClient();
     private MainApplicationController underTest;
     private TextArea responseArea;
     private TextArea inputArea;
@@ -58,14 +60,42 @@ class MainApplicationControllerTest {
 
     @Test
     void sendButtonStreamsTextOnlyResponseOnHappyPath(FxRobot robot) {
-    	
-    	robot.interact(() -> inputArea.setText("Plan next move"));
+
+        robot.interact(() -> inputArea.setText("Plan next move"));
         WaitForAsyncUtils.waitForFxEvents();
         robot.interact(() -> robot.lookup("#sendButton").queryButton().fire());
         WaitForAsyncUtils.waitForFxEvents();
 
         assertThat(chatClient.textPrompt).isEqualTo("Plan next move");
+        assertThat(chatClient.mediaPromptCalls).isZero();
+        assertThat(chatClient.textOnlyPromptCalls).isEqualTo(1);
         assertThat(chatClient.media).isNull();
+        assertThat(inputArea.getText()).isEmpty();
+        assertThat(responseArea.getText()).isEqualTo("Ready.");
+        assertThat(progressBar.getProgress()).isZero();
+        assertThat(imageView.isVisible()).isFalse();
+        assertThat(imageView.getImage()).isNull();
+    }
+
+    @Test
+    void sendButtonStreamsTextAndImageResponseOnHappyPath(FxRobot robot) {
+        var image = new WritableImage(2, 2);
+        image.getPixelWriter().setColor(0, 0, Color.BLUE);
+
+        robot.interact(() -> {
+            inputArea.setText("Plan next move with image");
+            imageView.setImage(image);
+            imageView.setVisible(true);
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+        robot.interact(() -> robot.lookup("#sendButton").queryButton().fire());
+        WaitForAsyncUtils.waitForFxEvents();
+
+        assertThat(chatClient.textPrompt).isEqualTo("Plan next move with image");
+        assertThat(chatClient.mediaPromptCalls).isEqualTo(1);
+        assertThat(chatClient.textOnlyPromptCalls).isZero();
+        assertThat(chatClient.media).isNotNull();
+        assertThat(chatClient.media).isNotEmpty();
         assertThat(inputArea.getText()).isEmpty();
         assertThat(responseArea.getText()).isEqualTo("Ready.");
         assertThat(progressBar.getProgress()).isZero();
@@ -76,12 +106,15 @@ class MainApplicationControllerTest {
     private static class StubChatClient implements ChatClient {
         private String textPrompt;
         private byte[] media;
+        private int mediaPromptCalls;
+        private int textOnlyPromptCalls;
 
         @Override
         public void sendPrompt(String textPrompt, byte[] media, Runnable onComplete,
                 Consumer<? super Throwable> onError, Consumer<? super String> consumer) {
             this.textPrompt = textPrompt;
             this.media = media;
+            this.mediaPromptCalls++;
             consumer.accept("Ready.");
             onComplete.run();
         }
@@ -90,6 +123,7 @@ class MainApplicationControllerTest {
         public void sendPrompt(String textPrompt, Runnable onComplete, Consumer<? super Throwable> onError,
                 Consumer<? super String> consumer) {
             this.textPrompt = textPrompt;
+            this.textOnlyPromptCalls++;
             consumer.accept("Ready.");
             onComplete.run();
         }
