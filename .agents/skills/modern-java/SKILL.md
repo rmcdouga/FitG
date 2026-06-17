@@ -4,147 +4,152 @@ description: Generic, composable Java 25 code conventions — modern syntax, cod
 ---
 
 ## Scope
+- Language-level style plus common Spring Boot idioms. This is the general convention
+  set; it is repo-agnostic by design.
+- It does NOT cover repo-specific architecture (module boundaries, which class owns
+  which responsibility). Those rules live in the repo's `CLAUDE.md`.
+- A more specific instruction always wins: an explicit request, the repo `CLAUDE.md`,
+  or a more specific skill overrides a rule here.
+- This is a working baseline. Refine it as the team agrees on conventions.
 
-- Language-level rules for Java 25 only — syntax, style, naming, visibility, structure, methods, streams, exceptions, comments.
-- Architecture (BCE, layering, packaging) is **not** in this skill — see `bce`.
-- Build, packaging, framework, and protocol rules are **not** in this skill — see `java-cli-script`, `java-cli-app`, `microprofile-server`, `zb`, etc.
-- When a composed skill specifies a rule, the composed skill wins; this skill is the fallback baseline.
+## Java version and syntax
+- Target Java 25; assume all features are GA. Never use preview flags.
+- Use modern syntax naturally: `var`, records, sealed types, pattern matching, text
+  blocks, switch expressions.
+- Use `var` for locals when the type is obvious from the right-hand side.
+- Prefer switch expressions with arrow syntax over `case:` with `break`.
+- Use pattern matching for `instanceof` (no separate cast) and in `switch` for type dispatch.
+- Use the diamond operator `<>`. Never use raw generic types; always parameterize.
+- Prefer domain types over primitives and strings: `Path` over `String`, `URI` over
+  `String`, `Duration` over `long`, `Instant`/`LocalDate` over `Date`.
+- Favor the standard library (`java.util`, `java.nio.file`, `java.time`, `java.net.http`)
+  over hand-rolled equivalents.
 
-## Java Version & Syntax
+## Dependency injection (Spring)
+- Use constructor injection. It makes dependencies explicit, lets you mark them `final`,
+  and lets tests construct the class with plain `new`, no container required.
+- Mark injected dependencies `final`.
+- A class with a single constructor needs no `@Autowired`; Spring injects it.
+- Do not use field injection (`@Autowired` on a field) or setter injection unless a
+  framework genuinely requires it.
+- No mutable static state.
 
-- target Java 25; assume all features are GA — never use `--enable-preview`
-- use modern syntax naturally: `var`, records, sealed types, pattern matching, text blocks, switch expressions
-- use `var` for local variable declarations where the type is obvious from the right-hand side
-- use module imports (e.g. `import module java.net.http;`) over individual type imports
-- do not import packages from `java.base` — it is automatically available
-- use switch expressions with arrow syntax (`case X -> ...`) over old `case X:` statements with `break`
-- use pattern matching for `instanceof` — `if (o instanceof String s)` over cast-and-assign
-- use pattern matching in `switch` for type-based dispatch
-- use the diamond operator `<>` for generic type inference
-- never use raw generic types — always parameterize
-- prefer `void main()` / `void main(String... args)` over `public static void main(String[] args)`; instance main, not static
+## Visibility and modifiers
+- Default to the most restrictive access that works: `private` fields and helper methods,
+  package-private only with a concrete reason, `public` only for the intended API.
+- Test through the public API. Do not widen visibility just to reach internals from a
+  test. If an internal is genuinely hard to test, treat that as a design signal. When you
+  must, relax a single member to package-private and mark it (`@VisibleForTesting` or a
+  short comment) as a deliberate exception.
+- Prefer `final` for fields that are set once (injected collaborators, immutable state).
 
-## Java SE APIs
-
-- use Java SE APIs over writing custom code — the standard library has it, usually in `java.util`, `java.nio.file`, `java.net.http`, or `java.time`
-- prefer the most specific Java SE type for the domain — `Path` over `String`, `URI` over `String`, `Duration` over `long millis`, `Instant`/`LocalDate` over `Date`/`long`
-
-## Visibility & Modifiers
-- Use the most restrictive access level that makes sense for a field or method. Use `private` unless you have a good reason not to.
-- make fields `final` and immutable when possible
-- do not use `final` on local variables or parameters
-- prefer constructor injection over field injection
-- avoid mutable static fields
-
-## Interfaces & Classes
-
-- only use interfaces with multiple implementations or for the strategy pattern; never create an interface whose only purpose is to be implemented by one class
-- for stateless or procedural logic, prefer interfaces with `static` methods over classes with private constructors
-- in utility interfaces, prefer `static` over `default` methods
-- avoid anonymous inner classes — extract them into named, testable top-level classes (e.g. a CDI bean produced via `@Produces`) instead of instantiating an interface inline
-- use records by default for value types and data carriers
-- use sealed interfaces or sealed classes for closed type hierarchies (pairs well with pattern matching)
-- prefer factory methods (static `of`, `from`, etc.) in records over passing `null` to constructors
-- prefer composition over inheritance
-- create multiple classes only if it decreases complexity and increases readability
+## Types and classes
+- Use records for value types and data carriers.
+- Use sealed interfaces or classes for closed hierarchies; they pair with pattern matching.
+- Create an interface only when there are multiple implementations or a real strategy
+  seam. Reject single-implementation interfaces.
+- Favor composition over inheritance.
+- Prefer static factory methods (`of`, `from`) over passing `null` to a constructor.
+- Avoid anonymous inner classes; extract them into named, testable types (for example a
+  Spring `@Component` or a `@Bean` method).
+- Add a class only when it reduces complexity or improves readability.
 
 ## Naming
+- Name types after their responsibility, not a technical layer.
+- Reserve Spring stereotype suffixes for the role they name: `Controller` for web
+  endpoints, `Service` for service-layer beans, `Repository` for data access,
+  `Configuration` for config classes.
+- Avoid meaningless suffixes that hide responsibility: `*Impl`, `*Manager`, `*Creator`,
+  `*Util`, `*Helper`.
+- Prefer record-style accessors without the `get` prefix (`configuration()` not
+  `getConfiguration()`), but keep JavaBean getters where serialization expects them
+  (for example Jackson-bound types).
 
-- name classes, modules, and files after their responsibilities, not technical concerns
-- avoid meaningless suffixes: `*Impl`, `*Service`, `*Manager`, `*Creator`
-- class names must not end with `Control`
-- reserve protocol- or pattern-specific suffixes for elements that actually fulfill that role: `Resource` for JAX-RS classes, `Factory` for actual GoF factories, `Builder` for classes with method chaining
-- avoid the `get` prefix; use the record-style convention — `configuration()` not `getConfiguration()`
+## Methods and lambdas
+- Keep methods short, cohesive, and named for intent.
+- No multi-statement lambdas; extract to a well-named method and use a method reference.
+- Prefer method references over equivalent lambdas.
+- Split a `.filter()` with multiple `&&`/`||` into chained `.filter()` calls, or extract a
+  named predicate method.
+- Extract non-trivial calculations and boolean conditions into named methods so call
+  sites read as intent.
+- Use guard clauses (early return) over deeply nested `if`/`else`.
+- Do not write empty pass-through delegate methods.
 
-## Methods & Lambdas
+## Streams and collections
+- Prefer the Stream API over imperative `for` loops, and terminal operations that return
+  a value over `forEach`.
+- Return a value from a stream rather than mutating an output parameter inside `forEach`.
+- Prefer `.toList()` over `.collect(Collectors.toList())`.
+- Prefer `List.of()`, `Set.of()`, `Map.of()` for small immutable collections.
+- Return empty collections, never `null`. Never put `null` into a collection.
+- Use named intermediate variables when a chain becomes hard to read.
+- For finite rule sets (for example validation), prefer a data table you stream over,
+  not a long `if`/`else` ladder.
 
-- keep methods short, cohesive, and testable
-- create well-named methods for coarse-grained, self-contained logic
-- never use multi-statement lambdas — extract them into well-named helper methods
-- prefer method references over equivalent lambdas (`String::strip` over `s -> s.strip()`, `this::isSkillFile` over `p -> p.endsWith("SKILL.md")`)
-- extract inline lambda predicates into explaining methods and use method references
-- split complex `.filter()` calls with multiple `&&`/`||` conditions into chained `.filter()` calls
-- extract complex boolean conditions into named predicate methods — write `boolean isEligible()` instead of inlining `age >= 18 && status.equals("active") && !banned`
-- extract non-trivial calculations into named methods so call sites read as intent, not arithmetic
-- do not create empty delegate methods that only forward without added value
+## Code style
+- KISS and YAGNI. Implement the simplest thing that works; ask before adding speculative
+  abstraction.
+- When approaches tie, choose fewer lines; but prefer several simple lines over one dense
+  line.
+- Prefer text blocks over `+`-concatenated multi-line strings; prefer `"...".formatted(...)`
+  over `String.format(...)`.
+- Prefer `Files.readString`/`writeString`/`lines` over manual reader and writer boilerplate.
+- Prefer try-with-resources over a manual `close()` on any `AutoCloseable`.
+- Prefer enums over magic strings for finite, well-defined sets.
+- Extract repeated literals into named constants; prefer named constants over bare numbers.
+- Use `Optional` as a return type only when absence is meaningful; never as a parameter type.
 
-## Stream & Collections
-
-- prefer `java.util.stream.Stream` API over `for` loops
-- avoid `forEach`; prefer terminal operations that return values
-- prefer `Stream.of` over `Arrays.stream` for known elements
-- prefer `.toList()` over `.collect(Collectors.toList())`
-- prefer `List.of` / `Set.of` / `Map.of` over `new ArrayList<>()` and array literals for small immutable collections
-- avoid creating unnecessary intermediate collections when streaming arrays
-- prefer `Stream.gather(...)` with a `Gatherer` (Java 24+) over custom `Spliterator` or stateful `forEach` for stream transformations that need to keep state across elements or flush a remainder at end-of-stream
-- prefer a named intermediate variable over deeply nested method chaining when readability suffers
-- return empty collections (`List.of()`, `Set.of()`, `Map.of()`), never `null`
-- do not put `null` values in collections
-
-## Code Style
-
-- KISS and YAGNI — always implement the simplest possible solution that works
-- never over-engineer; ask before adding optional features, extension points, or abstractions
-- code must be as simple, elegant, and understandable as possible
-- always choose the simplest API — prefer higher-level, concise APIs over verbose low-level ones
-- when multiple approaches exist, use the one with the fewest lines of code
-- prefer multiple simpler lines to one complex line
-- prefer text blocks (`"""`) over `+`-concatenated multi-line strings
-- prefer `String.formatted()` (instance) over `String.format(...)` (static) for readability at the call site
-- prefer imports over fully qualified class names; remove unused imports
-- prefer `Files.readString` / `Files.writeString` / `Files.lines` over `BufferedReader`/`BufferedWriter` ceremony
-- no blank lines between imports
-- use `this` to reference instance fields when it improves clarity
-- prefer enums over plain strings for finite, well-defined values; reuse existing enum constants as values where possible (enum constants do not have to follow naming conventions when reused as values)
-- prefer try-with-resources over manual `.close()` on any `AutoCloseable`
-- extract repeated string literals into named constants — define once, change once
-- prefer character literals and named constants over raw numeric literals — write `'\n'` not `10`, define `int ESC = '\033'` instead of inlining `27`
-- inline single-use variables — if assigned and used only once on the next line, pass the expression directly
-- bind behavior to data with functional fields — store a `Runnable`, `Consumer`, or lambda in a record instead of switching on type externally
-- separate side effects from conditions — do the work first, then branch on the result; keep the `if` a pure decision
-- use guard clauses (early returns) over deeply nested `if`/`else`
-- avoid `Optional` as a parameter type; use `Optional` as a return type only when absence is a meaningful part of the contract
+## JSON and Jackson (Spring)
+- Use the Spring-managed `ObjectMapper` (inject it). Never `new ObjectMapper()` in
+  application code.
+- Bind JSON to records or typed classes. Avoid ad-hoc tree walking such as
+  `JsonNode.fields()` where a typed binding or a documented Jackson API does the job.
 
 ## Exceptions
-
-- prefer unchecked over checked exceptions
-- never throw raw `java.lang.Exception` or `RuntimeException` directly — throw a specific subclass
-- do not re-throw with `throw e` adding no value
-- do not catch and silently ignore exceptions — at minimum, log with context or rethrow wrapped
-- use the underscore `_` for unused catch parameters (`catch (IOException _)`) instead of named variables like `e` or `ignored`
-- create custom exceptions only when they significantly improve robustness or maintainability
+- Prefer unchecked over checked exceptions.
+- Never throw raw `Exception` or `RuntimeException`; throw a specific type.
+- Never catch broad `Exception` or `Throwable` to swallow problems. Catch the specific
+  type you can handle, then log with context or rethrow wrapped.
+- Do not `throw e` to rethrow unchanged when it adds nothing.
+- Use `_` for an unused catch parameter.
+- Add a custom exception only when it meaningfully improves clarity or handling.
 
 ## Logging
+- Use SLF4J (`org.slf4j.Logger` via `LoggerFactory`) so the backend stays swappable under
+  Spring Boot. Never use `System.out`/`System.err`, `java.util.logging`, or `System.Logger`.
+- Name the logger `log` and declare it `private static final`. Lombok's `@Slf4j` generates
+  exactly this if the project uses Lombok.
+- Use parameterized messages (`log.info("loaded {} forms", count)`), not string concatenation.
 
-- use `org.slf4j.Logger` instead of `System.out` statements
-- never use `java.util.logging.Logger`
-- `Logger` fields must be named `log` (lowercase) and marked as `static final`
+## HTTP client
+- For outbound HTTP in a Spring app, prefer Spring's `RestClient` (or `WebClient` for
+  reactive code). If you use `java.net.http.HttpClient` directly, prefer its synchronous
+  API and reach for async only when explicitly needed.
 
-## HTTP Client
-
-- prefer the synchronous `java.net.http.HttpClient` APIs
-- use asynchronous APIs (`HttpClient.sendAsync`) only when explicitly requested
+## User-facing output
+- User-facing strings (UI text, messages returned to end users) are plain text: no emoji.
 
 ## Testing
+- Use AssertJ assertions rather than raw JUnit assertions.
+- Do not prefix test methods with `test` or `should`; name them for the behavior.
+- Write minimal, meaningful tests. Do not test code that cannot fail (records, enums,
+  plain accessors).
+- Aim for a few focused tests per class, not many trivial ones.
+- A specific `isEqualTo` makes weaker checks (`isNotNull`, `startsWith`) on the same value
+  redundant.
 
-- use AssertJ assertions instead of JUnit assertions
-- unit test methods must not start with `test` or `should`
-- create minimalistic tests first; avoid repetitive or trivial unit tests and keep only essential tests verifying core functionality
-- do not write tests for implementations that cannot fail (enums, records, getters/setters)
-- generate at most three tests per class under test (applies separately to unit, integration, and system tests)
-- the presence of an `isEqualTo` assertion makes less specific checks (`startsWith`, `isNotNull`) obsolete
+## Comments and JavaDoc
+- Default to no comments; let names carry the meaning.
+- Comment only the non-obvious why: a hidden constraint, a subtle invariant, a workaround,
+  or surprising behavior.
+- Do not restate the signature or describe what the code obviously does.
+- When you do write JavaDoc, prefer Markdown JavaDoc (`///`) over HTML-tagged `/** */`.
 
-## Comments & JavaDoc
+---
 
-- default to no comments
-- only comment when the *why* is non-obvious: hidden constraint, subtle invariant, workaround for a specific bug, behavior that would surprise a reader
-- do not explain *what* the code does — well-named identifiers do that
-- do not write JavaDoc that restates the method signature or rephrases the code
-- either describe the *why* or omit the comment entirely
-- when JavaDoc is written, prefer Markdown JavaDoc (`///`, JEP 467) over HTML-tagged `/** */` blocks
-
-## Composition with Other Skills
-
-- this skill defines only language-level Java conventions; build, packaging, file layout, frameworks, protocols, and architecture come from the composed skill (e.g. `java-cli-script`, `java-cli-app`, `microprofile-server`, `bce`, `zb`)
-- when a composed skill adds or refines a rule (e.g. "use `IO.println` not `System.out.println`", "no package declaration in single-file scripts", "JAX-RS resources are boundary classes"), apply it on top of these rules; the composed skill always specializes, never contradicts
-- if a composed skill is silent on a topic covered here, these rules apply by default
+Adapted from Adam Bien's airails `java-conventions`, with changes for Spring Boot:
+constructor injection (not field), SLF4J `log` (not `System.Logger`/`LOGGER`), `private` by
+default (not package-private for tests), `final` for injected dependencies, Spring
+stereotypes and `RestClient` where they fit, plus 4Point rules for Jackson, exception
+handling, and user-facing text.
