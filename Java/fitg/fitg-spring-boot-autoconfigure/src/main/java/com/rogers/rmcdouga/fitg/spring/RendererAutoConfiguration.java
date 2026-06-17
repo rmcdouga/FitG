@@ -11,6 +11,7 @@ import com.rogers.rmcdouga.fitg.basegame.CounterLocator;
 import com.rogers.rmcdouga.fitg.basegame.GameBoard;
 import com.rogers.rmcdouga.fitg.renderer.graphics2d.Map;
 import com.rogers.rmcdouga.fitg.renderer.images.ImageStore;
+import com.rogers.rmcdouga.fitg.renderer.text.TextMapRenderer;
 
 @AutoConfiguration
 public class RendererAutoConfiguration {
@@ -20,6 +21,12 @@ public class RendererAutoConfiguration {
 	@Bean
 	public Map mapRenderer(Graphics2D g2d, ImageStore imageStore, GameBoard gameBoard, CounterLocator counterLocator) {
 		return new Map(g2d, imageStore, gameBoard, counterLocator);
+	}
+
+	@ConditionalOnMissingBean
+	@Bean
+	public TextMapRenderer textMapRenderer(GameBoard gameBoard, CounterLocator counterLocator) {
+		return new TextMapRenderer(gameBoard, counterLocator);
 	}
 
 }

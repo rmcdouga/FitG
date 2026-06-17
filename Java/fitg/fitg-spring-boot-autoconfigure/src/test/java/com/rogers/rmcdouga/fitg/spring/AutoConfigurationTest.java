@@ -23,6 +23,7 @@ import com.rogers.rmcdouga.fitg.basegame.strategies.hardcoded.FlightToEgrixRebel
 import com.rogers.rmcdouga.fitg.renderer.graphics2d.Map;
 import com.rogers.rmcdouga.fitg.renderer.images.BaseGameImageStoreAdapter;
 import com.rogers.rmcdouga.fitg.renderer.images.ImageStore;
+import com.rogers.rmcdouga.fitg.renderer.text.TextMapRenderer;
 
 @SpringBootTest(classes = {com.rogers.rmcdouga.fitg.spring.AutoConfigurationTest.TestApplication.class, 
 						   com.rogers.rmcdouga.fitg.spring.AutoConfigurationTest.LocalTestConfiguration.class, 
@@ -35,6 +36,11 @@ class AutoConfigurationTest {
 	@Test
 	void testMap(@Autowired Map map) {
 		assertNotNull(map);
+	}
+
+	@Test
+	void testTextMapRenderer(@Autowired TextMapRenderer textMapRenderer) {
+		assertNotNull(textMapRenderer);
 	}
 
 	@Test
