@@ -3,6 +3,7 @@ package com.rogers.rmcdouga.fitg.basegame.units;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import com.rogers.rmcdouga.fitg.basegame.PlayerState.Faction;
 import com.rogers.rmcdouga.fitg.basegame.query.api.CounterFinder;
 
 public enum RebelMilitaryUnit implements Unit {
@@ -78,5 +79,10 @@ public enum RebelMilitaryUnit implements Unit {
 
 	public static Stream<RebelMilitaryUnit> stream(Predicate<RebelMilitaryUnit> predicate) {
 		return RebelMilitaryUnit.stream().filter(predicate);
+	}
+
+	@Override
+	public Faction faction() {
+		return Faction.REBEL;
 	}
 }

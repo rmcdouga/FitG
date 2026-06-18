@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
+import com.rogers.rmcdouga.fitg.basegame.PlayerState.Faction;
 import com.rogers.rmcdouga.fitg.basegame.box.BaseGameBox;
 import com.rogers.rmcdouga.fitg.basegame.box.CounterPool;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameImperialSpaceship;
@@ -35,6 +36,11 @@ class BaseGameCounterPoolTest {
 
 		@Override
 		public String id() {
+			return null;
+		}
+
+		@Override
+		public Faction faction() {
 			return null;
 		}
 	};

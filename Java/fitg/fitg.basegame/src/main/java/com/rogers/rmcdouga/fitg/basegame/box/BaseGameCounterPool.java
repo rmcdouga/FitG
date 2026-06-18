@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import com.rogers.rmcdouga.fitg.basegame.PlayerState.Faction;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameImperialSpaceship;
 import com.rogers.rmcdouga.fitg.basegame.units.ImperialMilitaryUnit;
 import com.rogers.rmcdouga.fitg.basegame.units.ImperialSpaceship;
@@ -196,6 +197,11 @@ class BaseGameCounterPool implements CounterPool {
 		@Override
 		public String id() {
 			return unitType.id();
+		}
+
+		@Override
+		public Faction faction() {
+			return unitType.faction();
 		}
 	}
 
