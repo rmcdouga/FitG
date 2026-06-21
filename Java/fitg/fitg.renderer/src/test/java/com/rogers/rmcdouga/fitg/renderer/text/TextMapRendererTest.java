@@ -11,9 +11,7 @@ import com.rogers.rmcdouga.fitg.basegame.Game;
 import com.rogers.rmcdouga.fitg.basegame.GameBoard;
 import com.rogers.rmcdouga.fitg.basegame.Scenario;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameStarSystem;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.rogers.rmcdouga.fitg.basegame.map.Location;
@@ -59,8 +57,10 @@ class TextMapRendererTest {
 		assertThat(rendered).contains("control: RebelControlled");
 		assertThat(rendered).contains("pdb: UP_2");
 		assertThat(rendered).contains("orbit: []");
-		assertThat(rendered).contains("environ: Urban | size=6 | resources=9* | coup=3 | races=[Yester*]");
-		assertThat(rendered).contains("environ: Wild | size=4 | resources=6* | coup=- | races=[Saurian*]");
+		assertThat(rendered).contains("environ: Urban");
+		assertThat(rendered).contains("size=6 | resources=9* | coup=3 | races=[Yester*]");
+		assertThat(rendered).contains("environ: Wild");
+		assertThat(rendered).contains("size=4 | resources=6* | coup=- | races=[Saurian*]");
 	}
 
 	@Test
@@ -84,9 +84,12 @@ class TextMapRendererTest {
 		var rendered = renderer.renderCompact();
 
 		assertThat(rendered).contains("[22 Egrix]");
-		assertThat(rendered).contains("[222 Angoff] loyalty=Neutral ctrl=Rebel pdb=2↑");
-		assertThat(rendered).contains("[221 Quibron] loyalty=Loyal ctrl=Imperial pdb=1↑");
-		assertThat(rendered).contains("[223 Charkhan] loyalty=Patriotic ctrl=Imperial pdb=0↑");
+		assertThat(rendered).contains("[222 Angoff]");
+		assertThat(rendered).contains("loyalty=Neutral ctrl=Rebel pdb=2↑");
+		assertThat(rendered).contains("[221 Quibron]");
+		assertThat(rendered).contains("loyalty=Loyal ctrl=Imperial pdb=1↑");
+		assertThat(rendered).contains("[223 Charkhan]");
+		assertThat(rendered).contains("loyalty=Patriotic ctrl=Imperial pdb=0↑");
 		assertThat(rendered).contains("Urban sz=6 res=9* coup=3 Yester* cr=Laboroid");
 		assertThat(rendered).contains("imperialspaceship[jonkidu vanskatiea]");
 		assertThat(rendered).contains(" :: ");
@@ -95,12 +98,16 @@ class TextMapRendererTest {
 
 	@Test
 	void renderCompactSovereignAndCreatureUsePrefixes() {
+		// No Sovereign
 		GameBoard gameBoard = BaseGameGameBoard.create(
 				List.of(BaseGameStarSystem.Varu), Scenario.Type.StartRebellion);
-		var renderer = new TextMapRenderer(gameBoard, EMPTY_COUNTER_LOCATOR);
+		var varuRenderer = new TextMapRenderer(gameBoard, EMPTY_COUNTER_LOCATOR);
 
-		var rendered = renderer.renderCompact();
+		var varuRendered = varuRenderer.renderCompact();
+		assertThat(varuRendered).doesNotContain("sov=");
+		assertThat(varuRendered).contains("cr=Snorkas");
 
+		// Has Sovereign
 		GameBoard luineBoard = BaseGameGameBoard.create(
 				List.of(BaseGameStarSystem.Luine), Scenario.Type.StartRebellion);
 		var luineRenderer = new TextMapRenderer(luineBoard, EMPTY_COUNTER_LOCATOR);

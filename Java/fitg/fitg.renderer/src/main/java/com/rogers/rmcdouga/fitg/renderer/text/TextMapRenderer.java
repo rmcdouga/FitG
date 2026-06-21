@@ -2,9 +2,11 @@ package com.rogers.rmcdouga.fitg.renderer.text;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import com.rogers.rmcdouga.fitg.basegame.CounterLocator;
 import com.rogers.rmcdouga.fitg.basegame.GameBoard;
@@ -18,16 +20,29 @@ import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 
 /// Renders the visible game map state as deterministic plain text for AI consumption.
 public final class TextMapRenderer {
+	enum RenderSubsets {
+		MAP, STATE;
+	}
 
 	private static final String EMPTY_VALUE = "-";
 	private static final String INDENT = "  ";
 
 	private final GameBoard gameBoard;
 	private final CounterLocator counterLocator;
+	private final Set<RenderSubsets> subsets;
 
 	public TextMapRenderer(GameBoard gameBoard, CounterLocator counterLocator) {
+		this(gameBoard, counterLocator, EnumSet.allOf(RenderSubsets.class));
+	}
+
+	public TextMapRenderer(GameBoard gameBoard, CounterLocator counterLocator, RenderSubsets subset) {
+		this(gameBoard, counterLocator, EnumSet.of(subset));
+	}
+
+	public TextMapRenderer(GameBoard gameBoard, CounterLocator counterLocator, Set<RenderSubsets> subsets) {
 		this.gameBoard = Objects.requireNonNull(gameBoard);
 		this.counterLocator = Objects.requireNonNull(counterLocator);
+		this.subsets = Objects.requireNonNull(subsets);
 	}
 
 	public String render() {
@@ -43,32 +58,43 @@ public final class TextMapRenderer {
 
 	private void appendStarSystem(StringBuilder builder, StarSystem starSystem) {
 		appendLine(builder, 1, "star-system: %d %s".formatted(starSystem.getId(), starSystem.getName()));
-		appendLine(builder, 2, "drift: " + formatCounters(starSystem.drift()));
-		appendLine(builder, 2, "drift2: " + formatCounters(starSystem.drift2()));
+		if (subsets.contains(RenderSubsets.STATE)) {
+			appendLine(builder, 2, "drift: " + formatCounters(starSystem.drift()));
+			appendLine(builder, 2, "drift2: " + formatCounters(starSystem.drift2()));
+		}
 		sortedPlanets(starSystem).forEach(planet -> appendPlanet(builder, planet));
 	}
 
 	private void appendPlanet(StringBuilder builder, Planet planet) {
 		appendLine(builder, 2, "planet: %d %s".formatted(planet.getId(), planet.getName()));
-		appendLine(builder, 3, "loyalty: " + gameBoard.getLoyalty(planet).getName());
-		appendLine(builder, 3, "control: " + formatControl(planet));
-		appendLine(builder, 3, "pdb: " + formatPdb(gameBoard.getPdb(planet)));
-		appendLine(builder, 3, "orbit: " + formatCounters(planet.inOrbit()));
+		if (subsets.contains(RenderSubsets.STATE)) {
+			appendLine(builder, 3, "loyalty: " + gameBoard.getLoyalty(planet).getName());
+			appendLine(builder, 3, "control: " + formatControl(planet));
+			appendLine(builder, 3, "pdb: " + formatPdb(gameBoard.getPdb(planet)));
+			appendLine(builder, 3, "orbit: " + formatCounters(planet.inOrbit()));
+		}
 		planet.listEnvirons().forEach(environ -> appendEnviron(builder, environ));
 	}
 
 	private void appendEnviron(StringBuilder builder, Environ environ) {
-		appendLine(builder, 3,
-				"environ: %s | size=%d | resources=%s | coup=%s | races=%s | creature=%s | sovereign=%s | counters=%s"
-						.formatted(
-								environ.getType().getName(),
-								environ.getSize(),
-								formatResources(environ),
-								formatCoup(environ),
-								formatRaces(environ),
-								formatOptionalLabel(environ.getCreature()),
-								formatOptionalLabel(environ.getSovereign()),
-								formatCounters(environ)));
+		appendLine(builder, 3, "environ: %s".formatted(environ.getType().getName()));
+		
+		if (subsets.contains(RenderSubsets.MAP)) {
+			appendLine(builder, 4,
+					"size=%d | resources=%s | coup=%s | races=%s | creature=%s | sovereign=%s"
+							.formatted(
+									environ.getSize(),
+									formatResources(environ),
+									formatCoup(environ),
+									formatRaces(environ),
+									formatOptionalLabel(environ.getCreature()),
+									formatOptionalLabel(environ.getSovereign())
+									)
+							);
+		}
+		if (subsets.contains(RenderSubsets.STATE)) {
+			appendLine(builder, 4, "counters=%s".formatted(formatCounters(environ)));
+		}
 	}
 
 	private String formatCounters(com.rogers.rmcdouga.fitg.basegame.map.Location location) {
@@ -194,40 +220,37 @@ public final class TextMapRenderer {
 
 	private void appendCompactStarSystem(StringBuilder builder, StarSystem starSystem) {
 		appendLine(builder, 1, "[%d %s]".formatted(starSystem.getId(), starSystem.getName()));
-		compactCounters(starSystem.drift())
-				.ifPresent(c -> appendLine(builder, 2, "drift :: " + c));
-		compactCounters(starSystem.drift2())
-				.ifPresent(c -> appendLine(builder, 2, "drift2 :: " + c));
+		if (subsets.contains(RenderSubsets.STATE)) {
+			compactCounters(starSystem.drift()).ifPresent(c -> appendLine(builder, 2, "drift :: " + c));
+			compactCounters(starSystem.drift2()).ifPresent(c -> appendLine(builder, 2, "drift2 :: " + c));
+		}
 		sortedPlanets(starSystem).forEach(planet -> appendCompactPlanet(builder, planet));
 	}
 
 	private void appendCompactPlanet(StringBuilder builder, Planet planet) {
-		appendLine(builder, 2, "[%d %s] loyalty=%s ctrl=%s pdb=%s".formatted(
-				planet.getId(),
-				planet.getName(),
-				gameBoard.getLoyalty(planet).getName(),
-				compactControl(planet),
-				compactPdb(gameBoard.getPdb(planet))));
-		compactCounters(planet.inOrbit())
-				.ifPresent(c -> appendLine(builder, 3, "orbit :: " + c));
-		planet.listEnvirons().forEach(environ -> appendCompactEnviron(builder, environ));
+		appendLine(builder, 2, "[%d %s]".formatted(planet.getId(), planet.getName()));
+		if (subsets.contains(RenderSubsets.STATE)) {
+			appendLine(builder, 3, "loyalty=%s ctrl=%s pdb=%s".formatted(gameBoard.getLoyalty(planet).getName(),
+					compactControl(planet), compactPdb(gameBoard.getPdb(planet))));
+			compactCounters(planet.inOrbit()).ifPresent(c -> appendLine(builder, 3, "orbit :: " + c));
+		}
+		planet.streamEnvirons().forEach(environ -> appendCompactEnviron(builder, environ));
 	}
 
 	private void appendCompactEnviron(StringBuilder builder, Environ environ) {
 		var parts = new java.util.ArrayList<String>();
 		parts.add(environ.getType().getName());
-		parts.add("sz=" + environ.getSize());
-		environ.getResources().ifPresent(r -> parts.add("res=" + r + (environ.isStarResources() ? "*" : "")));
-		environ.getCoupRating().ifPresent(c -> parts.add("coup=" + c));
-		environ.getRaces().stream()
-				.sorted(Comparator.comparing(RaceType::getName, String.CASE_INSENSITIVE_ORDER))
-				.map(r -> r.getName() + (r.isStarFaring() ? "*" : ""))
-				.forEach(parts::add);
-		environ.getCreature().ifPresent(c -> parts.add("cr=" + c.name()));
-		environ.getSovereign().ifPresent(s -> parts.add("sov=" + s.name()));
-
+		if (subsets.contains(RenderSubsets.MAP)) {
+			parts.add("sz=" + environ.getSize());
+			environ.getResources().ifPresent(r -> parts.add("res=" + r + (environ.isStarResources() ? "*" : "")));
+			environ.getCoupRating().ifPresent(c -> parts.add("coup=" + c));
+			environ.getRaces().stream().sorted(Comparator.comparing(RaceType::getName, String.CASE_INSENSITIVE_ORDER))
+					.map(r -> r.getName() + (r.isStarFaring() ? "*" : "")).forEach(parts::add);
+			environ.getCreature().ifPresent(c -> parts.add("cr=" + c.name()));
+			environ.getSovereign().ifPresent(s -> parts.add("sov=" + s.name()));
+		}
 		var base = String.join(" ", parts);
-		var counters = compactCounters(environ);
+		var counters = subsets.contains(RenderSubsets.STATE) ? compactCounters(environ) : Optional.empty();
 		appendLine(builder, 3, counters.map(c -> base + " :: " + c).orElse(base));
 	}
 
@@ -292,9 +315,10 @@ public final class TextMapRenderer {
 				.append(starSystem.getName())
 				.append("\n\n");
 
-		appendMarkdownSection(builder, "Drift", formatCounters(starSystem.drift()));
-		appendMarkdownSection(builder, "Drift2", formatCounters(starSystem.drift2()));
-
+		if (subsets.contains(RenderSubsets.STATE)) {
+			appendMarkdownSection(builder, "Drift", formatCounters(starSystem.drift()));
+			appendMarkdownSection(builder, "Drift2", formatCounters(starSystem.drift2()));
+		}
 		sortedPlanets(starSystem).forEach(planet -> appendMarkdownPlanet(builder, planet));
 	}
 
@@ -305,24 +329,28 @@ public final class TextMapRenderer {
 				.append(planet.getName())
 				.append("\n\n");
 
-		builder.append("- **Loyalty:** ").append(gameBoard.getLoyalty(planet).getName()).append("\n");
-		builder.append("- **Control:** ").append(formatControl(planet)).append("\n");
-		builder.append("- **PDB:** ").append(formatPdb(gameBoard.getPdb(planet))).append("\n\n");
-
-		appendMarkdownSection(builder, "Orbit", formatCounters(planet.inOrbit()));
-
+		if (subsets.contains(RenderSubsets.STATE)) {
+			builder.append("- **Loyalty:** ").append(gameBoard.getLoyalty(planet).getName()).append("\n");
+			builder.append("- **Control:** ").append(formatControl(planet)).append("\n");
+			builder.append("- **PDB:** ").append(formatPdb(gameBoard.getPdb(planet))).append("\n\n");
+			appendMarkdownSection(builder, "Orbit", formatCounters(planet.inOrbit()));
+		}
 		planet.listEnvirons().forEach(environ -> appendMarkdownEnviron(builder, environ));
 	}
 
 	private void appendMarkdownEnviron(StringBuilder builder, Environ environ) {
 		builder.append("#### Environment: ").append(environ.getType().getName()).append("\n\n");
-		builder.append("- **Size:** ").append(environ.getSize()).append("\n");
-		builder.append("- **Resources:** ").append(formatResources(environ)).append("\n");
-		builder.append("- **Coup:** ").append(formatCoup(environ)).append("\n");
-		builder.append("- **Races:** ").append(formatRaces(environ)).append("\n");
-		builder.append("- **Creature:** ").append(formatOptionalLabel(environ.getCreature())).append("\n");
-		builder.append("- **Sovereign:** ").append(formatOptionalLabel(environ.getSovereign())).append("\n");
-		appendMarkdownSection(builder, "Counters", formatCounters(environ));
+		if (subsets.contains(RenderSubsets.MAP)) {
+			builder.append("- **Size:** ").append(environ.getSize()).append("\n");
+			builder.append("- **Resources:** ").append(formatResources(environ)).append("\n");
+			builder.append("- **Coup:** ").append(formatCoup(environ)).append("\n");
+			builder.append("- **Races:** ").append(formatRaces(environ)).append("\n");
+			builder.append("- **Creature:** ").append(formatOptionalLabel(environ.getCreature())).append("\n");
+			builder.append("- **Sovereign:** ").append(formatOptionalLabel(environ.getSovereign())).append("\n");
+		}
+		if (subsets.contains(RenderSubsets.STATE)) {
+			appendMarkdownSection(builder, "Counters", formatCounters(environ));
+		}
 		builder.append("\n");
 	}
 
