@@ -14,7 +14,7 @@
 		<!-- Other local projects -->
 		<fitg.basegame.version>0.0.1-SNAPSHOT</fitg.basegame.version>
 			<!-- Test Dependencies -->
-			<assertj.version>3.27.4</assertj.version>
+			<assertj.version>3.27.7</assertj.version>
 			<javapoet.version>1.13.0</javapoet.version>
 		</properties>
 
