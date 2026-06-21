@@ -13,9 +13,10 @@
 	<properties>
 		<!-- Other local projects -->
 		<fitg.basegame.version>0.0.1-SNAPSHOT</fitg.basegame.version>
-		<!-- Test Dependencies -->
-		<javapoet.version>1.13.0</javapoet.version>
-	</properties>
+			<!-- Test Dependencies -->
+			<assertj.version>3.27.4</assertj.version>
+			<javapoet.version>1.13.0</javapoet.version>
+		</properties>
 
 	<dependencies>
 		<dependency>
@@ -29,7 +30,14 @@
 			<artifactId>javapoet</artifactId>
 			<version>${javapoet.version}</version>
 			<scope>test</scope>
-		</dependency>
-	</dependencies>
+			</dependency>
+			<!-- AssertJ test assertions -->
+			<dependency>
+				<groupId>org.assertj</groupId>
+				<artifactId>assertj-core</artifactId>
+				<version>${assertj.version}</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
 
 </project>
