@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import com.rogers.rmcdouga.fitg.basegame.command.adapters.Command.MoveCommand;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnvironType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
+import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.strategies.AbstractStrategy;
 import com.rogers.rmcdouga.fitg.basegame.units.Counter;
@@ -78,5 +80,15 @@ public class FlightToEgrixImperialStrategy extends AbstractStrategy {
 
 	private static Optional<Counter> findUniqueCounter(Collection<Counter> counters, Predicate<Counter> targetCounter) {
 		return counters.stream().filter(targetCounter).findFirst();
+	}
+	
+	@Override
+	public Collection<MoveCommand> movementSegment() {
+		return List.of();
+	}
+
+	@Override
+	public Optional<MoveCommand> reactionMove(Environ environ) {
+		return Optional.empty();
 	}
 }
