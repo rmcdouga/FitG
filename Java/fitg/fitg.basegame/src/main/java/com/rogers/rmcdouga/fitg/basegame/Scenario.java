@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.PlaceCountersInstruction;
 import com.rogers.rmcdouga.fitg.basegame.Scenario.PlayerDecisions.SetPdbInstructions;
 import com.rogers.rmcdouga.fitg.basegame.box.CounterPool;
-import com.rogers.rmcdouga.fitg.basegame.command.adapters.Command.MoveCommand;
+import com.rogers.rmcdouga.fitg.basegame.command.api.internal.Command.MoveCommand;
 import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.map.Pdb;

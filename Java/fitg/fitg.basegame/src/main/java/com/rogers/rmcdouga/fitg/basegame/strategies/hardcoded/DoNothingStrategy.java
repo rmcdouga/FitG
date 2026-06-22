@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import com.rogers.rmcdouga.fitg.basegame.command.adapters.Command.MoveCommand;
+import com.rogers.rmcdouga.fitg.basegame.command.api.internal.Command.MoveCommand;
 import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.strategies.AbstractStrategy;

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import com.rogers.rmcdouga.fitg.basegame.command.adapters.Command.MoveCommand;
+import com.rogers.rmcdouga.fitg.basegame.command.api.internal.Command.MoveCommand;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnvironType;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 import com.rogers.rmcdouga.fitg.basegame.map.Environ;
