@@ -15,7 +15,6 @@ public class CommandDispatcher {
 	
 	public CommandDispatcher(Game game) {
 		this.game = game;
-		super();
 	}
 
 	public void dispatch(Command command) {
