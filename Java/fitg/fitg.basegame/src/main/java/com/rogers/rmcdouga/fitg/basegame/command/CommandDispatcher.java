@@ -10,7 +10,7 @@ import com.rogers.rmcdouga.fitg.basegame.command.api.internal.Command.MoveComman
  * 
  * This class assumes that any incoming commands have already been validated by the CommandValidator class, and it does not perform any validation itself.
  */
-class CommandDispatcher {
+public class CommandDispatcher {
 	private final Game game;
 	
 	public CommandDispatcher(Game game) {
