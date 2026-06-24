@@ -20,6 +20,7 @@ import com.rogers.rmcdouga.fitg.basegame.map.Location;
 import com.rogers.rmcdouga.fitg.basegame.query.api.CounterFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.api.LocationFinder;
 import com.rogers.rmcdouga.fitg.basegame.units.Character;
+import com.rogers.rmcdouga.fitg.basegame.units.Counter;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager;
 import com.rogers.rmcdouga.fitg.basegame.units.StackManager.Stack;
 import com.rogers.rmcdouga.fitg.basegame.units.Unit;
@@ -81,6 +82,15 @@ class MoverAdapterTest {
         var unitMove = assertInstanceOf(MoveCommand.UnitMove.class, command);
         assertSame(unit, unitMove.unit());
         assertSame(destination, unitMove.destination());
+    }
+
+     @Test
+    void moveCounterWithNonUnitCharacterOrStackThrowsIllegalArgumentException() {
+        Counter unknownCounter = mock(Counter.class);
+        when(unknownCounter.id()).thenReturn("non-specific-counter");
+        when(counterFinder.findCounter("non-specific-counter")).thenReturn(Optional.of(unknownCounter));
+
+        assertThrows(IllegalArgumentException.class, () -> underTest.moveCounter("non-specific-counter", "Sirius", "Drift"));
     }
 
     @Test
