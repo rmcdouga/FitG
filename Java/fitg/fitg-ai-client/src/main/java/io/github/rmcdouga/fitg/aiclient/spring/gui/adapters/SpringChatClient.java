@@ -1,6 +1,7 @@
 package io.github.rmcdouga.fitg.aiclient.spring.gui.adapters;
 
 import java.io.ByteArrayInputStream;
+import java.util.Collection;
 import java.util.function.Consumer;
 
 import org.springframework.ai.chat.client.ChatClient;
@@ -8,11 +9,15 @@ import org.springframework.ai.chat.client.ChatClient.PromptUserSpec;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.util.MimeTypeUtils;
 
+import io.github.rmcdouga.fitg.aiclient.spring.ai.tools.SpringAiTool;
+
 public class SpringChatClient implements io.github.rmcdouga.fitg.aiclient.gui.ports.ChatClient {
     private final ChatClient chatClient;
+    private final Collection<SpringAiTool> springAiTools;
     
-	public SpringChatClient(ChatClient chatClient) {
+	public SpringChatClient(ChatClient chatClient, Collection<SpringAiTool> springAiTools) {
 		this.chatClient = chatClient;
+		this.springAiTools = springAiTools;
 	}
 	
 	@Override
@@ -47,6 +52,7 @@ public class SpringChatClient implements io.github.rmcdouga.fitg.aiclient.gui.po
 			Consumer<PromptUserSpec> promptSpecCustomizer) {
 		chatClient.prompt()
                 .user(promptSpecCustomizer)
+                .tools(springAiTools)
                 .stream()
                 .content()
                 .doOnComplete(onComplete)

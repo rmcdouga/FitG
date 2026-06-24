@@ -1,17 +1,23 @@
 package io.github.rmcdouga.fitg.aiclient;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 
+import com.rogers.rmcdouga.fitg.basegame.command.api.external.Mover;
 import com.rogers.rmcdouga.fitg.renderer.images.BaseGameImageStoreAdapter;
 import com.rogers.rmcdouga.fitg.renderer.images.ImageStore;
 
 import io.github.rmcdouga.fitg.aiclient.gui.MainApplicationController;
 import io.github.rmcdouga.fitg.aiclient.gui.ports.ChatClient;
 import io.github.rmcdouga.fitg.aiclient.images.ClassPathImageStore;
+import io.github.rmcdouga.fitg.aiclient.spring.ai.tools.MoverTool;
+import io.github.rmcdouga.fitg.aiclient.spring.ai.tools.SpringAiTool;
 import io.github.rmcdouga.fitg.aiclient.spring.gui.adapters.SpringChatClient;
 import javafx.application.Application;
 
@@ -31,13 +37,20 @@ public class FitGClientSpringApplication {
 	}
 
     @Bean
-    static ChatClient chatClient(org.springframework.ai.chat.client.ChatClient.Builder chatClientBuilder) {
-        return new SpringChatClient(chatClientBuilder.build());
+    static ChatClient chatClient(org.springframework.ai.chat.client.ChatClient.Builder chatClientBuilder,
+					    		 Collection<SpringAiTool> springAiTools
+					    		 ) {
+        return new SpringChatClient(chatClientBuilder.build(), springAiTools);
     }
     
     @Bean
     @Lazy
 	static MainApplicationController mainApplicationController(ChatClient chatClient) {
 		return new MainApplicationController(chatClient);
+	}
+    
+    @Bean
+    static Collection<SpringAiTool> springAiTools(Mover mover) {
+		return List.of(new MoverTool(mover));
 	}
 }
