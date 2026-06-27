@@ -7,4 +7,5 @@ public interface Unit extends Counter {
 	public int spaceCombatStrength();
 	public boolean isMobile();
 	public Faction faction();
+	public String name();
 }
