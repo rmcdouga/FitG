@@ -1,13 +1,16 @@
 package io.github.rmcdouga.fitg.aiclient;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.io.Resource;
 
 import com.rogers.rmcdouga.fitg.basegame.command.api.external.Mover;
 import com.rogers.rmcdouga.fitg.renderer.images.BaseGameImageStoreAdapter;
@@ -38,9 +41,10 @@ public class FitGClientSpringApplication {
 
     @Bean
     static ChatClient chatClient(org.springframework.ai.chat.client.ChatClient.Builder chatClientBuilder,
+    							 @Value("classpath:prompts/SystemPrompt.md") Resource systemPromptResource,
 					    		 Collection<SpringAiTool> springAiTools
-					    		 ) {
-        return new SpringChatClient(chatClientBuilder.build(), springAiTools);
+					    		 ) throws IOException {
+        return SpringChatClient.from(chatClientBuilder, systemPromptResource, springAiTools);
     }
     
     @Bean
