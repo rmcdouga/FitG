@@ -75,4 +75,29 @@ class SystemPromptIntegrationTest {
 
 		assertThat(aiResponse).containsIgnoringCase("no");
 	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"zinaadora", "Zina Adora ", "Adam_Starlight"})
+	void testSystemPrompt_ValidCharacters(String character, FxRobot robot,
+			  @Autowired MainApplicationController mainApplicationController
+			  ) throws TimeoutException {
+		var testQuery = "Is %s is a valid character? Respond with Yes or No.".formatted(character);
+		// Arrange
+		var aiResponse = sendQuery(robot, mainApplicationController, testQuery);
+//		IO.println("AI Response: " + aiResponse);
+
+		assertThat(aiResponse).containsIgnoringCase("yes");
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"Mickey Mouse", "Liquid10", "Liquid_2_0", "Liquid 2-0"})
+	void testSystemPrompt_InValidCharacters(String character, FxRobot robot,
+			  @Autowired MainApplicationController mainApplicationController
+			  ) throws TimeoutException {
+		var testQuery = "Is %s is a valid character? Respond with Yes or No.".formatted(character);
+		var aiResponse = sendQuery(robot, mainApplicationController, testQuery);
+//		IO.println("AI Response: " + aiResponse);
+
+		assertThat(aiResponse).containsIgnoringCase("no");
+	}
 }
