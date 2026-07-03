@@ -45,39 +45,39 @@ Any other characters referenced are invalid.
 
 The following table contains units that are valid units in the game.  It has a header row that describes each column in the row:
 
-| id | name | alias | faction |
-| air10 | Air 1 0 | Air_1_0 | REBEL |
-| air21 | Air 2 1 | Air_2_1 | REBEL |
-| air23 | Air 2 3 | Air_2_3 | REBEL |
-| air43 | Air 4 3 | Air_4_3 | REBEL |
-| fire10 | Fire 1 0 | Fire_1_0 | REBEL |
-| fire21 | Fire 2 1 | Fire_2_1 | REBEL |
-| fire23 | Fire 2 3 | Fire_2_3 | REBEL |
-| liquid10 | Liquid 1 0 | Liquid_1_0 | REBEL |
-| liquid21 | Liquid 2 1 | Liquid_2_1 | REBEL |
-| liquid23 | Liquid 2 3 | Liquid_2_3 | REBEL |
-| liquid43 | Liquid 4 3 | Liquid_4_3 | REBEL |
-| subterranean10 | Subterranean 1 0 | Subterranean_1_0 | REBEL |
-| subterranean21 | Subterranean 2 1 | Subterranean_2_1 | REBEL |
-| subterranean23 | Subterranean 2 3 | Subterranean_2_3 | REBEL |
-| subterranean43 | Subterranean 4 3 | Subterranean_4_3 | REBEL |
-| urban10 | Urban 1 0 | Urban_1_0 | REBEL |
-| urban21 | Urban 2 1 | Urban_2_1 | REBEL |
-| urban23 | Urban 2 3 | Urban_2_3 | REBEL |
-| urban43 | Urban 4 3 | Urban_4_3 | REBEL |
-| urban44elite | Urban 4 4 Elite | Urban_4_4_Elite | REBEL |
-| wild10 | Wild 1 0 | Wild_1_0 | REBEL |
-| wild21 | Wild 2 1 | Wild_2_1 | REBEL |
-| wild23 | Wild 2 3 | Wild_2_3 | REBEL |
-| wild43 | Wild 4 3 | Wild_4_3 | REBEL |
-| wild44elite | Wild 4 4 Elite | Wild_4_4_Elite | REBEL |
-| militia | Militia | Militia | IMPERIAL |
-| patrol | Patrol | Patrol | IMPERIAL |
-| line | Line | Line | IMPERIAL |
-| veteran | Veteran | Veteran | IMPERIAL |
-| elitearmy | Elite Army | Elite_Army | IMPERIAL |
-| elitenavy | Elite Navy | Elite_Navy | IMPERIAL |
-| suicidesquad | SuicideSquad | SuicideSquad | IMPERIAL |
+| id | name | aliases | faction |
+| air10 | Air 1 0 | Air_1_0, Air 1-0 | REBEL |
+| air21 | Air 2 1 | Air_2_1, Air 2-1 | REBEL |
+| air23 | Air 2 3 | Air_2_3, Air 2-3 | REBEL |
+| air43 | Air 4 3 | Air_4_3, Air 4-3 | REBEL |
+| fire10 | Fire 1 0 | Fire_1_0, Fire 1-0 | REBEL |
+| fire21 | Fire 2 1 | Fire_2_1, Fire 2-1 | REBEL |
+| fire23 | Fire 2 3 | Fire_2_3, Fire 2-3 | REBEL |
+| liquid10 | Liquid 1 0 | Liquid_1_0, Liquid 1-0 | REBEL |
+| liquid21 | Liquid 2 1 | Liquid_2_1, Liquid 2-1 | REBEL |
+| liquid23 | Liquid 2 3 | Liquid_2_3, Liquid 2-3 | REBEL |
+| liquid43 | Liquid 4 3 | Liquid_4_3, Liquid 4-3 | REBEL |
+| subterranean10 | Subterranean 1 0 | Subterranean_1_0, Subterranean 1-0 | REBEL |
+| subterranean21 | Subterranean 2 1 | Subterranean_2_1, Subterranean 2-1 | REBEL |
+| subterranean23 | Subterranean 2 3 | Subterranean_2_3, Subterranean 2-3 | REBEL |
+| subterranean43 | Subterranean 4 3 | Subterranean_4_3, Subterranean 4-3 | REBEL |
+| urban10 | Urban 1 0 | Urban_1_0, Urban 1-0 | REBEL |
+| urban21 | Urban 2 1 | Urban_2_1, Urban 2-1 | REBEL |
+| urban23 | Urban 2 3 | Urban_2_3, Urban 2-3 | REBEL |
+| urban43 | Urban 4 3 | Urban_4_3, Urban 4-3 | REBEL |
+| urban44elite | Urban 4 4 Elite | Urban_4_4_Elite, Urban 4-4 Elite | REBEL |
+| wild10 | Wild 1 0 | Wild_1_0, Wild 1-0 | REBEL |
+| wild21 | Wild 2 1 | Wild_2_1, Wild 2-1 | REBEL |
+| wild23 | Wild 2 3 | Wild_2_3, Wild 2-3 | REBEL |
+| wild43 | Wild 4 3 | Wild_4_3, Wild 4-3 | REBEL |
+| wild44elite | Wild 4 4 Elite | Wild_4_4_Elite, Wild 4-4 Elite | REBEL |
+| militia | Militia | Militia, Militia | IMPERIAL |
+| patrol | Patrol | Patrol, Patrol | IMPERIAL |
+| line | Line | Line, Line | IMPERIAL |
+| veteran | Veteran | Veteran, Veteran | IMPERIAL |
+| elitearmy | Elite Army | Elite_Army, Elite Army | IMPERIAL |
+| elitenavy | Elite Navy | Elite_Navy, Elite Navy | IMPERIAL |
+| suicidesquad | SuicideSquad | SuicideSquad, SuicideSquad | IMPERIAL |
 
 Any other units referenced are invalid.
 

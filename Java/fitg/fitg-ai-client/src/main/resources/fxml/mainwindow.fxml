@@ -37,10 +37,11 @@
                   <FontIcon iconLiteral="mdi2i-image-filter-center-focus" iconSize="25" />
                </graphic>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleButtonSendAction" prefWidth="80.0">
+            <Button fx:id="sendButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleButtonSendAction" prefWidth="80.0">
                <graphic>
                   <FontIcon iconLiteral="mdi2s-send" iconSize="25" />
-               </graphic></Button>
+               </graphic>
+            </Button>
          </children>
       </HBox>
    </bottom>

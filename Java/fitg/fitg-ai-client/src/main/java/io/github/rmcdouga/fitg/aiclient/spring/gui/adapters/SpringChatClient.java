@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import org.slf4j.Logger;
@@ -30,10 +31,13 @@ public class SpringChatClient implements io.github.rmcdouga.fitg.aiclient.gui.po
 
     private final ChatClient chatClient;
     private final Collection<SpringAiTool> springAiTools;
+    private final AtomicBoolean isSystemPromptSent = new AtomicBoolean(false);
+    private final String systemPrompt;
     
-	private SpringChatClient(ChatClient chatClient, Collection<SpringAiTool> springAiTools) {
+	private SpringChatClient(ChatClient chatClient, Collection<SpringAiTool> springAiTools, String systemPrompt) {
 		this.chatClient = chatClient;
 		this.springAiTools = springAiTools;
+		this.systemPrompt = systemPrompt;
 	}
 
 	public static SpringChatClient from(ChatClient.Builder chatClientBuilder, Resource systemPromptResource, Collection<SpringAiTool> springAiTools) throws IOException {
@@ -46,19 +50,11 @@ public class SpringChatClient implements io.github.rmcdouga.fitg.aiclient.gui.po
 		// Attach it as a default advisor when building the ChatClient
 		ChatClient chatClient = chatClientBuilder.defaultAdvisors(MessageChatMemoryAdvisor.builder(messageWindowChatMemory).build())
 												 .build();
-		// create a chat client that wraps the Spring ChatClient and the Spring AI tools.
-		var springChatClient = new SpringChatClient(chatClient, springAiTools);
-		
-		// Send system propmt to the AI to inform it of it's role and limitations.
+		// Read the system prompt from the resource
 		String systemPrompt = systemPromptResource.getContentAsString(StandardCharsets.UTF_8);
-		
-		CallResponseSpec response = chatClient.prompt()
-				  .advisors(spec -> spec.param(ChatMemory.CONVERSATION_ID, FITG_CLIENT_CONVERSATION_ID))
-        		  .user(systemPrompt)
-        		  .call();
-		
-		log.atInfo().addArgument(()->response.content()).log("System prompt response: {}");
-		return springChatClient;
+
+		// create a chat client that wraps the Spring ChatClient and the Spring AI tools.
+		return new SpringChatClient(chatClient, springAiTools, systemPrompt);
 	}
 
 	@Override
@@ -67,6 +63,7 @@ public class SpringChatClient implements io.github.rmcdouga.fitg.aiclient.gui.po
 						   Runnable onComplete,
 						   Consumer<? super Throwable> onError, 
 						   Consumer<? super String> consumer) {
+		if (!isSystemPromptSent.getAndSet(true)) { sendSystemPrompt(); }
 		sendPrompt(onComplete, onError, consumer, imagePromptCustomizer(textPrompt, media));
 	}
 
@@ -82,6 +79,7 @@ public class SpringChatClient implements io.github.rmcdouga.fitg.aiclient.gui.po
 						   Runnable onComplete, 
 						   Consumer<? super Throwable> onError,
 						   Consumer<? super String> consumer) {
+		if (!isSystemPromptSent.getAndSet(true)) { sendSystemPrompt(); }
 		sendPrompt(onComplete, onError, consumer, textPromptCustomizer(textPrompt));
 	}
 
@@ -100,5 +98,17 @@ public class SpringChatClient implements io.github.rmcdouga.fitg.aiclient.gui.po
                 .doOnComplete(onComplete)
                 .doOnError(onError)
                 .subscribe(consumer);
+	}
+
+	private void sendSystemPrompt() {
+		// Send system propmt to the AI to inform it of it's role and limitations.
+		log.atInfo().log("Sending system prompt");
+		
+		CallResponseSpec response = chatClient.prompt()
+				  .advisors(spec -> spec.param(ChatMemory.CONVERSATION_ID, FITG_CLIENT_CONVERSATION_ID))
+        		  .user(systemPrompt)
+        		  .call();
+		
+		log.atInfo().addArgument(()->response.content()).log("System prompt response: {}");
 	}
 }
