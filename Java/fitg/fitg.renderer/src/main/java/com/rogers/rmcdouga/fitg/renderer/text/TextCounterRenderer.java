@@ -41,7 +41,7 @@ public class TextCounterRenderer {
 	
 	private String renderUnitsMarkdown(Stream<Unit> units) {
 		return Stream.concat(
-				Stream.of(UNIT_TABLE_ROW_FORMAT.formatted("id", "name", "alias", "faction")), 
+				Stream.of(UNIT_TABLE_ROW_FORMAT.formatted("id", "name", "aliases", "faction")), 
 				units.map(this::renderUnitMarkdownRow)
 				)
 			.collect(Collectors.joining("\n", "Valid units in Freedom In The Galaxy:\n", ""));
@@ -49,6 +49,7 @@ public class TextCounterRenderer {
 	}
 	
 	private String renderUnitMarkdownRow(Unit unit) {
-		return String.format(UNIT_TABLE_ROW_FORMAT, unit.id(), unit.name().replace('_', ' '), unit.name(), unit.faction().toString());
+		var aliases = unit.name() + ", " + unit.name().replaceFirst("^([^_]*_[^_]*)_", "$1-").replace('_', ' ');
+		return String.format(UNIT_TABLE_ROW_FORMAT, unit.id(), unit.name().replace('_', ' '), aliases, unit.faction().toString());
 	}
 }

@@ -14,7 +14,7 @@ class TextCounterRendererTest {
 	@Test
 	void testRenderMarkdown() {
 		// Uncomment the following line to generate the markdown table of all characters and units in the game.
-//		IO.println(underTest.renderMarkdown());
+		IO.println(underTest.renderMarkdown());
 	}
 
 }
