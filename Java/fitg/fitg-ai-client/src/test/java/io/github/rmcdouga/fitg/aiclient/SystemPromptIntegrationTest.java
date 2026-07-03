@@ -90,7 +90,7 @@ class SystemPromptIntegrationTest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = {"Mickey Mouse", "Liquid10", "Liquid_2_0", "Liquid 2-0"})
+	@ValueSource(strings = {"Mickey Mouse", "Liquid10", "Liquid_2_0", "Liquid 2-0", "Zina Starlight", "Zina Adora 1", "Adam_Starlight_1"})
 	void testSystemPrompt_InValidCharacters(String character, FxRobot robot,
 			  @Autowired MainApplicationController mainApplicationController
 			  ) throws TimeoutException {
