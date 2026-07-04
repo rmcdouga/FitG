@@ -81,3 +81,51 @@ The following table contains units that are valid units in the game.  It has a h
 
 Any other units referenced are invalid.
 
+# Context about the Map
+
+The Map contains Star Systems.  Star Systems can be referred to by name or by 2 digit number.  Star Systems contain Planets.  Planets can be referred to by name or by 3 digit number.  Planets contain Environs.  Environs are locations.  Environs have properties: size, resources, coup, races, creatures and sometimes a sovereign.
+
+## Star System: 22 Egrix
+
+### Planet: 221 Quibron
+
+#### Environ: Wild
+
+- **Size:** 4
+- **Resources:** 6*
+- **Coup:** -
+- **Races:** [Saurian*]
+- **Creature:** Snow Giants
+- **Sovereign:** -
+
+### Planet: 222 Angoff
+
+#### Environ: Urban
+
+- **Size:** 6
+- **Resources:** 9*
+- **Coup:** 3
+- **Races:** [Yester*]
+- **Creature:** Laboroid
+- **Sovereign:** -
+
+### Planet: 223 Charkhan
+
+#### Environ: Air
+
+- **Size:** 5
+- **Resources:** 7*
+- **Coup:** -
+- **Races:** [Yester*]
+- **Creature:** Drants
+- **Sovereign:** -
+
+#### Environ: Wild
+
+- **Size:** 3
+- **Resources:** 5*
+- **Coup:** -
+- **Races:** [Charkhan]
+- **Creature:** -
+- **Sovereign:** Megda Sheels
+
