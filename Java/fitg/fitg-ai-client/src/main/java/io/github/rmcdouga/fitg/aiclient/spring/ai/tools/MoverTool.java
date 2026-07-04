@@ -11,7 +11,7 @@ public class MoverTool implements Mover, SpringAiTool {
 		this.mover = mover;
 	}
 
-	@Tool(description = "Move a non-unique unit from one location to another")
+	@Tool(description = "Move a non-unique unit from one location to another.  Use this for military units.")
 	@Override
 	public Mover moveUnitCounter(String unitType, String currentStarOrPlanetId, String currentLocation,
 			String destinationStarOrPlanetId, String destinationLocation) {
@@ -20,7 +20,7 @@ public class MoverTool implements Mover, SpringAiTool {
 		return this;
 	}
 
-	@Tool(description = "Move a unique unit from one location to another")
+	@Tool(description = "Move a unique unit from one location to another.  Use this for characters or ships.")
 	@Override
 	public Mover moveCounter(String counterId, String destinationStarOrPlanetId, String destinationLocation) {
 		mover.moveCounter(counterId, destinationStarOrPlanetId, destinationLocation);

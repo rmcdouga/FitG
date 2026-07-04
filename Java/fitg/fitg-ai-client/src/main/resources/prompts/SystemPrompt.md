@@ -41,9 +41,9 @@ The following table contains characters that are valid characters in the game.  
 | elstaroff | Els Taroff | Els_Taroff | IMPERIAL |
 | emperorcoreguya | Emperor Coreguya | Emperor_Coreguya | IMPERIAL |
 
-Any other characters referenced are invalid.
+Any other characters referenced are invalid.  Each character is a unique unit or counter.
 
-The following table contains units that are valid units in the game.  It has a header row that describes each column in the row:
+The following table contains military units that are valid non-unique units/counter in the game.  It has a header row that describes each column in the row:
 
 | id | name | aliases | faction |
 | air10 | Air 1 0 | Air_1_0, Air 1-0 | REBEL |

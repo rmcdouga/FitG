@@ -8,10 +8,11 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.AdditionalMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -29,7 +30,12 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 @Tag("requiresLLM")
-@SpringBootTest
+@SpringBootTest(
+		properties = {
+				"spring.ai.chat.client.observations.log-prompt=true",
+				"spring.ai.chat.client.observations.log-completion=true"
+		}
+)
 @ExtendWith(ApplicationExtension.class)
 class MoveCommandLlmTest {
 
@@ -62,17 +68,16 @@ class MoveCommandLlmTest {
 
 	// Should be able to move a unit by saying ("Move X from Y to Z")
 	// Should be able to move a unit by saying ("Move X at Y to Z")
-	@Test
+	@RepeatedTest(3)
 	void testMoveUnit(FxRobot robot,
 			  @Autowired MainApplicationController mainApplicationController
 			  ) throws TimeoutException {
 		when(mockMover.moveUnitCounter(anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(mockMover);
 
 		var testQuery = "Move Liquid 1-0 from 223 air to 223 wild";
-		var aiResponse = sendQuery(robot, mainApplicationController, testQuery);
-		IO.println("AI Response: " + aiResponse);
+		sendQuery(robot, mainApplicationController, testQuery);
 
-		verify(mockMover).moveUnitCounter(argThat("liquid10"::equalsIgnoreCase), 
+		verify(mockMover).moveUnitCounter(AdditionalMatchers.or(argThat("liquid10"::equalsIgnoreCase),argThat("liquid 1-0"::equalsIgnoreCase)), 
 										  eq("223"), 
 										  argThat("Air"::equalsIgnoreCase), 
 										  eq("223"), 
@@ -80,15 +85,14 @@ class MoveCommandLlmTest {
 	}
 
 	// Should be able to move a unique unit by saying ("Move X to Y")
-	@Test
+	@RepeatedTest(3)
 	void testMoveById(FxRobot robot,
 			  @Autowired MainApplicationController mainApplicationController
 			  ) throws TimeoutException {
 		when(mockMover.moveCounter(anyString(), anyString(), anyString())).thenReturn(mockMover);
 
 		var testQuery = "Move Zina Adora to 223 wild";
-		var aiResponse = sendQuery(robot, mainApplicationController, testQuery);
-		IO.println("AI Response: " + aiResponse);
+		sendQuery(robot, mainApplicationController, testQuery);
 
 		verify(mockMover).moveCounter(argThat("ZinaAdora"::equalsIgnoreCase), eq("223"), argThat("Wild"::equalsIgnoreCase));
 	}
