@@ -81,6 +81,9 @@ The following table contains military units that are valid non-unique units/coun
 
 Any other units referenced are invalid.
 
+Multiple counters may be grouped into stacks.  A stack of may contain multiple military units and/or characters.
+Stacks may be moved using a single command that references a counter in the stack. 
+
 # Context about the Map
 
 The Map contains Star Systems.  Star Systems can be referred to by name or by 2 digit number.  Star Systems contain Planets.  Planets can be referred to by name or by 3 digit number.  Planets contain Environs.  Environs are locations.  Environs have properties: size, resources, coup, races, creatures and sometimes a sovereign.

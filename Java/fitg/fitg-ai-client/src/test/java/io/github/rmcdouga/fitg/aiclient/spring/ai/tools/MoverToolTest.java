@@ -1,7 +1,10 @@
-package io.github.rmcdouga.fitg.aiclient;
+package io.github.rmcdouga.fitg.aiclient.spring.ai.tools;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
@@ -23,6 +26,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import com.rogers.rmcdouga.fitg.basegame.command.api.external.Mover;
 
+import io.github.rmcdouga.fitg.aiclient.FxmlLoader;
 import io.github.rmcdouga.fitg.aiclient.gui.MainApplicationController;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -37,7 +41,7 @@ import javafx.stage.Stage;
 		}
 )
 @ExtendWith(ApplicationExtension.class)
-class MoveCommandLlmTest {
+class MoverToolTest {
 
 	@Autowired
 	FxmlLoader fxmlLoader;
@@ -69,7 +73,7 @@ class MoveCommandLlmTest {
 	// Should be able to move a unit by saying ("Move X from Y to Z")
 	// Should be able to move a unit by saying ("Move X at Y to Z")
 	@RepeatedTest(3)
-	void testMoveUnit(FxRobot robot,
+	void testMoveUnitCounter(FxRobot robot,
 			  @Autowired MainApplicationController mainApplicationController
 			  ) throws TimeoutException {
 		when(mockMover.moveUnitCounter(anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(mockMover);
@@ -82,11 +86,13 @@ class MoveCommandLlmTest {
 										  argThat("Air"::equalsIgnoreCase), 
 										  eq("223"), 
 										  argThat("Wild"::equalsIgnoreCase));
+		verifyNoMoreInteractions(mockMover);
+		reset(mockMover);
 	}
 
 	// Should be able to move a unique unit by saying ("Move X to Y")
 	@RepeatedTest(3)
-	void testMoveById(FxRobot robot,
+	void testMoveCounter(FxRobot robot,
 			  @Autowired MainApplicationController mainApplicationController
 			  ) throws TimeoutException {
 		when(mockMover.moveCounter(anyString(), anyString(), anyString())).thenReturn(mockMover);
@@ -95,15 +101,39 @@ class MoveCommandLlmTest {
 		sendQuery(robot, mainApplicationController, testQuery);
 
 		verify(mockMover).moveCounter(argThat("ZinaAdora"::equalsIgnoreCase), eq("223"), argThat("Wild"::equalsIgnoreCase));
+		verifyNoMoreInteractions(mockMover);
+		reset(mockMover);
 	}
 
-	// Should be able to move a stack by saying ("Move the stack containing character to Y")
-	@Disabled("Can't do this yet because the LLM doesn't know how to identify a stack containing a character")
-	@Test
-	void testStackContaining(FxRobot robot,
+	@RepeatedTest(3)
+	void testMoveStackContainingUnitCounter(FxRobot robot,
 			  @Autowired MainApplicationController mainApplicationController
 			  ) throws TimeoutException {
-		when(mockMover.moveUnitCounter(anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(mockMover);
-		fail("Not yet implemented");
+		when(mockMover.moveStackContainingUnitCounter(anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(mockMover);
+
+		var testQuery = "Move stack containing Liquid 1-0 from 223 air to 223 wild";
+		sendQuery(robot, mainApplicationController, testQuery);
+
+		verify(mockMover).moveUnitCounter(AdditionalMatchers.or(argThat("liquid10"::equalsIgnoreCase),argThat("liquid 1-0"::equalsIgnoreCase)), 
+										  eq("223"), 
+										  argThat("Air"::equalsIgnoreCase), 
+										  eq("223"), 
+										  argThat("Wild"::equalsIgnoreCase));
+		verifyNoMoreInteractions(mockMover);
+		reset(mockMover);
+	}
+
+	@RepeatedTest(3)
+	void testMoveStackContainingCounter(FxRobot robot,
+			  @Autowired MainApplicationController mainApplicationController
+			  ) throws TimeoutException {
+		when(mockMover.moveStackContainingCounter(anyString(), anyString(), anyString())).thenReturn(mockMover);
+
+		var testQuery = "Move stack with Zina Adora to 223 wild";
+		sendQuery(robot, mainApplicationController, testQuery);
+
+		verify(mockMover).moveStackContainingCounter(argThat("ZinaAdora"::equalsIgnoreCase), eq("223"), argThat("Wild"::equalsIgnoreCase));
+		verifyNoMoreInteractions(mockMover);
+		reset(mockMover);
 	}
 }
