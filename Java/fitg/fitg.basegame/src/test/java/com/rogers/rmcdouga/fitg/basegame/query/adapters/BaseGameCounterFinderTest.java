@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -103,5 +104,22 @@ class BaseGameCounterFinderTest {
 	@Test
 	void testFindStackWithCounter_NotFound() {
 		assertTrue(underTest.findStackWithCounter("Line").isEmpty());
+	}
+
+	@Disabled("TODO: Find a scenario where a non-unique unit is in a stack after setup and test that it is found.")
+	@Test
+	void testFindStackWithCounter_NonUniqueUnit() {
+		//TODO: FInd a scenario where a non-unique unit is in a stack and test that it is found.
+//		Counter foundStack = underTest.findStackWithCounter("Jon Kidu", "Charkhan", "Air").orElseThrow();
+//		if (foundStack instanceof Stack stack) {
+//			assertTrue(stack.contains(BaseGameCharacter.Jon_Kidu));
+//		} else {
+//			fail("Expected to find Jon Kidu in a stack");
+//		}
+	}
+	
+	@Test
+	void testFindStackWithCounter_NonUniqueUnit_NotFound() {
+		assertTrue(underTest.findStackWithCounter("Line", "Charkhan", "Air").isEmpty());
 	}
 }

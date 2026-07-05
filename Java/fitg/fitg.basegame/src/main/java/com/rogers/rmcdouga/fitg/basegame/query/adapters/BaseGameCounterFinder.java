@@ -1,6 +1,5 @@
 package com.rogers.rmcdouga.fitg.basegame.query.adapters;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,6 +34,16 @@ public class BaseGameCounterFinder implements CounterFinder {
 		return internalFindCounter(unitId, null, null);
 	}
 
+	@Override
+	public Optional<Counter> findStackWithCounter(String unitId) {
+		return findCounter(unitId).flatMap(game::stackContaining);
+	}
+
+	@Override
+	public Optional<Counter> findStackWithCounter(String unitId, String starOrPlanetId, String location) {
+		return findCounter(unitId, starOrPlanetId, location).flatMap(game::stackContaining);
+	}
+
 	// Internal method allows null location
 	private Optional<Counter> internalFindCounter(String unitId, /* Nullable */ String starOrPlanetId, /* Nullable */String locationStr) {
 		Counter counterType = findCounterType(unitId).orElseThrow(() -> new IllegalArgumentException("Unknown unit type: " + unitId));
@@ -42,7 +51,7 @@ public class BaseGameCounterFinder implements CounterFinder {
 		if (isUniqueCounterType(counterType)) {
 			// Unique counter types are not location dependent however we must ensure they have been placed on the map.
 			// If they have no location, return an empty Optional.
-			return game.locationOf(counterType).map(__->counterType);
+			return game.locationOf(counterType).map(_->counterType);
 		}
 		
 		// See if there's only one instance of this counter type in the game.  If so, return it without requiring a location.
@@ -77,7 +86,7 @@ public class BaseGameCounterFinder implements CounterFinder {
 	private static boolean isUniqueCounterType(Counter counterType) {
 		// Characters and some spaceships are unique types.
 		return switch (counterType) {
-			case BaseGameCharacter bc -> true;
+			case BaseGameCharacter _ -> true;
 			case BaseGameImperialSpaceship bs -> bs == BaseGameImperialSpaceship.Redjacs_Spaceship;
 			default -> false;
 		};
@@ -114,10 +123,5 @@ public class BaseGameCounterFinder implements CounterFinder {
 
 	private static Stream<Counter> rebelMilitaryUnitStream() {
 		return RebelMilitaryUnit.stream().map(Counter.class::cast);
-	}
-
-	@Override
-	public Optional<Counter> findStackWithCounter(String unitId) {
-		return findCounter(unitId).flatMap(game::stackContaining);
 	}
 }

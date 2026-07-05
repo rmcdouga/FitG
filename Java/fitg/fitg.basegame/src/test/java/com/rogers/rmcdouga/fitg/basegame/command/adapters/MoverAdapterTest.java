@@ -130,6 +130,56 @@ class MoverAdapterTest {
         verify(userCommandProcessing, never()).processCommand(org.mockito.ArgumentMatchers.any(Command.class));
     }
 
+    @Test
+    void moveStackContainingUnitCounterWhenStackIsFoundSendsStackMoveCommand() {
+        when(counterFinder.findStackWithCounter("Militia", "Rigel", "Surface")).thenReturn(Optional.of(stack));
+        when(locationFinder.findLocation("Sirius", "Drift")).thenReturn(destination);
+
+        var returnedMover = underTest.moveStackContainingUnitCounter("Militia", "Rigel", "Surface", "Sirius", "Drift");
+
+        assertSame(underTest, returnedMover);
+        var command = captureMoveCommand();
+        var stackMove = assertInstanceOf(MoveCommand.StackMove.class, command);
+        assertSame(stack, stackMove.stack());
+        assertSame(destination, stackMove.destination());
+    }
+
+    @Test
+    void moveStackContainingUnitCounterWhenStackIsNotFoundDoesNotProcessCommand() {
+        when(counterFinder.findStackWithCounter("Militia", "Rigel", "Surface")).thenReturn(Optional.empty());
+
+        var returnedMover = underTest.moveStackContainingUnitCounter("Militia", "Rigel", "Surface", "Sirius", "Drift");
+
+        assertSame(underTest, returnedMover);
+        verify(locationFinder, never()).findLocation("Sirius", "Drift");
+        verify(userCommandProcessing, never()).processCommand(org.mockito.ArgumentMatchers.any(Command.class));
+    }
+
+    @Test
+    void moveStackContainingCounterWhenStackIsFoundSendsStackMoveCommand() {
+        when(counterFinder.findStackWithCounter("unit-1")).thenReturn(Optional.of(stack));
+        when(locationFinder.findLocation("Sirius", "Drift")).thenReturn(destination);
+
+        var returnedMover = underTest.moveStackContainingCounter("unit-1", "Sirius", "Drift");
+
+        assertSame(underTest, returnedMover);
+        var command = captureMoveCommand();
+        var stackMove = assertInstanceOf(MoveCommand.StackMove.class, command);
+        assertSame(stack, stackMove.stack());
+        assertSame(destination, stackMove.destination());
+    }
+
+    @Test
+    void moveStackContainingCounterWhenStackIsNotFoundDoesNotProcessCommand() {
+        when(counterFinder.findStackWithCounter("missing-counter")).thenReturn(Optional.empty());
+
+        var returnedMover = underTest.moveStackContainingCounter("missing-counter", "Sirius", "Drift");
+
+        assertSame(underTest, returnedMover);
+        verify(locationFinder, never()).findLocation("Sirius", "Drift");
+        verify(userCommandProcessing, never()).processCommand(org.mockito.ArgumentMatchers.any(Command.class));
+    }
+
     private MoveCommand captureMoveCommand() {
         verify(userCommandProcessing).processCommand(commandCaptor.capture());
         return assertInstanceOf(MoveCommand.class, commandCaptor.getValue());

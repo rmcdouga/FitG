@@ -72,4 +72,20 @@ public class MoverAdapter implements Mover {
 		userCommandProcessing.processCommand(new MoveCommand.CharacterMove(character , location));
 	}
 
+	@Override
+	public Mover moveStackContainingUnitCounter(String unitType, String currentStarOrPlanetId, String currentLocation,
+			String destinationStarOrPlanetId, String destinationLocation) {
+		counterFinder.findStackWithCounter(unitType, currentStarOrPlanetId, currentLocation)
+					 .ifPresent(stack -> moveCounter(stack, locationFinder.findLocation(destinationStarOrPlanetId, destinationLocation)));
+		return this;
+	}
+
+	@Override
+	public Mover moveStackContainingCounter(String counterId, String destinationStarOrPlanetId,
+			String destinationLocation) {
+		counterFinder.findStackWithCounter(counterId)
+					 .ifPresent(stack -> moveCounter(stack, locationFinder.findLocation(destinationStarOrPlanetId, destinationLocation)));
+		return this;
+	}
+
 }
