@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.chat.client.ChatClientBuilderCustomizer;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -56,5 +58,10 @@ public class FitGClientSpringApplication {
     @Bean
     static Collection<SpringAiTool> springAiTools(Mover mover) {
 		return List.of(new MoverTool(mover));
+	}
+    
+    @Bean
+	ChatClientBuilderCustomizer loggingCustomizer() {
+		return builder -> builder.defaultAdvisors(SimpleLoggerAdvisor.builder().build());
 	}
 }
