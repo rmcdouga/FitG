@@ -12,10 +12,13 @@ import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.AdditionalMatchers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -37,11 +40,13 @@ import javafx.stage.Stage;
 @SpringBootTest(
 		properties = {
 				"spring.ai.chat.client.observations.log-prompt=true",
-				"spring.ai.chat.client.observations.log-completion=true"
+				"spring.ai.chat.client.observations.log-completion=true",
+				"logging.level.io.github.rmcdouga.fitg.aiclient.spring.ai.tools.MoverToolTest=debug"
 		}
 )
 @ExtendWith(ApplicationExtension.class)
 class MoverToolTest {
+    private final Logger log = LoggerFactory.getLogger(MoverToolTest.class);
 
 	@Autowired
 	FxmlLoader fxmlLoader;
@@ -73,9 +78,13 @@ class MoverToolTest {
 	// Should be able to move a unit by saying ("Move X from Y to Z")
 	// Should be able to move a unit by saying ("Move X at Y to Z")
 	@RepeatedTest(3)
-	void testMoveUnitCounter(FxRobot robot,
-			  @Autowired MainApplicationController mainApplicationController
-			  ) throws TimeoutException {
+	void testMoveUnitCounter(RepetitionInfo repetitionInfo,
+							 FxRobot robot,
+							 @Autowired MainApplicationController mainApplicationController
+			  				) throws TimeoutException {
+		log.atInfo().addArgument(repetitionInfo::getCurrentRepetition)
+					.addArgument(repetitionInfo::getTotalRepetitions)
+					.log("Running testMoveUnitCounter repetition {} of {}");
 		when(mockMover.moveUnitCounter(anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(mockMover);
 
 		var testQuery = "Move Liquid 1-0 from 223 air to 223 wild";
@@ -92,9 +101,13 @@ class MoverToolTest {
 
 	// Should be able to move a unique unit by saying ("Move X to Y")
 	@RepeatedTest(3)
-	void testMoveCounter(FxRobot robot,
-			  @Autowired MainApplicationController mainApplicationController
-			  ) throws TimeoutException {
+	void testMoveCounter(RepetitionInfo repetitionInfo,
+						 FxRobot robot,
+						 @Autowired MainApplicationController mainApplicationController
+			  			) throws TimeoutException {
+		log.atInfo().addArgument(repetitionInfo::getCurrentRepetition)
+					.addArgument(repetitionInfo::getTotalRepetitions)
+					.log("Running testMoveCounter repetition {} of {}");
 		when(mockMover.moveCounter(anyString(), anyString(), anyString())).thenReturn(mockMover);
 
 		var testQuery = "Move Zina Adora to 223 wild";
@@ -106,9 +119,13 @@ class MoverToolTest {
 	}
 
 	@RepeatedTest(3)
-	void testMoveStackContainingUnitCounter(FxRobot robot,
-			  @Autowired MainApplicationController mainApplicationController
-			  ) throws TimeoutException {
+	void testMoveStackContainingUnitCounter(RepetitionInfo repetitionInfo,
+											FxRobot robot,
+											@Autowired MainApplicationController mainApplicationController
+											) throws TimeoutException {
+		log.atInfo().addArgument(repetitionInfo::getCurrentRepetition)
+					.addArgument(repetitionInfo::getTotalRepetitions)
+					.log("Running testMoveStackContainingUnitCounter repetition {} of {}");
 		when(mockMover.moveStackContainingUnitCounter(anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(mockMover);
 
 		var testQuery = "Move stack containing Liquid 1-0 from 223 air to 223 wild";
@@ -124,9 +141,13 @@ class MoverToolTest {
 	}
 
 	@RepeatedTest(3)
-	void testMoveStackContainingCounter(FxRobot robot,
-			  @Autowired MainApplicationController mainApplicationController
-			  ) throws TimeoutException {
+	void testMoveStackContainingCounter(RepetitionInfo repetitionInfo,
+										FxRobot robot,
+										@Autowired MainApplicationController mainApplicationController
+			  							) throws TimeoutException {
+		log.atInfo().addArgument(repetitionInfo::getCurrentRepetition)
+					.addArgument(repetitionInfo::getTotalRepetitions)
+					.log("Running testMoveStackContainingCounter repetition {} of {}");
 		when(mockMover.moveStackContainingCounter(anyString(), anyString(), anyString())).thenReturn(mockMover);
 
 		var testQuery = "Move stack with Zina Adora to 223 wild";
