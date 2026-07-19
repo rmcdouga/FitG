@@ -131,7 +131,7 @@ class MoverToolTest {
 		var testQuery = "Move stack containing Liquid 1-0 from 223 air to 223 wild";
 		sendQuery(robot, mainApplicationController, testQuery);
 
-		verify(mockMover).moveUnitCounter(AdditionalMatchers.or(argThat("liquid10"::equalsIgnoreCase),argThat("liquid 1-0"::equalsIgnoreCase)), 
+		verify(mockMover).moveStackContainingUnitCounter(AdditionalMatchers.or(argThat("liquid10"::equalsIgnoreCase),argThat("liquid 1-0"::equalsIgnoreCase)), 
 										  eq("223"), 
 										  argThat("Air"::equalsIgnoreCase), 
 										  eq("223"), 
