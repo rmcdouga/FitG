@@ -4,21 +4,15 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
 import org.springframework.ai.chat.client.ChatClient.PromptUserSpec;
-import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository;
-import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.content.Media;
 import org.springframework.core.io.InputStreamResource;
@@ -37,30 +31,20 @@ public class SpringChatClient implements io.github.rmcdouga.fitg.aiclient.gui.po
 
     private final ChatClient chatClient;
     private final Collection<SpringAiTool> springAiTools;
-    private final AtomicBoolean isSystemPromptSent = new AtomicBoolean(false);
-    private final String systemPrompt;
     
-	private SpringChatClient(ChatClient chatClient, Collection<SpringAiTool> springAiTools, String systemPrompt) {
+	private SpringChatClient(ChatClient chatClient, Collection<SpringAiTool> springAiTools) {
 		this.chatClient = chatClient;
 		this.springAiTools = springAiTools;
-		this.systemPrompt = systemPrompt;
 	}
 
 	public static SpringChatClient from(ChatClient.Builder chatClientBuilder, Resource systemPromptResource, Collection<SpringAiTool> springAiTools) throws IOException {
-		// Define a in-memory store with a message window of 100 messages.
-		var messageWindowChatMemory = MessageWindowChatMemory.builder()
-															 .chatMemoryRepository(new InMemoryChatMemoryRepository())
-															 .maxMessages(100) // Keep the last 10 messages in memory
-															 .build();
 
 		// Attach it as a default advisor when building the ChatClient
-		ChatClient chatClient = chatClientBuilder.defaultAdvisors(MessageChatMemoryAdvisor.builder(messageWindowChatMemory).build())
+		ChatClient chatClient = chatClientBuilder.defaultSystem(systemPromptResource)
 												 .build();
-		// Read the system prompt from the resource
-		String systemPrompt = systemPromptResource.getContentAsString(StandardCharsets.UTF_8);
 
 		// create a chat client that wraps the Spring ChatClient and the Spring AI tools.
-		return new SpringChatClient(chatClient, springAiTools, systemPrompt);
+		return new SpringChatClient(chatClient, springAiTools);
 	}
 
 	@Override
@@ -69,7 +53,6 @@ public class SpringChatClient implements io.github.rmcdouga.fitg.aiclient.gui.po
 						   Runnable onComplete,
 						   Consumer<? super Throwable> onError, 
 						   Consumer<? super String> consumer) {
-		if (!isSystemPromptSent.getAndSet(true)) { sendSystemPrompt(); }
 		sendPrompt(onComplete, onError, consumer, imagePromptCustomizer(textPrompt, media));
 	}
 
@@ -85,7 +68,6 @@ public class SpringChatClient implements io.github.rmcdouga.fitg.aiclient.gui.po
 						   Runnable onComplete, 
 						   Consumer<? super Throwable> onError,
 						   Consumer<? super String> consumer) {
-		if (!isSystemPromptSent.getAndSet(true)) { sendSystemPrompt(); }
 		sendPrompt(onComplete, onError, consumer, textPromptCustomizer(textPrompt));
 	}
 
@@ -110,18 +92,6 @@ public class SpringChatClient implements io.github.rmcdouga.fitg.aiclient.gui.po
                 .subscribe(chatLogger.consumer(consumer));
 	}
 
-	private void sendSystemPrompt() {
-		// Send system propmt to the AI to inform it of it's role and limitations.
-		log.atInfo().log("Sending system prompt");
-		
-		CallResponseSpec response = chatClient.prompt()
-        		  .advisors(spec -> spec.param(ChatMemory.CONVERSATION_ID, FITG_CLIENT_CONVERSATION_ID))
-        		  .user(systemPrompt)
-        		  .call();
-		
-		log.atInfo().addArgument(()->response.content()).log("System prompt response: {}");
-	}
-	
 	private static class ChatLogger {
 		private final Logger log;
 		private final StringBuilder sb = new StringBuilder();
