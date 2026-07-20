@@ -1,5 +1,6 @@
 package com.rogers.rmcdouga.fitg.renderer.text;
 
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -14,44 +15,77 @@ import com.rogers.rmcdouga.fitg.basegame.units.Unit;
  * the characters in the game for inclusion in the LLM prompt.
  */
 public class TextCounterRenderer {
-	
-	private record CharacterRow(String id, String name, String alias, String faction) {
-		private static final String CHARACTER_TABLE_ROW_FORMAT = "| %s | %s | %s | %s |";
 
-		private CharacterRow(Character character) {
-			this(character.id(), 
-				 character.name().replace('_', ' '), 
-				 character.name(), 
-				 character.allegience().toString()
-				 );
+	// Represents a field in a table, with a name and a function to extract the value from an object of type T.
+	private static record TableField<T>(String name, java.util.function.Function<T, String> valueExtractor) {
+		private String toMarkdownHeader() {
+			return name;
 		}
 		
-		private String toCharacterMarkdownRow() {
-			return String.format(CHARACTER_TABLE_ROW_FORMAT, id, name, alias, faction);
+		private String toMarkdownRow(T object) {
+			return valueExtractor.apply(object);
 		}
 		
-		private static String toCharacterMarkdownHeader() {
-			return String.format(CHARACTER_TABLE_ROW_FORMAT, "id", "name", "alias", "faction");
+		private static <T> TableField<T> of(String name, java.util.function.Function<T, String> valueExtractor) {
+			return new TableField<>(name, valueExtractor);
+		}
+		
+		private static <T> String toMarkdownHeader(List<TableField<T>> fields) {
+			return fields.stream()
+						 .map(TableField::toMarkdownHeader)
+						 .collect(Collectors.joining(" | ", "| ", " |"));
+		}
+
+		private static <T> String toMarkdownRow(List<TableField<T>> fields, T object) {
+			return fields.stream()
+						 .map(field -> field.toMarkdownRow(object))
+						 .collect(Collectors.joining(" | ", "| ", " |"));
 		}
 	}
 
-	private record UnitRow(String id, String name, String aliases, String faction) {
-		private static final String UNIT_TABLE_ROW_FORMAT = "| %s | %s | %s | %s |";
+	private static class CharacterRow {
+		// Prevent instantiation of this class, since it is just a utility class for rendering characters as markdown rows.
+		private CharacterRow() {
+			throw new UnsupportedOperationException("CharacterRow is a utility class and cannot be instantiated.");
+		}
 
-		private UnitRow(Unit unit) {
-			this(unit.id(), 
-				 unit.name().replace('_', ' '), 
-				 unit.name() + ", " + unit.name().replaceFirst("^([^_]*_[^_]*)_", "$1-").replace('_', ' '), 
-				 unit.faction().toString()
-				 );
+		private static final List<TableField<Character>> CHARACTER_TABLE_FIELDS = List.of(
+				TableField.of("id", Character::id),
+				TableField.of("name", c->c.name().replace('_', ' ')),
+				TableField.of("alias", Character::name),
+				TableField.of("faction", c->c.allegience().toString())
+				);
+		private static final String CHARACTER_TABLE_HEADER_STR = TableField.toMarkdownHeader(CHARACTER_TABLE_FIELDS);
+
+		private static String toCharacterMarkdownRow(Character character) {
+			return TableField.toMarkdownRow(CHARACTER_TABLE_FIELDS, character);
 		}
 		
-		private String toUnitMarkdownRow() {
-			return String.format(UNIT_TABLE_ROW_FORMAT, id, name, aliases, faction);
+		private static String toCharacterMarkdownHeader() {
+			return CHARACTER_TABLE_HEADER_STR;
+		}
+	}
+
+	private static class UnitRow {
+		// Prevent instantiation of this class, since it is just a utility class for rendering units as markdown rows.
+		private UnitRow() {
+			throw new UnsupportedOperationException("UnitRow is a utility class and cannot be instantiated.");
+		}
+
+		private static final List<TableField<Unit>> UNIT_TABLE_FIELDS = List.of(
+				TableField.of("id", Unit::id),
+				TableField.of("name", u->u.name().replace('_', ' ')),
+				TableField.of("aliases", u->u.name() + ", " + u.name().replaceFirst("^([^_]*_[^_]*)_", "$1-").replace('_', ' ')),
+				TableField.of("faction", u->u.faction().toString())
+				);
+		private static final String UNIT_TABLE_HEADER_STR = TableField.toMarkdownHeader(UNIT_TABLE_FIELDS);
+		
+		private static String toUnitMarkdownRow(Unit unit) {
+			return TableField.toMarkdownRow(UNIT_TABLE_FIELDS, unit);
 		}
 		
 		private static String toUnitMarkdownHeader() {
-			return String.format(UNIT_TABLE_ROW_FORMAT, "id", "name", "aliases", "faction");
+			return UNIT_TABLE_HEADER_STR;
 		}
 	}
 	
@@ -67,7 +101,7 @@ public class TextCounterRenderer {
 	private String renderCharactersMarkdown(Stream<Character> characters) {
 		return Stream.concat(
 						Stream.of(CharacterRow.toCharacterMarkdownHeader()), 
-						characters.map(character->new CharacterRow(character).toCharacterMarkdownRow())
+						characters.map(CharacterRow::toCharacterMarkdownRow)
 						)
 					.collect(Collectors.joining("\n", "Valid characters in Freedom In The Galaxy:\n", ""));
 	}
@@ -75,9 +109,8 @@ public class TextCounterRenderer {
 	private String renderUnitsMarkdown(Stream<Unit> units) {
 		return Stream.concat(
 				Stream.of(UnitRow.toUnitMarkdownHeader()), 
-				units.map(unit->new UnitRow(unit).toUnitMarkdownRow())
+				units.map(UnitRow::toUnitMarkdownRow)
 				)
 			.collect(Collectors.joining("\n", "Valid units in Freedom In The Galaxy:\n", ""));
-		
 	}
 }
