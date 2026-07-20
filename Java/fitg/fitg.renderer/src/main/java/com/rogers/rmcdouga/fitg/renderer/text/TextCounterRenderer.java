@@ -67,26 +67,17 @@ public class TextCounterRenderer {
 	private String renderCharactersMarkdown(Stream<Character> characters) {
 		return Stream.concat(
 						Stream.of(CharacterRow.toCharacterMarkdownHeader()), 
-						characters.map(this::renderCharacterMarkdownRow)
+						characters.map(character->new CharacterRow(character).toCharacterMarkdownRow())
 						)
 					.collect(Collectors.joining("\n", "Valid characters in Freedom In The Galaxy:\n", ""));
 	}
 	
-	private String renderCharacterMarkdownRow(Character character) {
-		return new CharacterRow(character).toCharacterMarkdownRow();
-	}
-
-	
 	private String renderUnitsMarkdown(Stream<Unit> units) {
 		return Stream.concat(
 				Stream.of(UnitRow.toUnitMarkdownHeader()), 
-				units.map(this::renderUnitMarkdownRow)
+				units.map(unit->new UnitRow(unit).toUnitMarkdownRow())
 				)
 			.collect(Collectors.joining("\n", "Valid units in Freedom In The Galaxy:\n", ""));
 		
-	}
-	
-	private String renderUnitMarkdownRow(Unit unit) {
-		return new UnitRow(unit).toUnitMarkdownRow();
 	}
 }
