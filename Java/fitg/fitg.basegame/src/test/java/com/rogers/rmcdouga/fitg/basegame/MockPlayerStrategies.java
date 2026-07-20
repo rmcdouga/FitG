@@ -2,10 +2,13 @@ package com.rogers.rmcdouga.fitg.basegame;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.rogers.rmcdouga.fitg.basegame.command.api.internal.Command.MoveCommand;
 import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
+import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 import com.rogers.rmcdouga.fitg.basegame.map.StarSystem;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameImperialSpaceship;
@@ -28,6 +31,17 @@ public class MockPlayerStrategies {
 			@Override
 			public Collection<PlaceCountersInstruction> placeCounters(Collection<Counter> counters, StackManager stackMgr) {
 				throw new UnsupportedOperationException("Place Counters should not be called for Rebel Player in Flight To Egrix"); 
+			}
+
+			@Override
+			public Collection<MoveCommand> movementSegment() {
+				throw new UnsupportedOperationException("Not implemented yet"); 
+			}
+
+			@Override
+			public Optional<MoveCommand> reactionMove(Environ environ) {
+				throw new UnsupportedOperationException("Not implemented yet"); 
+//				return Optional.empty();
 			}
 			
 		}
@@ -56,6 +70,17 @@ public class MockPlayerStrategies {
 				Stack unitStack = stackMgr.of(units);
 				
 				return List.of(new PlaceCountersInstruction(spaceshipStack, BaseGamePlanet.Quibron.environ(0)), new PlaceCountersInstruction(unitStack, BaseGamePlanet.Quibron.environ(0)));
+			}
+
+			@Override
+			public Collection<MoveCommand> movementSegment() {
+				throw new UnsupportedOperationException("Not implemented yet"); 
+			}
+
+			@Override
+			public Optional<MoveCommand> reactionMove(Environ environ) {
+				throw new UnsupportedOperationException("Not implemented yet"); 
+//				return Optional.empty();
 			}
 			
 		}

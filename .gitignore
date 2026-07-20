@@ -101,3 +101,19 @@ dependency-reduced-pom.xml
 .recommenders
 .classpath
 .project
+
+# Python specific files
+main.py
+pyproject.toml
+.python-version
+
+# Python uv environment
+venv/
+
+# Graphiphy
+.graphify/
+graphify-out/
+
+# AI Agent files
+.codex/
+.opencode/

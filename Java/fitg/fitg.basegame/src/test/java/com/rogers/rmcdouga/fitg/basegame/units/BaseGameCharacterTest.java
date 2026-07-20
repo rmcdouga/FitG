@@ -140,6 +140,11 @@ class BaseGameCharacterTest {
 			public String id() {
 				return null;
 			}
+
+			@Override
+			public String name() {
+				return null;
+			}
 		}));
 		
 		String msg = ex.getMessage();
