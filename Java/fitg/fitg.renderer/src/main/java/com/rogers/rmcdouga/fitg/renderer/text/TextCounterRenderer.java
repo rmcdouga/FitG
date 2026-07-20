@@ -14,8 +14,46 @@ import com.rogers.rmcdouga.fitg.basegame.units.Unit;
  * the characters in the game for inclusion in the LLM prompt.
  */
 public class TextCounterRenderer {
-	private static final String CHARACTER_TABLE_ROW_FORMAT = "| %s | %s | %s | %s |";
-	private static final String UNIT_TABLE_ROW_FORMAT = "| %s | %s | %s | %s |";
+	
+	private record CharacterRow(String id, String name, String alias, String faction) {
+		private static final String CHARACTER_TABLE_ROW_FORMAT = "| %s | %s | %s | %s |";
+
+		private CharacterRow(Character character) {
+			this(character.id(), 
+				 character.name().replace('_', ' '), 
+				 character.name(), 
+				 character.allegience().toString()
+				 );
+		}
+		
+		private String toCharacterMarkdownRow() {
+			return String.format(CHARACTER_TABLE_ROW_FORMAT, id, name, alias, faction);
+		}
+		
+		private static String toCharacterMarkdownHeader() {
+			return String.format(CHARACTER_TABLE_ROW_FORMAT, "id", "name", "alias", "faction");
+		}
+	}
+
+	private record UnitRow(String id, String name, String aliases, String faction) {
+		private static final String UNIT_TABLE_ROW_FORMAT = "| %s | %s | %s | %s |";
+
+		private UnitRow(Unit unit) {
+			this(unit.id(), 
+				 unit.name().replace('_', ' '), 
+				 unit.name() + ", " + unit.name().replaceFirst("^([^_]*_[^_]*)_", "$1-").replace('_', ' '), 
+				 unit.faction().toString()
+				 );
+		}
+		
+		private String toUnitMarkdownRow() {
+			return String.format(UNIT_TABLE_ROW_FORMAT, id, name, aliases, faction);
+		}
+		
+		private static String toUnitMarkdownHeader() {
+			return String.format(UNIT_TABLE_ROW_FORMAT, "id", "name", "aliases", "faction");
+		}
+	}
 	
 	public String renderMarkdown() {
 		return renderCharactersMarkdown(BaseGameCharacter.stream().map(Character.class::cast))
@@ -28,20 +66,20 @@ public class TextCounterRenderer {
 
 	private String renderCharactersMarkdown(Stream<Character> characters) {
 		return Stream.concat(
-						Stream.of(CHARACTER_TABLE_ROW_FORMAT.formatted("id", "name", "alias", "faction")), 
+						Stream.of(CharacterRow.toCharacterMarkdownHeader()), 
 						characters.map(this::renderCharacterMarkdownRow)
 						)
 					.collect(Collectors.joining("\n", "Valid characters in Freedom In The Galaxy:\n", ""));
 	}
 	
 	private String renderCharacterMarkdownRow(Character character) {
-		return String.format(CHARACTER_TABLE_ROW_FORMAT, character.id(), character.name().replace('_', ' '), character.name(), character.allegience().toString());
+		return new CharacterRow(character).toCharacterMarkdownRow();
 	}
 
 	
 	private String renderUnitsMarkdown(Stream<Unit> units) {
 		return Stream.concat(
-				Stream.of(UNIT_TABLE_ROW_FORMAT.formatted("id", "name", "aliases", "faction")), 
+				Stream.of(UnitRow.toUnitMarkdownHeader()), 
 				units.map(this::renderUnitMarkdownRow)
 				)
 			.collect(Collectors.joining("\n", "Valid units in Freedom In The Galaxy:\n", ""));
@@ -49,7 +87,6 @@ public class TextCounterRenderer {
 	}
 	
 	private String renderUnitMarkdownRow(Unit unit) {
-		var aliases = unit.name() + ", " + unit.name().replaceFirst("^([^_]*_[^_]*)_", "$1-").replace('_', ' ');
-		return String.format(UNIT_TABLE_ROW_FORMAT, unit.id(), unit.name().replace('_', ' '), aliases, unit.faction().toString());
+		return new UnitRow(unit).toUnitMarkdownRow();
 	}
 }
