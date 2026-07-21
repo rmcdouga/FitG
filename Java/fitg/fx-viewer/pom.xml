@@ -19,7 +19,7 @@
 
 		<!-- Local dependency versions -->
 		<jfree-fxgraphics2d.version>2.1.5</jfree-fxgraphics2d.version>
-		<javafx.version>26.0.1</javafx.version>
+		<javafx.version>27-ea+25</javafx.version>
 		<javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
 
 		<!-- Other local prjects -->
