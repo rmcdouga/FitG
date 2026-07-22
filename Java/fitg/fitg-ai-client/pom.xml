@@ -20,7 +20,7 @@
 
 		<!-- Local dependency versions -->
 		<jfree-fxgraphics2d.version>2.1.5</jfree-fxgraphics2d.version>
-		<javafx.version>26.0.1</javafx.version>
+		<javafx.version>26.0.2</javafx.version>
 		<javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
 		<ikonli.libs.version>12.4.0</ikonli.libs.version>
 		<testfx.version>4.0.18</testfx.version>
