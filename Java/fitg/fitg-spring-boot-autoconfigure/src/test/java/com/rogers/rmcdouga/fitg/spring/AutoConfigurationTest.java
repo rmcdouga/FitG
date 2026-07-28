@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.rogers.rmcdouga.fitg.basegame.Game;
 import com.rogers.rmcdouga.fitg.basegame.Scenario;
+import com.rogers.rmcdouga.fitg.basegame.query.api.CharacterFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.api.CounterFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.api.LocationFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.api.PlanetFinder;
@@ -58,6 +59,11 @@ class AutoConfigurationTest {
 	void testImperialDecisions(@Autowired Scenario.PlayerDecisions imperialDecisions) {
 		assertNotNull(imperialDecisions);
 		assertEquals(FlightToEgrixImperialStrategy.class, imperialDecisions.getClass());
+	}
+
+	@Test
+	void testCharacterFinder(@Autowired CharacterFinder characterFinder) {
+		assertNotNull(characterFinder);
 	}
 
 	@Test
