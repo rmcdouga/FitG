@@ -2,9 +2,12 @@ package com.rogers.rmcdouga.fitg.basegame.query.adapters;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import com.rogers.rmcdouga.fitg.basegame.Game;
+import com.rogers.rmcdouga.fitg.basegame.PlayerState.Faction;
+import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 import com.rogers.rmcdouga.fitg.basegame.query.api.CharacterFinder;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter;
 import com.rogers.rmcdouga.fitg.basegame.units.Character;
@@ -15,7 +18,6 @@ import com.rogers.rmcdouga.fitg.basegame.units.Counter;
  * {@link BaseGameCharacter} enum values by normalized ID.
  */
 public class BaseGameCharacterFinder implements CharacterFinder {
-
 	private final Game game;
 
 	public BaseGameCharacterFinder(Game game) {
@@ -38,9 +40,15 @@ public class BaseGameCharacterFinder implements CharacterFinder {
 	}
 
 	@Override
-	public Stream<Character> findAllCharactersInPlay() {
+	public Stream<CharacterEligibleForMission> findAllCharactersEligibleForMissions(Faction faction) {
 		return BaseGameCharacter.stream()
-				.filter(character -> game.locationOf(character).isPresent())
-				.map(Character.class::cast);
+								.filter(c -> c.allegience() == faction)	
+								.mapMulti(this::createIfCharacterEligibleForMissionConsumer);
+	}
+	
+	private void createIfCharacterEligibleForMissionConsumer(Character character, Consumer<CharacterEligibleForMission> consumer) {
+		game.locationOf((Counter) character)		// Find location
+			.filter(Environ.class::isInstance)		// Keep if it's an Environ
+			.ifPresent(location -> consumer.accept(new CharacterEligibleForMission(character, (Environ) location)));
 	}
 }

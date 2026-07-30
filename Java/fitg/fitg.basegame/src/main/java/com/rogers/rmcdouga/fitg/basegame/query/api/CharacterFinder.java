@@ -3,6 +3,8 @@ package com.rogers.rmcdouga.fitg.basegame.query.api;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import com.rogers.rmcdouga.fitg.basegame.PlayerState.Faction;
+import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 import com.rogers.rmcdouga.fitg.basegame.units.Character;
 
 public interface CharacterFinder {
@@ -30,13 +32,14 @@ public interface CharacterFinder {
 	Optional<Character> findCharacterInPlay(String characterId);
 
 	/**
-	 * Find all characters currently in play (i.e. placed on the map).
+	 * Find all characters Eligible for missions (i.e. placed on the map in an Environ).
 	 *
-	 * The returned stream may be empty if no characters are currently in play.
-	 *
-	 * @return a stream of all characters that currently have a location on the map
+	 * The returned stream may be empty if no characters are currently eligible.
+	 * 
+	 * @return a stream of all characters that are currently eligible
 	 */
-	Stream<Character> findAllCharactersInPlay();
+	record CharacterEligibleForMission(Character character, Environ environ) {};
+	Stream<CharacterEligibleForMission> findAllCharactersEligibleForMissions(Faction faction);
 	
 	/**
 	 * Normalize a string to be used as a character ID by removing all

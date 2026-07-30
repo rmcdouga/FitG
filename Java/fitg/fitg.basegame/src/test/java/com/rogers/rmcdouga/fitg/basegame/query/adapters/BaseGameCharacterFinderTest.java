@@ -3,6 +3,7 @@ package com.rogers.rmcdouga.fitg.basegame.query.adapters;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,10 +11,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.rogers.rmcdouga.fitg.basegame.Game;
 import com.rogers.rmcdouga.fitg.basegame.GameTest;
+import com.rogers.rmcdouga.fitg.basegame.PlayerState.Faction;
+import com.rogers.rmcdouga.fitg.basegame.map.BaseGameEnvironType;
+import com.rogers.rmcdouga.fitg.basegame.map.BaseGamePlanet;
 import com.rogers.rmcdouga.fitg.basegame.query.api.CharacterFinder;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter;
 import com.rogers.rmcdouga.fitg.basegame.units.Character;
-import com.rogers.rmcdouga.fitg.basegame.units.Counter;
 
 class BaseGameCharacterFinderTest {
 
@@ -64,14 +67,23 @@ class BaseGameCharacterFinderTest {
 	}
 
 	@Test
-	void testFindAllCharactersInPlay_returnsPlacedCharactersOnly() {
-		List<Character> result = underTest.findAllCharactersInPlay().toList();
+	void testFindAllCharactersEligibleForMissions_returnsCharactersPlacedInEnvirons() {
+		var expectedEnviron = BaseGamePlanet.Angoff.environ(BaseGameEnvironType.Urban).orElseThrow();
+		List<CharacterFinder.CharacterEligibleForMission> result = underTest.findAllCharactersEligibleForMissions(Faction.IMPERIAL).toList();
 
 		assertAll(
-				() -> assertFalse(result.isEmpty()),
-				() -> assertTrue(result.contains(BaseGameCharacter.Jon_Kidu)),
-				() -> assertFalse(result.contains(BaseGameCharacter.Zina_Adora)),
-				() -> assertTrue(result.stream().allMatch(character -> game.locationOf((Counter) character).isPresent()))
-				);
+				() -> assertEquals(2, result.size()),
+				() -> assertEquals(
+						Set.of(
+								new CharacterFinder.CharacterEligibleForMission(BaseGameCharacter.Jon_Kidu, expectedEnviron),
+								new CharacterFinder.CharacterEligibleForMission(BaseGameCharacter.Vans_Ka_Tie_A, expectedEnviron)),
+						Set.copyOf(result)));
 	}
+
+	@Test
+	void testFindAllCharactersEligibleForMissions_returnsEmptyStream() {
+		List<CharacterFinder.CharacterEligibleForMission> result = underTest.findAllCharactersEligibleForMissions(Faction.REBEL).toList();
+		assertTrue(result.isEmpty(), "Expected no Rebel characters to be eligible for missions, but found: " + result);
+	}
+
 }
