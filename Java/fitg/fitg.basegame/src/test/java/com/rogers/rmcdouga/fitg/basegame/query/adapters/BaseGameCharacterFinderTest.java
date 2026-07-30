@@ -2,18 +2,23 @@ package com.rogers.rmcdouga.fitg.basegame.query.adapters;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.rogers.rmcdouga.fitg.basegame.Game;
 import com.rogers.rmcdouga.fitg.basegame.GameTest;
 import com.rogers.rmcdouga.fitg.basegame.query.api.CharacterFinder;
 import com.rogers.rmcdouga.fitg.basegame.units.BaseGameCharacter;
 import com.rogers.rmcdouga.fitg.basegame.units.Character;
+import com.rogers.rmcdouga.fitg.basegame.units.Counter;
 
 class BaseGameCharacterFinderTest {
 
-	CharacterFinder underTest = new BaseGameCharacterFinder(GameTest.createFlightToEgrixGame());
+	private final Game game = GameTest.createFlightToEgrixGame();
+	private final CharacterFinder underTest = new BaseGameCharacterFinder(game);
 
 	// --- findCharacter ---
 
@@ -56,5 +61,17 @@ class BaseGameCharacterFinderTest {
 	@ValueSource(strings = {"unknown", "foo", ""})
 	void testFindCharacterInPlay_unknownId(String input) {
 		assertTrue(underTest.findCharacterInPlay(input).isEmpty());
+	}
+
+	@Test
+	void testFindAllCharactersInPlay_returnsPlacedCharactersOnly() {
+		List<Character> result = underTest.findAllCharactersInPlay().toList();
+
+		assertAll(
+				() -> assertFalse(result.isEmpty()),
+				() -> assertTrue(result.contains(BaseGameCharacter.Jon_Kidu)),
+				() -> assertFalse(result.contains(BaseGameCharacter.Zina_Adora)),
+				() -> assertTrue(result.stream().allMatch(character -> game.locationOf((Counter) character).isPresent()))
+				);
 	}
 }

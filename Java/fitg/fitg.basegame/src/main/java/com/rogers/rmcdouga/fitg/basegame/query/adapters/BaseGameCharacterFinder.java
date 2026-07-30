@@ -2,6 +2,7 @@ package com.rogers.rmcdouga.fitg.basegame.query.adapters;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import com.rogers.rmcdouga.fitg.basegame.Game;
 import com.rogers.rmcdouga.fitg.basegame.query.api.CharacterFinder;
@@ -34,5 +35,12 @@ public class BaseGameCharacterFinder implements CharacterFinder {
 	public Optional<Character> findCharacterInPlay(String characterId) {
 		return findCharacter(characterId)
 				.filter(c -> game.locationOf((Counter) c).isPresent());
+	}
+
+	@Override
+	public Stream<Character> findAllCharactersInPlay() {
+		return BaseGameCharacter.stream()
+				.filter(character -> game.locationOf(character).isPresent())
+				.map(Character.class::cast);
 	}
 }

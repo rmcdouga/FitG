@@ -1,6 +1,7 @@
 package com.rogers.rmcdouga.fitg.basegame.query.api;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import com.rogers.rmcdouga.fitg.basegame.units.Character;
 
@@ -28,6 +29,15 @@ public interface CharacterFinder {
 	 */
 	Optional<Character> findCharacterInPlay(String characterId);
 
+	/**
+	 * Find all characters currently in play (i.e. placed on the map).
+	 *
+	 * The returned stream may be empty if no characters are currently in play.
+	 *
+	 * @return a stream of all characters that currently have a location on the map
+	 */
+	Stream<Character> findAllCharactersInPlay();
+	
 	/**
 	 * Normalize a string to be used as a character ID by removing all
 	 * non-alphanumeric characters and converting to lower case.
