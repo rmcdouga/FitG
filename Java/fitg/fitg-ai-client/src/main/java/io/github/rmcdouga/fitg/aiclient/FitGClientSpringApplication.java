@@ -15,12 +15,14 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.Resource;
 
 import com.rogers.rmcdouga.fitg.basegame.command.api.external.Mover;
+import com.rogers.rmcdouga.fitg.basegame.query.api.CharacterFinder;
 import com.rogers.rmcdouga.fitg.renderer.images.BaseGameImageStoreAdapter;
 import com.rogers.rmcdouga.fitg.renderer.images.ImageStore;
 
 import io.github.rmcdouga.fitg.aiclient.gui.MainApplicationController;
 import io.github.rmcdouga.fitg.aiclient.gui.ports.ChatClient;
 import io.github.rmcdouga.fitg.aiclient.images.ClassPathImageStore;
+import io.github.rmcdouga.fitg.aiclient.spring.ai.tools.MissionsTool;
 import io.github.rmcdouga.fitg.aiclient.spring.ai.tools.MoverTool;
 import io.github.rmcdouga.fitg.aiclient.spring.ai.tools.SpringAiTool;
 import io.github.rmcdouga.fitg.aiclient.spring.gui.adapters.SpringChatClient;
@@ -56,8 +58,8 @@ public class FitGClientSpringApplication {
 	}
     
     @Bean
-    static Collection<SpringAiTool> springAiTools(Mover mover) {
-		return List.of(new MoverTool(mover));
+    static Collection<SpringAiTool> springAiTools(Mover mover, CharacterFinder characterFinder) {
+		return List.of(new MoverTool(mover), new MissionsTool(characterFinder));
 	}
     
     @Bean
