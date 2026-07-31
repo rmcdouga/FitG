@@ -1,5 +1,6 @@
 package io.github.rmcdouga.fitg.aiclient.spring.ai.tools;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -86,11 +87,11 @@ class MissionsToolTest {
 				new CharacterFinder.CharacterEligibleForMission(BaseGameCharacter.Agan_Rafa, expectedEnviron_Agan)
 			));
 		
-		var testQuery = "What characters are available for missions for the Rebel faction?";
-		sendQuery(robot, mainApplicationController, testQuery);
+		var testQuery = "What characters are available for missions for the Rebel faction?  List the characters and the environs they are in.";
+		var response = sendQuery(robot, mainApplicationController, testQuery);
 		
 		verify(mockCharacterFinder).findAllCharactersEligibleForMissions(Faction.REBEL);
-
+		assertThat(response).contains("Adam Starlight").contains("Agan Rafa").contains("Angoff").contains("Urban");
 	}
 
 }
