@@ -5,10 +5,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 
 import com.rogers.rmcdouga.fitg.basegame.Game;
+import com.rogers.rmcdouga.fitg.basegame.query.adapters.BaseGameCharacterFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.adapters.BaseGameCounterFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.adapters.BaseGameLocationFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.adapters.BaseGamePlanetFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.adapters.BaseGameStarSystemFinder;
+import com.rogers.rmcdouga.fitg.basegame.query.api.CharacterFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.api.CounterFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.api.LocationFinder;
 import com.rogers.rmcdouga.fitg.basegame.query.api.PlanetFinder;
@@ -16,6 +18,12 @@ import com.rogers.rmcdouga.fitg.basegame.query.api.StarSystemFinder;
 
 @AutoConfiguration
 public class QueryAutoConfiguration {
+
+	@ConditionalOnMissingBean
+	@Bean
+	public CharacterFinder characterFinder(Game game) {
+		return new BaseGameCharacterFinder(game);
+	}
 
 	@ConditionalOnMissingBean
 	@Bean

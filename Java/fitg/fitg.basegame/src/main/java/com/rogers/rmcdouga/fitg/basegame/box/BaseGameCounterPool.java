@@ -203,6 +203,11 @@ class BaseGameCounterPool implements CounterPool {
 		public Faction faction() {
 			return unitType.faction();
 		}
+
+		@Override
+		public String name() {
+			return unitType.name();
+		}
 	}
 
 	private static class GenericImperialSpaceship<T extends ImperialSpaceship> implements ImperialSpaceship {

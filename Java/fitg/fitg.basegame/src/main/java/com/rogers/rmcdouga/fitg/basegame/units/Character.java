@@ -8,6 +8,7 @@ import com.rogers.rmcdouga.fitg.basegame.RaceType;
 import com.rogers.rmcdouga.fitg.basegame.map.Planet;
 
 public interface Character extends Counter {
+	public String name();
 	public int combat();
 	public int endurance();
 	public int intelligence();
@@ -37,4 +38,5 @@ public interface Character extends Counter {
 		ADD_TWO_TO_HIDING_VALUE,			// Add two to hiding value of group she is hiding with.
 		;
 	}
+
 }

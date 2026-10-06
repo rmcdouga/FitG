@@ -4,11 +4,23 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.rogers.rmcdouga.fitg.basegame.map.Environ;
 import com.rogers.rmcdouga.fitg.basegame.utils.MarkdownString;
 
 public interface Action extends Card {
 
-	public enum EnvironType { URBAN, SPECIAL, WILD }
+	public enum EnvironType { 
+		URBAN, SPECIAL, WILD;
+		
+		public static EnvironType from(Environ environ) {
+			return switch(environ.getType().getName()) {
+				case "Urban" -> URBAN;
+				case "Wild" -> WILD;
+				case "Air", "Fire", "Liquid", "Subterranian" -> SPECIAL;
+				default -> throw new IllegalArgumentException("Unknown EnvironType: " + environ.getType().getName());
+			};
+		}
+	}
 
 	public MarkdownString getResultDescription(EnvironType environType);
 	public Set<Mission> getMissions(EnvironType environType);

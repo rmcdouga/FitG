@@ -185,6 +185,11 @@ class BaseGameCharacterPoolTest {
 			public String id() {
 				return null;
 			}
+
+			@Override
+			public String name() {
+				return null;
+			}
 			
 		};
 		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()->underTest.getCharacter(anonCharacter));

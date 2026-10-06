@@ -136,6 +136,28 @@ class TextMapRendererTest {
 		assertThat(rendered).contains("- **Races:** [Yester*]");
 	}
 
+	@Test
+	void renderMarkdownMapOnly() {
+		var game = createFlightToEgrixGame();
+		var renderer = new TextMapRenderer(game, game, TextMapRenderer.RenderSubsets.MAP);
+
+		var rendered = renderer.renderMarkdown();
+		
+		IO.println(rendered);
+		
+		assertThat(rendered).startsWith("# FitG Map");
+		assertThat(rendered).contains("## Star System: 22 Egrix");
+		assertThat(rendered).contains("### Planet: 222 Angoff");
+		assertThat(rendered).doesNotContain("- **Loyalty:** Neutral");
+		assertThat(rendered).doesNotContain("- **Control:** RebelControlled");
+		assertThat(rendered).doesNotContain("- **PDB:** UP_2");
+		assertThat(rendered).contains("#### Environment: Urban");
+		assertThat(rendered).contains("- **Size:** 6");
+		assertThat(rendered).contains("- **Resources:** 9*");
+		assertThat(rendered).contains("- **Coup:** 3");
+		assertThat(rendered).contains("- **Races:** [Yester*]");
+	}
+
 	private static Game createFlightToEgrixGame() {
 		return Game.createGame(BaseGameScenario.FlightToEgrix, new FlightToEgrixRebelStrategy(), new FlightToEgrixImperialStrategy());
 	}

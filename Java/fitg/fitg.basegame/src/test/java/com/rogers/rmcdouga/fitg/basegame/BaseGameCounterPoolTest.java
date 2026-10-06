@@ -43,6 +43,11 @@ class BaseGameCounterPoolTest {
 		public Faction faction() {
 			return null;
 		}
+
+		@Override
+		public String name() {
+			return null;
+		}
 	};
 
 	private static final ImperialSpaceship invalidSpaceship = new ImperialSpaceship() {
